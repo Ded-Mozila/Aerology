@@ -2,21 +2,7 @@
 
 void recording_and_write::TTBB(char * code)
 {
-	int i = 0;
-	int len = strlen(code)+1;
-	stringstream ss;
-	for (int i = 0; i < len; ++i)
-	{
-		if (code[i] != '\r')
-		{
-			if(code[i] == '\n')
-				ss << ' ';
-			else ss << code[i];
-		}	
-	}
-	string str(ss.str());
-	strcpy(code,str.c_str());
-	
+	code = deleteEndl(code);
 	DateSurfase_TTBB new_base_;
 	TTBB_Database base;
 	base.information = true;

@@ -29,6 +29,7 @@ public:
 
 	WIND_SHIFT WindShift( int GGPPP );										// Îïðåäåëåíèå ñäâèãà âåòðà
 
+	char * deleteEndl( char* code );  										// delete '\r\n' in string code
 	char * MaxWind ( char * code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
 
 	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i, TTAA_Database & base);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ

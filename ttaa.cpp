@@ -1,9 +1,7 @@
 #include "WriteFile.h"
 
-void recording_and_write::TTAA( char * code )
+char* recording_and_write::deleteEndl( char* code )
 {
-	//Замена '\n' на пробел
-	int i = 0;
 	int len = strlen(code)+1;
 	stringstream ss;
 	for (int i = 0; i < len; ++i)
@@ -13,12 +11,16 @@ void recording_and_write::TTAA( char * code )
 			if(code[i] == '\n')
 				ss << ' ';
 			else ss << code[i];
-
 		}	
 	}
-	
 	string str(ss.str());
 	strcpy(code,str.c_str());
+	return code;
+}
+void recording_and_write::TTAA( char * code )
+{
+	//Замена '\n' на пробел
+	code = deleteEndl(code);
 	DateSurfase_TTAA new_base_;
 	TTAA_Database base;
 	base.information = true;
