@@ -4,7 +4,7 @@
 
 recording_and_write::recording_and_write( void )
 {
-
+	
 }
 
 recording_and_write::~recording_and_write(void)

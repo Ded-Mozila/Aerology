@@ -23,16 +23,16 @@ void recording_and_write::OutCodTTAA( const string _file )
 		i->data_.sort();
 		//создание 
 		string name = StrNameFile( st, i->time, st.wDay, _file );
-		fstream inFile( name.c_str() , ios_base::out );
-		if(!inFile)
+		InFile.open( name.c_str() , ios_base::out );
+		if(!InFile)
 		{
 			perror("Error open file!");
 			cin.get();
 			exit(1);
 		}
-
+		
 		//Вывод
-		inFile << "Выборка за период: " ;
+		InFile << "Выборка за период: " ;
 			 //Сравниваем время для определения дальнейшего алгаритма
 		if (11 <= ((time_period/100)%100) <= 13)
 			time_period = 12;
@@ -42,12 +42,12 @@ void recording_and_write::OutCodTTAA( const string _file )
 			{
 			case 0:// 00 время это промежуток времени от 23:00 - 01:00
 				{
-					ViewTimePeriod_00_(inFile);
+					ViewTimePeriod_00_(InFile);
 					break;
 				}
 			case 12:// 12 время этого промежутка от 11:00 до 13:00
 				{
-					ViewTimePeriod_12_(inFile);
+					ViewTimePeriod_12_(InFile);
 					break;
 				}
 			default:
@@ -56,43 +56,42 @@ void recording_and_write::OutCodTTAA( const string _file )
 					break;
 				}
 			}		
-			inFile << "\n\n";
+			InFile << "\n\n";
 		list<TTAA_Database>::iterator J;
 		for ( J = i->data_.begin(); J != i->data_.end(); ++J )
 		{
 			surface DAT = (*J).land_surface;
 			double temp = DAT.info_temp.temp;
-			inFile <<  (*J).number.district_number;
-			if((*J).number.station_number < 100 )inFile<<"0";
-			inFile<<(*J).number.station_number <<" " ;
+			InFile <<  (*J).number.district_number;
+			if((*J).number.station_number < 100 )InFile<<"0";
+			InFile<<(*J).number.station_number <<" " ;
 			if ( DAT.information == true /*|| DAT.pressure != NULL || temp != NULL*/ )
 			{
-				inFile << "Pzem=";
-				if ((DAT.pressure) < 1000) inFile << " ";
-				inFile << DAT.pressure << " ";
-				inFile << "Tzem=";
+				InFile << "Pzem=";
+				if ((DAT.pressure) < 1000) InFile << " ";
+				InFile << DAT.pressure << " ";
+				InFile << "Tzem=";
 				if ( temp >= 0 )
 				{
-					inFile << " ";
+					InFile << " ";
 				}
-				if (fabs(temp) < 10) inFile << " ";
-				inFile << temp;
-				if ((temp - (int)temp) == 0) inFile << ".0";
-				inFile << '\n' ;
+				if (fabs(temp) < 10) InFile << " ";
+				InFile << temp;
+				if ((temp - (int)temp) == 0) InFile << ".0";
+				InFile << '\n' ;
 			}
 			else
 			{
-				inFile << "Нет данных\n";
+				InFile << "Нет данных\n";
 			}
 		}
-		inFile << '\n' <<  "StandartLevels" << "\n";
+		InFile << '\n' <<  "StandartLevels" << "\n";
 
 		for ( J = i->data_.begin(); J != i->data_.end(); ++J )
 		{	
 			bool controllerEmptyLevels = true;
-			controllerEmptyLevels = WriteStandateSurfase( *J , inFile ,controllerEmptyLevels);
+			controllerEmptyLevels = WriteStandateSurfase( *J , InFile ,controllerEmptyLevels);
 		}
-		inFile.close();
 	}
 
 }
@@ -202,10 +201,6 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 		{
 			int  StandartLevels[11] = {0,92,85,70,50,40,30,25,20,15,10};
 			standardSurface new_surfase = *i;
-			/*if (new_surfase.data.information == true)// Îòñëåæèâàåò îòñóòñòâèå ñòàíäàðòíûõ óðîâíåé è âñòàâëÿåò çà ìåñòî íèõ ïðîáåëû îòñóòñòâèÿ
-			{
-				int t;
-				cin >>t;*/
 				double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
 				int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
 				WIND wind = new_surfase.data.wind;
@@ -271,7 +266,6 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 				if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) inFile << ".0";
 				if ( dewpoint != 999 ) inFile << "0";
 				inFile << "\n" ;
-			//}
 		}
 		inFile << "\n" ;
 	}
@@ -286,50 +280,45 @@ void recording_and_write::OutCodTTBB( const string _file )
 	list<DateSurfase_TTBB>::iterator k;
 	for (k = data_TTBB.begin(); k != data_TTBB.end(); ++k)
 	{
-		//Ôîðìèðîêàíèå èìåíè ôàéëà
-		string name = StrNameFile( st, k->time, st.wDay , _file );
-		fstream inFile( name.c_str() , ios_base::app );
-		if(!inFile)
-		{
-			perror("Error open file!");
-			cin.get();
-			exit(1);
-		}
 		list<TTBB_Database>::iterator j;
-		inFile << '\n' << "SpecialPoints" << "\n\n";
+		InFile << '\n' << "SpecialPoints" << "\n\n";
 		k->data_.sort();
 		for ( j = k->data_.begin(); j != k->data_.end(); ++j )
 		{
-			OutFileListTTBB(j, inFile);
-			inFile << '\n';
+			OutFileListTTBB(j, InFile);
+			if (j->information)
+				InFile << '\n';
 		}
-		inFile.close();
+		
 	}
+	InFile.close();
 }
 
-void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fstream & inFile )
+void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fstream & writeFileTTBB )
 {
+	//cout << "OutFileListTTBB" << endl;
 	list<Temp_Base>::iterator L;
 	for ( L = j->level.begin(); L != j->level.end(); ++L )
 	{
-		inFile <<  "IND=" << j->number.district_number;
-		if(j->number.station_number < 100) inFile<<"0";
-		inFile<<j->number.station_number<<"  ";
+		//cout << "OutFileListTTBB loop" << endl;
+		writeFileTTBB <<  "IND=" << j->number.district_number;
+		if(j->number.station_number < 100) writeFileTTBB<<"0";
+		writeFileTTBB<<j->number.station_number<<"  ";
 		int pressure = L->pressure;
-		inFile <<  "P=" ;
+		writeFileTTBB <<  "P=" ;
 		if( pressure <= 99) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-		if (pressure < 1000)inFile << " ";
-		if (pressure < 100)inFile << " ";
-		if (pressure < 10)inFile << " ";
-		inFile << pressure << "  ";
-		inFile <<  "T=" ;
+		if (pressure < 1000)writeFileTTBB << " ";
+		if (pressure < 100)writeFileTTBB << " ";
+		if (pressure < 10)writeFileTTBB << " ";
+		writeFileTTBB << pressure << "  ";
+		writeFileTTBB <<  "T=" ;
 		double temp = L->info_temp.temp;
-		if (temp > 0 )inFile << " ";
-		if (fabs(temp) < 10)inFile << " ";
-		if (fabs(temp) == 0)inFile << " ";
-		inFile << temp;
-		if((temp - (int)temp) == 0) inFile << ".0";
-		inFile << '\n' ;
+		if (temp > 0 )writeFileTTBB << " ";
+		if (fabs(temp) < 10)writeFileTTBB << " ";
+		if (fabs(temp) == 0)writeFileTTBB << " ";
+		writeFileTTBB << temp;
+		if((temp - (int)temp) == 0) writeFileTTBB << ".0";
+		writeFileTTBB << '\n' ;
 	}
 }
 

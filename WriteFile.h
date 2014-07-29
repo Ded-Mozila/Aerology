@@ -17,7 +17,7 @@ public:
 
 	list<DateSurfase_TTAA> data_TTAA;
 	list<DateSurfase_TTBB> data_TTBB;
-
+	fstream InFile;
 	recording_and_write(void);
 	~recording_and_write(void);
 
