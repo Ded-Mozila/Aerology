@@ -48,7 +48,6 @@ public:
 		int n = ((number.district_number*1000) + number.station_number);
 		return n < m;
 	} ;
-	
 };
  class DateSurfase_TTAA
 {
@@ -56,6 +55,7 @@ public:
 	int date;
 	int time;
 	list<TTAA_Database> data_;
+	void FindReplicaToList(); 			// Поиск и исключение из списка повторяющюхся и пустых элементов
 	bool operator< (const DateSurfase_TTAA & right) 
 	{
 		return date < right.date;

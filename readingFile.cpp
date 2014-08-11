@@ -1,4 +1,27 @@
 #include "readingFile.h"
+void DateSurfase_TTAA::FindPeplicaToList()
+{
+	list<DateSurfase_TTAA>::iterator i;
+	for (i = data_.begin(); i != data_.end(); ++i)
+	{
+		int k = 1;
+		int m = (((*i).number.district_number*1000) + (*i).number.station_number);
+		int n = (((*(i+K))number.district_number*1000) + (*(i+K))number.station_number);
+		if( m == n )
+		{
+			if ((*i).information == false && *(i+1).information == false)
+				data_.remove(i);
+			else
+			{
+				if ((*i).information == false)
+					data_.remove(i);
+				else
+					data_.remove(i+1);
+			}
+		}
+	}
+}
+
 
 readingFile::readingFile(void)
 {
