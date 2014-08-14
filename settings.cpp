@@ -70,6 +70,8 @@ string Settings::ToDayData( char * address )
 
 string Settings::WhatMonth( const long month )
 {
+	//переделать на цифры
+
 	string ListMonths[12] = {
 		"Январь",
 		"Февраль",

@@ -11,8 +11,8 @@ class recording_and_write
 {
 public:
 
-	int data;
-	int time_period;			// 20140715 ГГГГ_ММ_ДД
+	int data;					// 20140715 ГГГГ_ММ_ДД
+	int time_period;			
 	char nameFile[256];
 
 	list<DateSurfase_TTAA> data_TTAA;

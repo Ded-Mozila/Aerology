@@ -1,27 +1,28 @@
 #include "readingFile.h"
-void DateSurfase_TTAA::FindPeplicaToList()
+/*void DateSurfase_TTAA::FindReplicaToList()
 {
-	list<DateSurfase_TTAA>::iterator i;
-	for (i = data_.begin(); i != data_.end(); ++i)
+	list<TTAA_Database>::iterator i;
+	for (i = data_.begin(); i != data_.end(); i++)
 	{
 		int k = 1;
 		int m = (((*i).number.district_number*1000) + (*i).number.station_number);
-		int n = (((*(i+K))number.district_number*1000) + (*(i+K))number.station_number);
+		int n = (((*(i)).number.district_number*1000) + (*(i)).number.station_number);
 		if( m == n )
 		{
-			if ((*i).information == false && *(i+1).information == false)
-				data_.remove(i);
-			else
+			if (i->information == false && i->information == false)
+						{
+				this->data_.remove(*i);
+			}
+			/*else
 			{
 				if ((*i).information == false)
 					data_.remove(i);
 				else
-					data_.remove(i+1);
+					data_.remove(i);
 			}
 		}
 	}
-}
-
+}*/
 
 readingFile::readingFile(void)
 {
@@ -105,7 +106,7 @@ void readingFile::FindTimePriod()
 			file >> stringTime;
 			file >> stringTime;
 			timeFile = atoi(stringTime);
-			if ( st.wDay == timeFile/10000 && st.whour <= (((timeFile/100)%100)+5) &&  st.whour >= (((timeFile/100)%100)-5) )//  +-2
+			if ( st.wDay == timeFile/10000 && st.whour <= (((timeFile/100)%100)+3) &&  st.whour >= (((timeFile/100)%100)-2) )//  +-2
 			{
 				TTXX.time_period = timeFile;
 				delete []str;

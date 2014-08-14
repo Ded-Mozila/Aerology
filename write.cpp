@@ -33,12 +33,12 @@ void recording_and_write::OutCodTTAA( const string _file )
 		
 		//Вывод
 		InFile << "Выборка за период: " ;
-			 //Сравниваем время для определения дальнейшего алгаритма
-		if (11 <= ((time_period/100)%100) <= 13)
-			time_period = 12;
-			else time_period = 0;
 
-		switch (time_period) //ДДЧЧММ - ДД - день ; ЧЧ - часы ; ММ - минуты
+		int period ;	 //Сравниваем время для определения дальнейшего алгаритма
+		if (10 <= int((time_period/100)%100) && int((time_period/100)%100) <= 14)
+			period = 12;
+			else period = 0;
+		switch (period) //ДДЧЧММ - ДД - день ; ЧЧ - часы ; ММ - минуты
 			{
 			case 0:// 00 время это промежуток времени от 23:00 - 01:00
 				{
@@ -159,8 +159,8 @@ void recording_and_write::ViewTimePeriod_12_(fstream & inFile)
 		if(month < 10) 
 			inFile << "0";
 		inFile << month << "." << year;
-		if (h == 0) inFile << " 11:00 - ";
-			else inFile << " 13:00";
+		if (h == 0) inFile << " 10:00 - ";
+			else inFile << " 12:00";
 	}
 }
 
@@ -222,7 +222,7 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 							inFile << StandartLevels[a];
 							if ( StandartLevels[a] == 92 ) inFile << "5";
 							else inFile << "0";
-							inFile << "================================\n";
+							inFile << "=============================\n";
 						}
 					}
 				}
@@ -322,13 +322,16 @@ void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fst
 	}
 }
 
-string recording_and_write::StrNameFile(local_time st, int time, int date, string _file )
+string recording_and_write::StrNameFile(local_time st, int time_, int date, string _file )
 {
 	string name;
 	stringstream time_name;
 	time_name << _file << "/SpecialPoints" << date;
 	if(st.wMonth < 10) time_name << "0";
-	time_name << st.wMonth << st.wYear << "_" << time << ".txt";
+	time_name << st.wMonth << st.wYear << "_";
+	if (time_ == 0)
+		time_name << "0";
+	time_name << time_ << ".txt";
 	time_name >> name;
 	return name;
 }
