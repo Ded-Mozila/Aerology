@@ -14,8 +14,12 @@ public:
 	void readF();
 	void FindDate();
 	void FindTimePriod();
-	void SelectionCipher( char TXX[] );
+	
+	void SelectionCipher( char TXX[] , fstream& FindDate);
 	~readingFile(void);	
+
+	// Модуль тестирования с выводом сканируемых данных
+	string dataFile; // название файла + директроия с исходными данными
 };
 
 #endif	// !READINGFILE_H 

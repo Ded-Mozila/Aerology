@@ -7,13 +7,13 @@ Settings::Settings()
 	if(!fileSettings)
 	{
 		perror("Error open file settings.txt!");
-		cin.get();
 		exit(1);
 	}
 	else
 	{
 		init();
 	}
+	fileSettings.close();
 }
 
 Settings::~Settings()
@@ -28,7 +28,7 @@ void Settings::init()
 	{
 		char getStr;
 		fileSettings.get ( getStr );
-		if ( getStr == 'O' || getStr == 'I' )
+		if ( getStr == 'O' || getStr == 'I' || getStr == 'A' )
 		{
 			fileSettings.getline ( str, 256, '=' );
 			switch (getStr)
@@ -46,6 +46,14 @@ void Settings::init()
 					fileSettings.getline ( dir , 256, '=' );
 					inDirectory = ToDayData(dir);
 					mkdirp(inDirectory.c_str());
+					break;
+				}
+			case 'A':
+				{
+					char dir[256];
+					fileSettings.getline ( dir , 256, '=' );
+					dataDirectory = ToDayData(dir);
+					mkdirp(dataDirectory.c_str());
 					break;
 				}
 			default: break;
@@ -73,18 +81,19 @@ string Settings::WhatMonth( const long month )
 	//переделать на цифры
 
 	string ListMonths[12] = {
-		"Январь",
-		"Февраль",
-		"Март",
-		"Апрель",
-		"Май",
-		"Июнь",
-		"Июль",
-		"Август",
-		"Сентябрь",
-		"Октябрь",
-		"Ноябрь",
-		"Декабрь"
+		
+		"01",
+		"02",
+		"03",
+		"04",
+		"05",
+		"06",
+		"07",
+		"08",
+		"09",
+		"10",
+		"11",
+		"12"
 	};
 	return ListMonths[month-1];
 }

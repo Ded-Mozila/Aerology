@@ -11,33 +11,36 @@
 void recording_and_write::WriteFile(const string _file )
 {
 	OutCodTTAA(_file);  // создание файла и запись кода TTAA
+
 	OutCodTTBB(_file);	// запись в созданный уже файла кода TTBB
 }
 
 void recording_and_write::OutCodTTAA( const string _file )
 {
 	local_time st;
-	list<DateSurfase_TTAA>::iterator i;
-	for ( i = data_TTAA.begin(); i !=data_TTAA.end();++i )
-	{
+	list<DateSurfase_TTAA>::iterator i = data_TTAA.begin();
+	cout << data_TTAA.size() << endl;
+	/*for ( i = data_TTAA.begin(); i !=data_TTAA.end();++i )
+	{*/
+
 		i->data_.sort();
 		//создание 
-		string name = StrNameFile( st, i->time, st.wDay, _file );
+		int period = 0;	 //Сравниваем время для определения дальнейшего алгаритма
+		if (10 <= int((time_period/100)%100) && int((time_period/100)%100) <= 14)
+			period = 12;
+			else period = 0;
+		cout << _file.c_str()<< endl;	
+		string name = StrNameFile( st, period , st.wDay, _file );
+		cout << name.c_str()<< endl;
 		InFile.open( name.c_str() , ios_base::out );
 		if(!InFile)
 		{
-			perror("Error open file!");
-			cin.get();
+			perror("error open file!");
 			exit(1);
 		}
 		
 		//Вывод
 		InFile << "Выборка за период: " ;
-
-		int period ;	 //Сравниваем время для определения дальнейшего алгаритма
-		if (10 <= int((time_period/100)%100) && int((time_period/100)%100) <= 14)
-			period = 12;
-			else period = 0;
 		switch (period) //ДДЧЧММ - ДД - день ; ЧЧ - часы ; ММ - минуты
 			{
 			case 0:// 00 время это промежуток времени от 23:00 - 01:00
@@ -92,7 +95,7 @@ void recording_and_write::OutCodTTAA( const string _file )
 			bool controllerEmptyLevels = true;
 			controllerEmptyLevels = WriteStandateSurfase( *J , InFile ,controllerEmptyLevels);
 		}
-	}
+	//}
 
 }
 
@@ -276,10 +279,9 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 
 void recording_and_write::OutCodTTBB( const string _file )
 {
-	local_time st;
-	list<DateSurfase_TTBB>::iterator k;
-	for (k = data_TTBB.begin(); k != data_TTBB.end(); ++k)
-	{
+	list<DateSurfase_TTBB>::iterator k = data_TTBB.begin();
+	//for (k = data_TTBB.begin(); k != data_TTBB.end(); ++k)
+	//{
 		list<TTBB_Database>::iterator j;
 		InFile << '\n' << "SpecialPoints" << "\n\n";
 		k->data_.sort();
@@ -290,13 +292,13 @@ void recording_and_write::OutCodTTBB( const string _file )
 				InFile << '\n';
 		}
 		
-	}
+	//}
 	InFile.close();
 }
 
 void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fstream & writeFileTTBB )
 {
-	//cout << "OutFileListTTBB" << endl;
+	cout << "OutFileListTTBB" << endl;
 	list<Temp_Base>::iterator L;
 	for ( L = j->level.begin(); L != j->level.end(); ++L )
 	{
@@ -326,8 +328,12 @@ string recording_and_write::StrNameFile(local_time st, int time_, int date, stri
 {
 	string name;
 	stringstream time_name;
-	time_name << _file << "/SpecialPoints" << date;
-	if(st.wMonth < 10) time_name << "0";
+	time_name << _file << "/SpecialPoints" ;
+	if(date < 10) 
+		time_name << "0";
+	 time_name << date;
+	if(st.wMonth < 10) 
+		time_name << "0";
 	time_name << st.wMonth << st.wYear << "_";
 	if (time_ == 0)
 		time_name << "0";

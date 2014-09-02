@@ -9,13 +9,15 @@ class Settings
 public:
     string outDirectory;
 	string inDirectory;
+	string dataDirectory;  // РґРёСЂРµРєС‚РѕСЂРёСЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РёСЃС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
+
 	fstream fileSettings;
 	Settings();
 	~Settings();
 				
-	string ToDayData(char * address);							// Получание строки содержащяя месяц и год в формате ГГГГ\Месяц
-	string WhatMonth(const long month);							// Перевод и з числа в название месяца
-	void init(void);											// инициализация параметров программы	
+	string ToDayData(char * address);							// ГЏГ®Г«ГіГ·Г Г­ГЁГҐ Г±ГІГ°Г®ГЄГЁ Г±Г®Г¤ГҐГ°Г¦Г Г№ГїГї Г¬ГҐГ±ГїГ¶ ГЁ ГЈГ®Г¤ Гў ГґГ®Г°Г¬Г ГІГҐ ГѓГѓГѓГѓ\ГЊГҐГ±ГїГ¶
+	string WhatMonth(const long month);							// ГЏГҐГ°ГҐГўГ®Г¤ ГЁ Г§ Г·ГЁГ±Г«Г  Гў Г­Г Г§ГўГ Г­ГЁГҐ Г¬ГҐГ±ГїГ¶Г 
+	void init(void);											// ГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГЇГ Г°Г Г¬ГҐГІГ°Г®Гў ГЇГ°Г®ГЈГ°Г Г¬Г¬Г»	
 };
 
 

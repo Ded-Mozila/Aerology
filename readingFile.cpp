@@ -1,29 +1,36 @@
 #include "readingFile.h"
+#include <algorithm> 
 /*void DateSurfase_TTAA::FindReplicaToList()
 {
 	list<TTAA_Database>::iterator i;
-	for (i = data_.begin(); i != data_.end(); i++)
+	for (i = data_.begin(); i != data_.end(); i)
 	{
-		int k = 1;
-		int m = (((*i).number.district_number*1000) + (*i).number.station_number);
-		int n = (((*(i)).number.district_number*1000) + (*(i)).number.station_number);
-		if( m == n )
+		TTAA_Database item = (*i);
+		i++;
+		list<TTAA_Database>::iterator filder;
+		for (int J = 0; J < 10; ++J)
 		{
-			if (i->information == false && i->information == false)
-						{
-				this->data_.remove(*i);
-			}
-			/*else
+			filder = find(i,data_.end(),item);
+			if((*filder) == item)
 			{
-				if ((*i).information == false)
-					data_.remove(i);
+				if (item.information == false && filder->information == false)
+				{
+					data_.erase(filder);
+				}
 				else
-					data_.remove(i);
+				{
+					if ( filder->information == false)
+						data_.erase(filder);
+					else
+						data_.erase(i);
+				}
 			}
+			
 		}
 	}
-}*/
 
+}
+*/
 readingFile::readingFile(void)
 {
 }
@@ -33,17 +40,16 @@ void readingFile::OpenFile_(string name, string file_next)
 	file.open( name.c_str(), ios_base::in);
 	if(!file)
 	{
-		perror("Error open file!");
-		cin.get();
+		perror("Error open file aeroindex.txt!");
 		exit(1);
 	}
 	else
 	{
 		readF();
 		file.close();
-		cout << "readGood";
+		//list<DateSurfase_TTAA>::iterator h = TTXX.data_TTAA.begin();
+		//h->FindReplicaToList();
 		TTXX.WriteFile(file_next);
-		cout << "writeGood";
 	}
 }
 void readingFile::readF()
@@ -54,13 +60,27 @@ void readingFile::readF()
 	FindDate();
 	/// модуль который ищит временной отрезок по U
 	FindTimePriod();
+	// задание файла dataFile
+	local_time st;
+	stringstream ss;
+	ss << dataFile << "/aeroindex";
+	if(st.wDay < 10 ) ss << "0";
+	ss << st.wDay ;
+	if(st.wMonth < 10 ) ss << "0";
+	ss << st.wMonth << st.wYear << "_"; 
+	if ((TTXX.time_period/100)%100 == 0) ss << "0"; 
+	ss << (TTXX.time_period/100)%100 << ".txt";
+	ss >> dataFile;
+	cout << dataFile << endl;
 	char s;
+	fstream FileData( dataFile.c_str(), ios::out);
 	while (!file.get(s).eof())
 	{
 		file.getline( T, 2000, 'T' );
 		file.getline( TXX, 5 ,' ');
-		SelectionCipher( TXX );
+		SelectionCipher( TXX ,FileData );
 	}
+	FileData.close();
 	TTXX.data_TTAA.sort();
 	TTXX.data_TTBB.sort();
 }
@@ -116,9 +136,9 @@ void readingFile::FindTimePriod()
 	}
 }
 
-void readingFile::SelectionCipher( char TXX[] )
+void readingFile::SelectionCipher( char TXX[] , fstream& FileData)
 {
-	char * TTX = new char[1000] ;
+	char * TTX = new char[2000] ;
 	if ( strchr( TXX,'T')) 
 		switch (TXX[1])
 		{
@@ -126,8 +146,10 @@ void readingFile::SelectionCipher( char TXX[] )
 			{
 				if (TXX[2] == 'A')
 				{
-					file.getline(TTX,1000,'=');
+					file.getline(TTX,2000,'=');
+					FileData << "TTAA " << TTX << "\n\n";
 					TTXX.TTAA(TTX);
+					
 				}
 				break;
 			}
@@ -135,7 +157,8 @@ void readingFile::SelectionCipher( char TXX[] )
 			{
 				if (TXX[2] == 'B')
 				{					
-					file.getline(TTX,1000,'=');
+					file.getline(TTX,2000,'=');
+					FileData << "TTBB " << TTX << "\n\n";
 					TTXX.TTBB(TTX);
 				}
 				break;

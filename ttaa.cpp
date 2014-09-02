@@ -19,8 +19,7 @@ char* recording_and_write::deleteEndl( char* code )
 }
 void recording_and_write::TTAA( char * code )
 {
-	//Замена '\n' на пробел
-	code = deleteEndl(code);
+	code = deleteEndl(code);				//Замена '\n' на пробел
 	DateSurfase_TTAA new_base_;
 	TTAA_Database base;
 	base.information = true;

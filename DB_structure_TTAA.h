@@ -42,6 +42,18 @@ public:
 	list<surface> tropopause;			// Сведения о тропопаузе 88
 	list<surfaceWind> max_wind;			// Сведения о максимальном ветре 77 66 
 	list<WIND_SHIFT> vertical;			// Сведения о вертикальном сдвиге ветра 4
+	bool operator== (const TTAA_Database & right) 
+	{
+		int m = ((right.number.district_number*1000) + right.number.station_number);
+		int n = ((number.district_number*1000) + number.station_number);
+		return n == m;
+	} ;
+	bool operator!= (const TTAA_Database & right) 
+	{
+		int m = ((right.number.district_number*1000) + right.number.station_number);
+		int n = ((number.district_number*1000) + number.station_number);
+		return n != m;
+	} ;
 	bool operator< (const TTAA_Database & right) 
 	{
 		int m = ((right.number.district_number*1000) + right.number.station_number);
@@ -49,7 +61,8 @@ public:
 		return n < m;
 	} ;
 };
- class DateSurfase_TTAA
+
+class DateSurfase_TTAA
 {
 public:
 	int date;
