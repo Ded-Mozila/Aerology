@@ -2,6 +2,8 @@
 #define GENERAL_DATA_H 
 
 
+
+
 struct WIND
 {
 	int wind_direction;					// Направление ветра
@@ -37,6 +39,35 @@ struct NUMBER_HEIGHT
 {
 	int number;							// Номер уровня
 	int height;							// Высота над уровнем моря
+};
+
+
+struct standardSurface                  // Стандартные уровни 
+{
+	NUMBER_HEIGHT height;               // данные о высоте на уровне
+	surface data;                       // Данные о уровне
+};
+
+class surface                       // Все стандартыне данные для всех повехностей
+{
+public:
+	bool information;                   // Идентификатор существования данных  
+	TEMP_DEWPOINT info_temp;            // Информация о данных температуры и дефекта точки росы
+	WIND wind;                          // Данные по ветру
+	int pressure;                       // Давление на уровне 
+	surface()
+	{
+		information = false;
+		pressure = -1;
+	}
+
+};
+
+struct surfaceWind                      // Данные  с максимальной скоростью ветра 77 66
+{
+	int point;                          // 66 или 77
+	bool information;                   // Отсутствие информации
+	surface data;                       // Данные о уровне
 };
 
 #endif // !GENERAL_DATA_H

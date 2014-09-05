@@ -139,6 +139,8 @@ void readingFile::SelectionCipher( char TXX[] , fstream& FileData)
 		case  'C':
 			{
 				file.getline(TTX,1000,'=');
+				FileData << "TTCC " << TTX << "\n\n";
+				TTXX.TTCC(TTX);
 				break;
 			}
 		case  'D':
