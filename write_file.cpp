@@ -180,11 +180,10 @@ char * recording_and_write::DateTime( char * code, DATA_TIME & new_data_tim )
 	return code;	
 }
 
-char* recording_and_write::DistrictStation( char * code, DISTRICT_STATION & new_number)
+char* recording_and_write::DistrictStation( char * code, int & new_number)
  {
 	 int area = strtol( code , &code , 10);
-	 new_number.district_number = area / 1000;
-	 new_number.station_number =  area % 1000;
+	 new_number = area;
 	 return code;
  }
 

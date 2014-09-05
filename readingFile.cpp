@@ -1,36 +1,10 @@
 #include "readingFile.h"
 #include <algorithm> 
-/*void DateSurfase_TTAA::FindReplicaToList()
+void DateSurfase_TTAA::FindReplicaToList()
 {
-	list<TTAA_Database>::iterator i;
-	for (i = data_.begin(); i != data_.end(); i)
-	{
-		TTAA_Database item = (*i);
-		i++;
-		list<TTAA_Database>::iterator filder;
-		for (int J = 0; J < 10; ++J)
-		{
-			filder = find(i,data_.end(),item);
-			if((*filder) == item)
-			{
-				if (item.information == false && filder->information == false)
-				{
-					data_.erase(filder);
-				}
-				else
-				{
-					if ( filder->information == false)
-						data_.erase(filder);
-					else
-						data_.erase(i);
-				}
-			}
-			
-		}
-	}
 
 }
-*/
+
 readingFile::readingFile(void)
 {
 }
@@ -71,7 +45,6 @@ void readingFile::readF()
 	if ((TTXX.time_period/100)%100 == 0) ss << "0"; 
 	ss << (TTXX.time_period/100)%100 << ".txt";
 	ss >> dataFile;
-	cout << dataFile << endl;
 	char s;
 	fstream FileData( dataFile.c_str(), ios::out);
 	while (!file.get(s).eof())
@@ -156,7 +129,7 @@ void readingFile::SelectionCipher( char TXX[] , fstream& FileData)
 		case  'B':
 			{
 				if (TXX[2] == 'B')
-				{					
+				{
 					file.getline(TTX,2000,'=');
 					FileData << "TTBB " << TTX << "\n\n";
 					TTXX.TTBB(TTX);

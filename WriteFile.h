@@ -34,7 +34,7 @@ public:
 
 	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i, TTAA_Database & base);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ
 
-	char * DistrictStation ( char * code, DISTRICT_STATION & new_number);	// Îïðåäåëåíèå Íîìåðà ðàéîíà è ñòàíöèè
+	char * DistrictStation ( char * code, int & new_number);	// Îïðåäåëåíèå Íîìåðà ðàéîíà è ñòàíöèè
 
 	char * DateTime ( char * code, DATA_TIME & new_data_tim );				// Îïðåäåëåíèå Äàòû è âðÿìû çàïóñêà çîíäà + îïðåäåëåíèå èíäåíòèôîêàòîðà ïîñëåäíåé èçîáàðè÷åñêîé ïîâåðõíîñòè(ÒÒÀÀ) ëèáî òèïà îáîðóäîâàíèÿ(ÒÒÂÂ)
 

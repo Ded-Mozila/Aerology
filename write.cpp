@@ -19,7 +19,7 @@ void recording_and_write::OutCodTTAA( const string _file )
 {
 	local_time st;
 	list<DateSurfase_TTAA>::iterator i = data_TTAA.begin();
-	cout << data_TTAA.size() << endl;
+	
 	/*for ( i = data_TTAA.begin(); i !=data_TTAA.end();++i )
 	{*/
 
@@ -28,10 +28,8 @@ void recording_and_write::OutCodTTAA( const string _file )
 		int period = 0;	 //Сравниваем время для определения дальнейшего алгаритма
 		if (10 <= int((time_period/100)%100) && int((time_period/100)%100) <= 14)
 			period = 12;
-			else period = 0;
-		cout << _file.c_str()<< endl;	
+		else period = 0;
 		string name = StrNameFile( st, period , st.wDay, _file );
-		cout << name.c_str()<< endl;
 		InFile.open( name.c_str() , ios_base::out );
 		if(!InFile)
 		{
@@ -65,10 +63,8 @@ void recording_and_write::OutCodTTAA( const string _file )
 		{
 			surface DAT = (*J).land_surface;
 			double temp = DAT.info_temp.temp;
-			InFile <<  (*J).number.district_number;
-			if((*J).number.station_number < 100 )InFile<<"0";
-			InFile<<(*J).number.station_number <<" " ;
-			if ( DAT.information == true /*|| DAT.pressure != NULL || temp != NULL*/ )
+			InFile <<  (*J).number <<" " ;
+			if ( DAT.information == true )
 			{
 				InFile << "Pzem=";
 				if ((DAT.pressure) < 1000) InFile << " ";
@@ -171,7 +167,7 @@ void recording_and_write::WriteLand( const TTAA_Database time_data,fstream & inF
 {
 	surface DAT = time_data.land_surface;
 	double temp = DAT.info_temp.temp;
-	inFile <<  time_data.number.district_number<<time_data.number.station_number <<" " ;
+	inFile <<  time_data.number <<" " ;
 	if ( DAT.information == true )
 	{
 		inFile << "Pzem=";
@@ -218,19 +214,19 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 						}
 						else
 						{
-							inFile << "IND="<<  time_data.number.district_number<<time_data.number.station_number <<" ";
+							inFile << "IND="<<  time_data.number <<" ";
 							inFile << "P=";
 							if (StandartLevels[a] != 0) inFile << " ";
 							else inFile << "10";
 							inFile << StandartLevels[a];
 							if ( StandartLevels[a] == 92 ) inFile << "5";
 							else inFile << "0";
-							inFile << "=============================\n";
+							inFile << "==========================\n";
 						}
 					}
 				}
 				//Íîìåð ñòàíöèè è ðàéîíà
-				inFile << "IND="<<  time_data.number.district_number<<time_data.number.station_number <<" ";
+				inFile << "IND="<<  time_data.number <<" ";
 
 				//äàâëåíèå
 				inFile << "P=";
@@ -280,6 +276,7 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 void recording_and_write::OutCodTTBB( const string _file )
 {
 	list<DateSurfase_TTBB>::iterator k = data_TTBB.begin();
+	//Тут закоментирована версия программы которая должна анализировать несколько файлов
 	//for (k = data_TTBB.begin(); k != data_TTBB.end(); ++k)
 	//{
 		list<TTBB_Database>::iterator j;
@@ -298,14 +295,10 @@ void recording_and_write::OutCodTTBB( const string _file )
 
 void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fstream & writeFileTTBB )
 {
-	cout << "OutFileListTTBB" << endl;
 	list<Temp_Base>::iterator L;
 	for ( L = j->level.begin(); L != j->level.end(); ++L )
 	{
-		//cout << "OutFileListTTBB loop" << endl;
-		writeFileTTBB <<  "IND=" << j->number.district_number;
-		if(j->number.station_number < 100) writeFileTTBB<<"0";
-		writeFileTTBB<<j->number.station_number<<"  ";
+		writeFileTTBB <<  "IND=" << j->number;
 		int pressure = L->pressure;
 		writeFileTTBB <<  "P=" ;
 		if( pressure <= 99) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà

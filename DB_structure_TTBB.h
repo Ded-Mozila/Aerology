@@ -33,13 +33,13 @@ class TTBB_Database
 public:
 	bool information;					// Отсутствие информации
 	DATA_TIME memory;					// Данные о времени и дате запуска и + индентификатор
-	DISTRICT_STATION number;			// Данные о територии запуска зонда и станции 
+	int number;			// Данные о територии запуска зонда и станции 
 	list<Temp_Base> level;				// Уровни по температуре 
 	list< list<Wind_Base> >level_wind;	// Уровни по ветру
 	bool operator< (const TTBB_Database & right) 
 	{
-		int m = ((right.number.district_number*1000) + right.number.station_number);
-		int n = ((number.district_number*1000) + number.station_number);
+		int m = right.number;
+		int n = number;
 		return n<m;
 	} ;
 };

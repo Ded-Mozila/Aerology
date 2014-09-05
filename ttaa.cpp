@@ -41,10 +41,8 @@ void recording_and_write::TTAA( char * code )
 					step++; // преход к новому шагу
 					break;
 				}
-
 			case 3 : // Сортировка и находние поверхностей
 				{
-
 					if( strstr( code, "NIL" ) == NULL ) //Проверка на отсутствие данных
 					{
 						base.land_surface.information = true;
@@ -53,7 +51,6 @@ void recording_and_write::TTAA( char * code )
 					}
 					else
 					{	
-						
 						theEnd = true;
 						base.information = false;
 					}
