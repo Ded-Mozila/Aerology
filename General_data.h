@@ -42,12 +42,6 @@ struct NUMBER_HEIGHT
 };
 
 
-struct standardSurface                  // Стандартные уровни 
-{
-	NUMBER_HEIGHT height;               // данные о высоте на уровне
-	surface data;                       // Данные о уровне
-};
-
 class surface                       // Все стандартыне данные для всех повехностей
 {
 public:
@@ -63,11 +57,19 @@ public:
 
 };
 
+
+struct standardSurface                  // Стандартные уровни 
+{
+	NUMBER_HEIGHT height;               // данные о высоте на уровне
+	surface data;                       // Данные о уровне
+};
+
 struct surfaceWind                      // Данные  с максимальной скоростью ветра 77 66
 {
 	int point;                          // 66 или 77
 	bool information;                   // Отсутствие информации
 	surface data;                       // Данные о уровне
 };
+
 
 #endif // !GENERAL_DATA_H

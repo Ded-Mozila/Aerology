@@ -1,6 +1,7 @@
 #include "settings.h"
 #include <errno.h>
 
+
 Settings::Settings()
 {
 	fileSettings.open( "settings.txt", ios_base::in );

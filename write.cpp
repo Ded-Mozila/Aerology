@@ -13,6 +13,10 @@ void recording_and_write::WriteFile(const string _file )
 	OutCodTTAA(_file);  // создание файла и запись кода TTAA
 
 	OutCodTTBB(_file);	// запись в созданный уже файла кода TTBB
+
+	OutCodTTCC(_file);	// запись в созданный уже файла кода TTCC
+
+	InFile.close();
 }
 
 void recording_and_write::OutCodTTAA( const string _file )
@@ -290,7 +294,6 @@ void recording_and_write::OutCodTTBB( const string _file )
 		}
 		
 	//}
-	InFile.close();
 }
 
 void  recording_and_write::OutFileListTTBB( list<TTBB_Database>::iterator j, fstream & writeFileTTBB )
@@ -349,4 +352,101 @@ bool recording_and_write::LeapYear( local_time st )
 		}else Leap=1;
 	}else Leap=0;
 	return Leap;
+}
+
+
+void recording_and_write::OutCodTTCC( const string _file )
+{
+	local_time st;
+	list<DateSurfase_TTCC>::iterator i = data_TTCC.begin();
+	i->data_.sort();
+	InFile << "\n\n" << "SpecialPoints_TTCC";
+	list<TTCC_Database>::iterator J;
+	InFile << '\n' <<  "StandartLevels" << "\n";
+	for ( J = i->data_.begin(); J != i->data_.end(); ++J )
+	{	
+		bool controllerEmptyLevels = true;
+		controllerEmptyLevels = WriteStandateSurfase_TTCC( *J , InFile ,controllerEmptyLevels);
+	}
+}
+bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & inFile , bool StopProcesingLevels)
+{
+	TTCC_Database date = time_data;
+	list<standardSurface>::iterator i;
+	if (date.information == true)
+	{
+
+		for(i = date.level.begin(); i != date.level.end(); ++i )
+		{
+			int  StandartLevels[6] = {70,50,30,20,10};
+			standardSurface new_surfase = *i;
+			double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
+			int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
+			WIND wind = new_surfase.data.wind;
+			if (StopProcesingLevels)
+			{
+				for (int a = 0; a < 5; a++)
+				{
+					if (StandartLevels[a] == new_surfase.height.number)
+					{
+						StopProcesingLevels = false;
+						break;
+					}
+					else
+					{
+						inFile << "IND="<<  time_data.number <<" ";
+						inFile << "P=";
+						if (StandartLevels[a] != 0) inFile << " ";
+						else inFile << "10";
+						inFile << StandartLevels[a];
+						if ( StandartLevels[a] == 92 ) inFile << "5";
+						else inFile << "0";
+						inFile << "==========================\n";
+					}
+				}
+			}
+			//Íîìåð ñòàíöèè è ðàéîíà
+			inFile << "IND="<<  time_data.number <<" ";
+
+			//äàâëåíèå
+			inFile << "P=";
+			if (number != 0) inFile << " ";
+			else inFile << "10";
+			inFile << number;
+			if ( number == 92 ) inFile << "5";
+			else inFile << "0";
+
+			//òåìïåðàòóðà
+			inFile << " T=";
+			if ( temp == 999 ) inFile << " ";
+			if ( temp >= 0 ) inFile << " ";
+			if ( fabs(temp) < 10 ) inFile << " ";
+			inFile << temp;
+			if ( ( temp - (int)temp ) == 0 && temp != 999 ) inFile << ".0";
+
+			//íàïðàâëåíèå âåòðà
+			inFile << " d=";
+			if ( wind.wind_direction < 100 ) inFile << " ";
+			if ( wind.wind_direction < 10 ) inFile << " ";
+			inFile << wind.wind_direction;
+
+			//ñêîðîòü âåòðà
+			inFile << " f=";
+			if ( abs(wind.wind_speed) < 100 )inFile << " ";
+			if ( abs(wind.wind_speed) < 10 )inFile << " ";
+			inFile << wind.wind_speed;
+
+			//äåôèöèò òî÷êè ðîñû
+			inFile << " D=";
+			double dewpoint = new_surfase.data.info_temp.dewpoint;
+			if ( abs(dewpoint) < 100 )inFile << " ";
+			if ( abs(dewpoint) < 10 )inFile << " ";
+			inFile << dewpoint;
+			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) inFile << ".0";
+			if ( dewpoint != 999 ) inFile << "0";
+			inFile << "\n" ;
+		}
+		inFile << "\n" ;
+	}
+	return StopProcesingLevels;
 }

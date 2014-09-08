@@ -5,6 +5,7 @@
 #include <string.h>
 #include "DB_structure_TTAA.h"
 #include "DB_structure_TTBB.h"
+#include "DB_structure_TTCC.h"
 using namespace std;
 #define STOP 77
 class recording_and_write
@@ -27,13 +28,14 @@ public:
 	void TimePeriod( TTAA_Database &base, DateSurfase_TTAA &new_base_ );
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
 	void TTBB(char * code);
+	void TTCC( char * code );
 
 	WIND_SHIFT WindShift( int GGPPP );										// Îïðåäåëåíèå ñäâèãà âåòðà
 
 	char * deleteEndl( char* code );  										// delete '\r\n' in string code
 	char * MaxWind ( char * code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
 
-	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i, TTAA_Database & base);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ
+	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ
 
 	char * DistrictStation ( char * code, int & new_number);	// Îïðåäåëåíèå Íîìåðà ðàéîíà è ñòàíöèè
 
@@ -61,17 +63,21 @@ public:
 
 	void OutCodTTAA( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÀÀ
 
-    bool LeapYear( local_time st );
+	void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
+
+	bool LeapYear( local_time st );
 
 	void OutCodTTBB( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
 
-    string StrNameFile(local_time st, int time, int date, string _file );		//Ôîðìèðóåò ñòîðîêó äåðåêòîðèè äëÿ îòêðûòèÿ ôàéëà
+	string StrNameFile(local_time st, int time, int date, string _file );		//Ôîðìèðóåò ñòîðîêó äåðåêòîðèè äëÿ îòêðûòèÿ ôàéëà
 
 	void OutFileListTTBB( list<TTBB_Database>::iterator j, fstream &inFile );
 
 	void WriteLand(const TTAA_Database time_data, fstream & inFile);			// Ôóíêöèÿ çàïèñè äàííûõ íà óðîâíè çåìëè
 
 	bool WriteStandateSurfase( const TTAA_Database time_data, fstream & inFile , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
+
+	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & inFile , bool StopProcesingLevels);
 
 	void WriteSpecialPoints(const TTAA_Database time_data, fstream & inFile);	// Ôóíêöèÿ çàïèñè ñïåöèàëüíûõ ïóíêòîâ êîäà ÒÒÂÂ
 

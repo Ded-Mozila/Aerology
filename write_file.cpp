@@ -187,7 +187,7 @@ char* recording_and_write::DistrictStation( char * code, int & new_number)
 	 return code;
  }
 
-char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_height, int & i ,TTAA_Database & base)
+char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_height, int & i)
 {
 	int PPhhh = strtol(code, &code, 10);
 	//1. îïðåäåëåíèå ÷òî ýòî: äàííûå  î òðîïîïàóçå èëè äàííûå î âåòðå

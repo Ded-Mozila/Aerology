@@ -1,8 +1,8 @@
-
+#include "header.h"
 #ifndef SETTINGS_H
 #define SETTINGS_H 
 #define DEFAULT_MODE S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
-#include "header.h"
+
 
 class Settings
 {

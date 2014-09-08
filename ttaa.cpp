@@ -45,7 +45,7 @@ void recording_and_write::TTAA( char * code )
 				{
 					if( strstr( code, "NIL" ) == NULL ) //Проверка на отсутствие данных
 					{
-						base.land_surface.information = true;
+						base.information = true;
 						code = Pressure(code, base.land_surface.pressure);  
 						code = ReturnSurface( code , base.land_surface );
 					}
@@ -65,7 +65,7 @@ void recording_and_write::TTAA( char * code )
 
 						standardSurface time_data;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
-						code = NumberHeight( code, time_data.height, i, base );
+						code = NumberHeight( code, time_data.height, i);
 						//2. ...
 						if (i == STOP)
 							break;

@@ -56,6 +56,7 @@ void readingFile::readF()
 	FileData.close();
 	TTXX.data_TTAA.sort();
 	TTXX.data_TTBB.sort();
+	TTXX.data_TTCC.sort();
 }
 void readingFile::FindDate()
 {	
@@ -99,7 +100,7 @@ void readingFile::FindTimePriod()
 			file >> stringTime;
 			file >> stringTime;
 			timeFile = atoi(stringTime);
-			if ( st.wDay == timeFile/10000 && st.whour <= (((timeFile/100)%100)+3) &&  st.whour >= (((timeFile/100)%100)-2) )//  +-2
+			if ( st.wDay == timeFile/10000 && st.whour <= (((timeFile/100)%100)+10) )
 			{
 				TTXX.time_period = timeFile;
 				delete []str;
