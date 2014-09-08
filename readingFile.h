@@ -13,6 +13,7 @@ public:
 	void OpenFile_( string name, string file_next );
 	void readF();
 	void FindDate();
+	void MadeNameAeroindex();
 	void FindTimePriod();
 	
 	void SelectionCipher( char TXX[] , fstream& FindDate);

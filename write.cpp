@@ -114,7 +114,7 @@ void recording_and_write::ViewTimePeriod_00_(fstream & inFile)
 		{
 			old_day = 31;
 			old_month = 12;
-			old_year = year - 1;	
+			old_year = year - 1;
 		}
 		else
 		{

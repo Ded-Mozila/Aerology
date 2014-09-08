@@ -29,37 +29,42 @@ void Settings::init()
 	{
 		char getStr;
 		fileSettings.get ( getStr );
-		if ( getStr == 'O' || getStr == 'I' || getStr == 'A' )
+		fileSettings.getline ( str, 256, '=' );
+		switch (getStr)
 		{
-			fileSettings.getline ( str, 256, '=' );
-			switch (getStr)
+		case 'O':
 			{
-			case 'O':	
-				{
-					char dir[256];
-					fileSettings.getline ( dir, 256, '=' );
-					outDirectory =  dir;
-					break;
-				}
-			case 'I':
-				{
-					char dir[256];
-					fileSettings.getline ( dir , 256, '=' );
-					inDirectory = ToDayData(dir);
-					mkdirp(inDirectory.c_str());
-					break;
-				}
-			case 'A':
-				{
-					char dir[256];
-					fileSettings.getline ( dir , 256, '=' );
-					dataDirectory = ToDayData(dir);
-					mkdirp(dataDirectory.c_str());
-					break;
-				}
-			default: break;
+				char dir[256];
+				fileSettings.getline ( dir, 256, '=' );
+				outDirectory =  dir;
+				break;
 			}
+		case 'I':
+			{
+				char dir[256];
+				fileSettings.getline ( dir , 256, '=' );
+				inDirectory = ToDayData(dir);
+				mkdirp(inDirectory.c_str());
+				break;
+			}
+		case 'A':
+			{
+				char dir[256];
+				fileSettings.getline ( dir , 256, '=' );
+				dataDirectory = ToDayData(dir);
+				mkdirp(dataDirectory.c_str());
+				break;
+			}
+		case 'T':
+			{
+				char dir[256];
+				fileSettings.getline ( dir , 256, '=' );
+				InitTimePeriodSart(dir);
+				break;
+			}
+		default: break;
 		}
+		
 	}
 }
 
@@ -128,4 +133,16 @@ bool mkdirp(const char* path, mode_t mode) //Создание дерева ди�
 		*p = v;
 	}
 	return true;
+}
+void Settings::InitTimePeriodSart(char * dir)
+{
+	while( *dir != '\0' )
+	{
+		int period_time = strtol( dir , &dir , 10);
+		Time_Period new_period;
+		new_period.hour = period_time/100;
+		new_period.minutes = period_time%100;
+		TimeStart.push_back(new_period);
+		cout << new_period.hour << ":" <<new_period.minutes<< '\n';
+	}
 }

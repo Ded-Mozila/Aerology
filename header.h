@@ -10,6 +10,7 @@
 #include "local_time.h" 
 #include <fstream>
 #include <cstring>
+#include <list>
 using namespace std;
 
 #endif // ! HEADER_H 

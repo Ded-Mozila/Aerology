@@ -1,31 +1,6 @@
 #include "readingFile.h"
 #include <algorithm> 
-void DateSurfase_TTAA::FindReplicaToList()
-{
 
-}
-
-readingFile::readingFile(void)
-{
-}
-void readingFile::OpenFile_(string name, string file_next)
-{
-	TTXX.data = 0 ; 
-	file.open( name.c_str(), ios_base::in);
-	if(!file)
-	{
-		perror("Error open file aeroindex.txt!");
-		exit(1);
-	}
-	else
-	{
-		readF();
-		file.close();
-		//list<DateSurfase_TTAA>::iterator h = TTXX.data_TTAA.begin();
-		//h->FindReplicaToList();
-		TTXX.WriteFile(file_next);
-	}
-}
 void readingFile::readF()
 {
 	char T[2000];
