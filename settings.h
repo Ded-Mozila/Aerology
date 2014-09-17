@@ -14,8 +14,8 @@ class Settings
 public:
     string outDirectory;
 	string inDirectory;
-	string dataDirectory;  // директория сохранения исходных данных
-	list<Time_Period> TimeStart;
+	string dataDirectory;		// директория сохранения исходных данных
+	list<int> stations;			//
 	fstream fileSettings;
 	Settings();
 	~Settings();

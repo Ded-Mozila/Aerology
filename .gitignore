@@ -2,3 +2,5 @@
 *.a
 *.txt
 Aerology.sublime-project
+*.name
+*.xml

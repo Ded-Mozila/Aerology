@@ -4,28 +4,20 @@
 #include <time.h>
 #include <iostream>
 using namespace std;
+
 class local_time
 {
 public:
 	long wDay;
- 	long wMonth;
- 	long wYear;
- 	long whour;
- 	~local_time()
- 	{};
- 	
- 	local_time()
-	{
-		time_t rawtime;
-   		struct tm * info;
-   		time(&rawtime);
-   		info = localtime (&rawtime);
-   		wYear = info->tm_year+=1900;
-   		wMonth = info->tm_mon+1;
-   		wDay = info->tm_mday;
-   		whour = info->tm_hour;
-	
-	};
+	long wMonth;
+	long wYear;
+	long whour;
+	long wmin;
+	long wsec;
+	~local_time();
+	local_time();
+	local_time Yesterday();	//нахождение вчерашних числа
 	
 };
+bool LeapYear(  int year );
 #endif //! LOCAL_TIME_H

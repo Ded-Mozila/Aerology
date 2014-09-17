@@ -4,6 +4,7 @@
 
 Settings::Settings()
 {
+	cout << "Settings \n";
 	fileSettings.open( "settings.txt", ios_base::in );
 	if(!fileSettings)
 	{
@@ -23,49 +24,23 @@ Settings::~Settings()
 
 void Settings::init()
 {
-	char str[256];
-	char strDirectory[256];
-	while (!fileSettings.getline ( str, 256, '#' ).eof())
+	char dir1[256];
+	fileSettings.getline ( dir1, 256, ';' );
+	outDirectory =  dir1;
+	char dir2[256];
+	fileSettings.getline ( dir2, 256, ';' );
+	inDirectory = ToDayData(dir2);
+	mkdirp(inDirectory.c_str());
+	char dir3[256];
+	fileSettings.getline ( dir3, 256, ';' );
+	dataDirectory = ToDayData(dir3);
+	mkdirp(dataDirectory.c_str());
+	char stat[256];
+	while(!fileSettings.getline ( stat, 256, '\n').eof())
 	{
-		char getStr;
-		fileSettings.get ( getStr );
-		fileSettings.getline ( str, 256, '=' );
-		switch (getStr)
-		{
-		case 'O':
-			{
-				char dir[256];
-				fileSettings.getline ( dir, 256, '=' );
-				outDirectory =  dir;
-				break;
-			}
-		case 'I':
-			{
-				char dir[256];
-				fileSettings.getline ( dir , 256, '=' );
-				inDirectory = ToDayData(dir);
-				mkdirp(inDirectory.c_str());
-				break;
-			}
-		case 'A':
-			{
-				char dir[256];
-				fileSettings.getline ( dir , 256, '=' );
-				dataDirectory = ToDayData(dir);
-				mkdirp(dataDirectory.c_str());
-				break;
-			}
-		case 'T':
-			{
-				char dir[256];
-				fileSettings.getline ( dir , 256, '=' );
-				InitTimePeriodSart(dir);
-				break;
-			}
-		default: break;
-		}
-		
+		stations.push_back(atoi(stat));
 	}
+	stations.push_back(atoi(stat));
 }
 
 
@@ -84,8 +59,6 @@ string Settings::ToDayData( char * address )
 
 string Settings::WhatMonth( const long month )
 {
-	//переделать на цифры
-
 	string ListMonths[12] = {
 		
 		"01",
@@ -133,16 +106,4 @@ bool mkdirp(const char* path, mode_t mode) //Создание дерева ди�
 		*p = v;
 	}
 	return true;
-}
-void Settings::InitTimePeriodSart(char * dir)
-{
-	while( *dir != '\0' )
-	{
-		int period_time = strtol( dir , &dir , 10);
-		Time_Period new_period;
-		new_period.hour = period_time/100;
-		new_period.minutes = period_time%100;
-		TimeStart.push_back(new_period);
-		cout << new_period.hour << ":" <<new_period.minutes<< '\n';
-	}
 }

@@ -1,6 +1,6 @@
+
+
 #include "WriteFile.h"
-
-
 
 recording_and_write::recording_and_write( void )
 {

@@ -20,11 +20,12 @@ char* recording_and_write::deleteEndl( char* code )
 void recording_and_write::TTAA( char * code )
 {
 	code = deleteEndl(code);				//Замена '\n' на пробел
-	DateSurfase_TTAA new_base_;
+	//DateSurfase_TTAA new_base_;
 	TTAA_Database base;
 	base.information = true;
 	bool theEnd = false;					// Завершение программы
-	int step = 1;							// Шаг выполнения программы	
+	int step = 1;							// Шаг выполнения программы
+	base.code_ = code;
 	while((*code) != '\0')
 	{
 		switch (step)
@@ -78,90 +79,53 @@ void recording_and_write::TTAA( char * code )
 					break;
 
 				}
-		default:
-			break;
+			default:
+				break;
 		}
 		if(theEnd  == true)
 			break;
 	}
 	// Заполение списка ТТАА данными
-	if(data_TTAA.size() == 0)
-	{
-		TimePeriod( base.memory.date, base.memory.time, new_base_.date, new_base_.time);
-		new_base_.data_.push_back( base );
-		data_TTAA.push_back( new_base_ );
-	}
-	else
-	{
-		bool check = false;
-		list<DateSurfase_TTAA>::iterator i;
-		for ( i = data_TTAA.begin(); i != data_TTAA.end(); ++i )
+	list<Station>::iterator i;
+	list<Station>::iterator i_begin;
+	list<Station>::iterator i_end;
+		if( base.memory.time == 23 || base.memory.time == 0 || base.memory.time == 1 )			// 00
 		{
-			//Упростить 
-			if( ((i->date == ( base.memory.date+1 ) && base.memory.time == 23  ) /* Если даты совпадают и время 23*/\
-				|| \
-				( i->date == ( base.memory.date ) && \
-				( base.memory.time == 0  || base.memory.time == 1 ) )) && \
-				( i->time  == 0)) //
-			{
-				check = true;
-				i->data_.push_back( base );
-				break;
-			}
-			if( i->date == base.memory.date  && ( base.memory.time == 11  || base.memory.time == 12  || base.memory.time == 13) &&  i->time == 12 ) //
-			{
-				check = true;
-				i->data_.push_back( base );
-				break;
-			}
+			i_begin = time_00.begin();
+			i_end = time_00.end();
 		}
-		if(check == false)
+		if( base.memory.time == 11 || base.memory.time == 12 || base.memory.time == 13 )		// 12
 		{
-			TimePeriod( base.memory.date, base.memory.time, new_base_.date, new_base_.time);
-			new_base_.data_.push_back( base );
-			data_TTAA.push_back( new_base_ );
+			i_begin = time_12.begin();
+			i_end = time_12.end();
 		}
-	}
-
-}
-
-//Íåâåðíûé ìåòîä â êàæäîì ìåñÿöå åñòü ýòà äàòà!!!!!!!
-void recording_and_write::TimePeriod( const int newDate, const int NewTime, int& Date, int& Time ) // New* òå äàííûå êîòîðûå íóæíî çàïèñàòü â íîâûé áëîê äàííûõ Date and Time
-{
-	if( NewTime == 0 || NewTime == 1 || NewTime == 23 ) Time = 0;
-	else Time = 12;
-	Date = newDate;
-	if ( NewTime == 23 )
+	for ( i =i_begin; i != i_end; ++i )
 	{
-		int monline[4]={31,28,30,29};
-		for (int i = 0; i < 4; i++)
+		if(base.number == (*i).number )
 		{
-			if(Date == monline[i])
-			{
-				Date = 1;
-				break;
-			}
-			else Date = newDate + 1;
+			(*i).info = true;
+			(*i).TTAA = base;
+			break;
 		}
 	}
 }
+ 
+// int  recording_and_write::LastDayPrecedingMonth() /// Îïðåäåëåíèå ïîñëåäíåãî äíÿ ïðîøëîãî ìåñÿöà
+// {
+// 	int oldMonth = 0;
+// 	int oldDay = 0;
+// 	local_time st; // ïîëó÷åíèå äàííûõ äàòû
 
+// 	// Получение заначения высокосного года
+// 	int monline[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+// 	if (LeapYear(st.wYear)) monline[1]=29;
+// 	int month = st.wMonth;
+// 	if(month == 0)
+// 	{
+// 		oldMonth = 11;
+// 	}
+// 	else oldMonth = month-1;
+// 	oldDay = monline[oldMonth];
+// 	return oldDay;
 
-int  recording_and_write::LastDayPrecedingMonth() /// Îïðåäåëåíèå ïîñëåäíåãî äíÿ ïðîøëîãî ìåñÿöà
-{
-	int oldMonth = 0;
-	int oldDay = 0;
-	local_time st; // ïîëó÷åíèå äàííûõ äàòû
-
-	// Получение заначения высокосного года
-	int monline[12]={31,28,31,30,31,30,31,31,30,31,30,31};
-	if (LeapYear(st)) monline[1]=29;
-	int month = st.wMonth;
-	if(month == 0)
-	{
-		oldMonth = 11;
-	}else oldMonth = month-1;
-	oldDay = monline[oldMonth];
-	return oldDay;
-
-}
+// }

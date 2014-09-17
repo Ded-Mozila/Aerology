@@ -1,26 +1,26 @@
 #ifndef READINGFILE_H
 #define READINGFILE_H 
-
-
 #include "WriteFile.h"
+#include "settings.h"
 class readingFile
 {
 public:
 
-	fstream file; 								// Ôàéë 
+	Settings app;
+	fstream file;								// Исходный файл
 	recording_and_write  TTXX;					// Êëàññ ðàçêîäèðîâàíèÿ è çàïèñè
-	readingFile(void);							// Ïî óìîë÷àíèþ
-	void OpenFile_( string name, string file_next );
-	void readF();
-	void FindDate();
-	void MadeNameAeroindex();
-	void FindTimePriod();
+	readingFile(void);							// Конструктор по умолчанию
+	~readingFile(void);
+	void OpenFile_(void);
+	void MadeNameAeroindex( void );				// Создание имени для исходного файла
+	void Read( void );							// Функция поиска данных
+	void SelectionCipher(void);
 	
-	void SelectionCipher( char TXX[] , fstream& FindDate);
-	~readingFile(void);	
 
 	// Модуль тестирования с выводом сканируемых данных
-	string dataFile; // название файла + директроия с исходными данными
+	string outFile_name;		//Исходный файл
+	string inFile_name;			//Выходной файл
+	string dataFile_name;		// название файла + директроия с исходными данными
 };
 
 #endif	// !READINGFILE_H 

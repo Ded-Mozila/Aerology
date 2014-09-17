@@ -3,14 +3,17 @@
 
 
 #include <sstream>
-#include <iostream>
 #include <cstdlib>
 #include <cstdio>
 #include <sys/stat.h>
-#include "local_time.h" 
 #include <fstream>
 #include <cstring>
 #include <list>
-using namespace std;
+#include <cmath>
+//файлы H
+#include "DB_structure_TTAA.h"
+// #include "DB_structure_TTBB.h"
+// #include "DB_structure_TTCC.h"
+#include "local_time.h"
 
 #endif // ! HEADER_H 
