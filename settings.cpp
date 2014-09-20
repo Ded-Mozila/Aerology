@@ -4,7 +4,6 @@
 
 Settings::Settings()
 {
-	cout << "Settings \n";
 	fileSettings.open( "settings.txt", ios_base::in );
 	if(!fileSettings)
 	{
@@ -46,13 +45,12 @@ void Settings::init()
 
 string Settings::ToDayData( char * address )
 {
-   	local_time timeInfo; //время
+	local_time timeInfo; //время
 	stringstream new_addres;
-    new_addres << address <<  "/" << timeInfo.wYear <<  "/" << WhatMonth(timeInfo.wMonth);
+	new_addres << address <<  "/" << timeInfo.wYear <<  "/" << WhatMonth(timeInfo.wMonth);
 	string AddresStr;
-    new_addres >> AddresStr;
-    new_addres.clear();
-
+	new_addres >> AddresStr;
+	new_addres.clear();
 	return AddresStr;
 }
 
@@ -60,7 +58,6 @@ string Settings::ToDayData( char * address )
 string Settings::WhatMonth( const long month )
 {
 	string ListMonths[12] = {
-		
 		"01",
 		"02",
 		"03",

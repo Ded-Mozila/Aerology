@@ -10,9 +10,9 @@ class Station 							//Данные о определенной станции
 public:
 	int number;
 	bool info;
-	TTAA_Database TTAA;					//Данные со станции  
-	// TTBB_Database TTBB;					//
-	// TTCC_Database TTCC;					// до разборки с TTAA
+	TTAA_Database TTAA;					//Данные со станции
+	TTBB_Database TTBB;					//
+	TTCC_Database TTCC;					// до разборки с TTAA
 	Station(void)
 	{
 		number = -1;
@@ -36,22 +36,25 @@ public:
 	int data;							// 20140715 ГГГГ_ММ_ДД
 	recording_and_write(void);
 	~recording_and_write(void);
-	fstream dataFile;					//Файл с отсортированными данными
-	fstream inFile;						//Файл с выходной файл
-
+	
+	fstream inFile_00;						//Файл с выходной файл
+	fstream inFile_12;						//Файл с выходной файл
 
 	void TTAA(char * code);
-
-	void Write_file_TTAA(int period , const string _file );												// Вывод данных
+	void Write_file_TTAA(int period , const string _file , fstream & file );												// Вывод данных
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
-	// void TTBB(char * code);
-	// void TTCC( char * code );
 
+	void TTBB(char * code);
+	void Write_file_TTBB( int period, const string _file, fstream & file );												// Вывод данных
+	void OutFileListTTBB( TTBB_Database j, fstream& file );
+
+	void TTCC(char * code);
+	void Write_file_TTCC( int period, const string _file, fstream & file );												// Вывод данных
+	
 	WIND_SHIFT WindShift( int GGPPP );										// Îïðåäåëåíèå ñäâèãà âåòðà
-
 	char * deleteEndl( char* code );  										// delete '\r\n' in string code
-	char * MaxWind ( char * code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
+	char * MaxWind ( char* code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
 
 	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ
 
@@ -81,31 +84,30 @@ public:
 
 	void OutCodTTAA( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÀÀ
 
-	// void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
+	void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
 	
-	// void OutCodTTBB( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
+	void OutCodTTBB( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
 
 	string StrNameFile(local_time st, int time, string _file );		//Ôîðìèðóåò ñòîðîêó äåðåêòîðèè äëÿ îòêðûòèÿ ôàéëà
 
-	// void OutFileListTTBB( list<TTBB_Database>::iterator j, fstream &inFile );
 
-	void WriteLand(const TTAA_Database time_data, fstream & inFile);			// Ôóíêöèÿ çàïèñè äàííûõ íà óðîâíè çåìëè
+	void WriteLand(const TTAA_Database time_data, fstream & file);			// Ôóíêöèÿ çàïèñè äàííûõ íà óðîâíè çåìëè
 
-	bool WriteStandateSurfase( const TTAA_Database time_data, fstream & inFile , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
+	bool WriteStandateSurfase( const TTAA_Database time_data, fstream & file , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
 
-	// bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & inFile , bool StopProcesingLevels);
+	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels);
 
-	void WriteSpecialPoints(const TTAA_Database time_data, fstream & inFile);	// Ôóíêöèÿ çàïèñè ñïåöèàëüíûõ ïóíêòîâ êîäà ÒÒÂÂ
+	void WriteSpecialPoints(const TTAA_Database time_data, fstream & file);	// Ôóíêöèÿ çàïèñè ñïåöèàëüíûõ ïóíêòîâ êîäà ÒÒÂÂ
 
 	int DayPeriod(int time , int day);
 
 	int LastDayPrecedingMonth(void);
 
 
-	void ViewTimePeriod_00_(fstream & inFile);
+	void ViewTimePeriod_00_(fstream & file);
 
 
-	void ViewTimePeriod_12_(fstream & inFile);
+	void ViewTimePeriod_12_(fstream & file);
 
 };
 

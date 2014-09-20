@@ -1,10 +1,6 @@
 #include "readingFile.h"
 #include <algorithm> 
 
-// void DateSurfase_TTAA::FindReplicaToList()
-// {
-
-// }
 readingFile::~readingFile()
 {
 }
@@ -17,7 +13,7 @@ void readingFile::OpenFile_(  )
 	TTXX.data = 0;
 	app.stations.sort();
 	list<int>::iterator i;
-	for (i = app.stations.begin() ; i != app.stations.end(); ++i)
+	for (i = app.stations.begin(); i != app.stations.end(); ++i)
 	{
 		Station new_station;
 		new_station.number = (*i);
@@ -35,9 +31,8 @@ void readingFile::OpenFile_(  )
 		Read();
 		cout << "Read Good \n";
 		file.close();
-		cout << '\n' << TTXX.time_00.size() <<  '\n' <<TTXX.time_12.size() <<'\n' ;
-
 		TTXX.WriteFile( app.inDirectory );
+		outDataFile();
 	}
 }
 
@@ -63,7 +58,6 @@ void readingFile::Read( void ) // Функция поиска данных
 				timeFile = atoi(stringTime);
 				if (st.wYear == timeFile/10000 && st.wMonth == (timeFile/100)%100 && st.wDay == timeFile%100 )
 				{
-					cout << timeFile;
 					TTXX.data = timeFile;
 					key_DATA = true;
 				}
@@ -107,13 +101,13 @@ void readingFile::SelectionCipher( void )
 		case  'B':
 			{
 				file.getline(TTX,2000,'=');
-				// TTXX.TTBB(TTX);
+				TTXX.TTBB(TTX);
 				break;
 			}
 		case  'C':
 			{
 				file.getline(TTX,1000,'=');
-				// TTXX.TTCC(TTX);
+				TTXX.TTCC(TTX);
 				break;
 			}
 		case  'D':
@@ -132,16 +126,78 @@ void readingFile::SelectionCipher( void )
 	delete []TTX;
 }
 
-// void readingFile::MadeNameAeroindex( void )
-// {
-// 	local_time st;
-// 	stringstream ss;
-// 	ss << dataFile_name << "/aeroindex";
-// 	if(st.wDay < 10 ) ss << "0";
-// 	ss << st.wDay ;
-// 	if(st.wMonth < 10 ) ss << "0";
-// 	ss << st.wMonth << st.wYear << "_";
-// 	if ((TTXX.time_period/100)%100 == 0) ss << "0";
-// 	ss << (TTXX.time_period/100)%100 << ".txt";
-// 	ss >> dataFile_name;
-// }
+
+
+string readingFile::MadeNameAeroindex( int period, const string _file )
+{
+	local_time st;
+	stringstream ss;
+	string str;
+	ss << _file << "/aeroindex"<< setfill ('0')<< setw (2)<< st.wDay \
+	<< setw (2)  << st.wMonth << setw (4) << st.wYear << "_"\
+	<< setw (2) << period << ".txt";
+	ss >> str;
+	cout << str.c_str() << '\n';
+	return str;
+}
+
+void readingFile::outInfoFileDecodePeriod(int period)
+{
+	dataFile.open((MadeNameAeroindex(period, app.dataDirectory)).c_str(), ios_base::out);
+	list<Station>::iterator i;
+	list<Station>::iterator i_begin;
+	list<Station>::iterator i_end;
+		if( period == 0 )			// 00
+		{
+			i_begin = TTXX.time_00.begin();
+			i_end = TTXX.time_00.end();
+		}
+		if( period == 12 )		// 12
+		{
+			i_begin = TTXX.time_12.begin();
+			i_end = TTXX.time_12.end();
+		}
+	for ( int k = 0; k <3 ;++k )
+	{
+		for ( i =i_begin; i != i_end; ++i )
+		{
+			switch(k)
+			{
+				case 0: // TTAA
+				{
+					if ((*i).info == true && (*i).TTAA.information == true)
+					{
+						dataFile << "TTAA " << (*i).TTAA.code_ << "=\n";
+					}
+					break;
+				}
+				case 1: // TTBB
+				{	
+					if ((*i).info == true && (*i).TTBB.information == true)
+					{
+						dataFile << "TTBB " << (*i).TTBB.code_ << "=\n";
+					}
+					break;
+				}
+				case 2: // TTCC
+				{
+					if ((*i).info == true && (*i).TTCC.information == true)
+					{
+						dataFile << "TTCC " << (*i).TTCC.code_ << "=\n";
+					}
+					break;
+				}
+			}
+		}
+		dataFile << "-----------------------------------------------------------------------\n";
+	}
+	dataFile.close();
+}
+
+void readingFile::outDataFile( void )
+{
+	outInfoFileDecodePeriod(0);
+	outInfoFileDecodePeriod(12);
+}
+
+

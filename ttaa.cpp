@@ -19,9 +19,9 @@ char* recording_and_write::deleteEndl( char* code )
 }
 void recording_and_write::TTAA( char * code )
 {
-	code = deleteEndl(code);				//Замена '\n' на пробел
-	//DateSurfase_TTAA new_base_;
 	TTAA_Database base;
+	base.code_ = code;
+	code = deleteEndl(code);				//Замена '\n' на пробел
 	base.information = true;
 	bool theEnd = false;					// Завершение программы
 	int step = 1;							// Шаг выполнения программы
@@ -62,8 +62,7 @@ void recording_and_write::TTAA( char * code )
 				{
 					int i = 1;
 					while((*(code)) != '\0' )
-					{	
-
+					{
 						standardSurface time_data;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
 						code = NumberHeight( code, time_data.height, i);
@@ -73,7 +72,6 @@ void recording_and_write::TTAA( char * code )
 						code = ReturnSurface( code, time_data.data );
 						//3. Добавление элемента в список
 						base.level.push_back(time_data);
-
 					}
 					theEnd  = true;
 					break;
@@ -109,23 +107,3 @@ void recording_and_write::TTAA( char * code )
 		}
 	}
 }
- 
-// int  recording_and_write::LastDayPrecedingMonth() /// Îïðåäåëåíèå ïîñëåäíåãî äíÿ ïðîøëîãî ìåñÿöà
-// {
-// 	int oldMonth = 0;
-// 	int oldDay = 0;
-// 	local_time st; // ïîëó÷åíèå äàííûõ äàòû
-
-// 	// Получение заначения высокосного года
-// 	int monline[12]={31,28,31,30,31,30,31,31,30,31,30,31};
-// 	if (LeapYear(st.wYear)) monline[1]=29;
-// 	int month = st.wMonth;
-// 	if(month == 0)
-// 	{
-// 		oldMonth = 11;
-// 	}
-// 	else oldMonth = month-1;
-// 	oldDay = monline[oldMonth];
-// 	return oldDay;
-
-// }

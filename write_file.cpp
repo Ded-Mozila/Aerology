@@ -95,11 +95,13 @@ char* recording_and_write::Wind( char * code, WIND& new_wind )
 		new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
 		if ((*code) =='/') 
 		{
+			new_wind.wind_direction = ddfff* 10 ; // Определение направление ветра
 			code += 3;
 			new_wind.wind_speed = 999;			// Отсутствие данных о направлении ветра
 		} 
 		else
 		{
+			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
 			int fff = ddfff % 1000;
 			if(( fff - 500 ) >= 0)
 			{
@@ -193,7 +195,7 @@ char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_heigh
 	//1. îïðåäåëåíèå ÷òî ýòî: äàííûå  î òðîïîïàóçå èëè äàííûå î âåòðå
 	if((PPhhh/1000) == 88 || (PPhhh/1000) ==77)
 	{
-		i = STOP;	
+		i = STOP;
 	}
 	else
 	{
@@ -212,9 +214,8 @@ char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_heigh
 				else new_height.height = PPhhh % 1000;
 			}
 			else new_height.height = PPhhh % 1000;
-		}	
+		}
 	}
-	
 	return code;
 }
 

@@ -19,17 +19,4 @@ public:
 	//list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
 	//list<WIND_SHIFT> vertical;          // Сведения о вертикальном сдвиге ветра 4
 };
-// 							Удалено из-за ненадобности
-// class DateSurfase_TTAA
-// {
-// public:
-// 	int date;
-// 	int time;
-// 	list<TTAA_Database> data_;
-// 	void FindReplicaToList();							// Поиск и исключение из списка повторяющюхся и пустых элементов
-// 	bool operator< (const DateSurfase_TTAA & right)
-// 	{
-// 		return date < right.date;
-// 	};
-// };
 #endif // !DB_STRUCTURE_TTAA_H
