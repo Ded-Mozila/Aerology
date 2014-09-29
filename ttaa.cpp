@@ -21,7 +21,6 @@ void recording_and_write::TTAA( char * code )
 {
 	TTAA_Database base;
 	base.code_ = code;
-	code = deleteEndl(code);				//Замена '\n' на пробел
 	base.information = true;
 	bool theEnd = false;					// Завершение программы
 	int step = 1;							// Шаг выполнения программы

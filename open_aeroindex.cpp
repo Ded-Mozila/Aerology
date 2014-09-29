@@ -49,6 +49,7 @@ void readingFile::Read( void ) // Функция поиска данных
 		{
 			case '&':// Указатель на Дату 
 			{
+
 				int timeFile;
 				char * str = new char[20];
 				file >> str;
@@ -65,6 +66,7 @@ void readingFile::Read( void ) // Функция поиска данных
 			}
 			case 'T':// Указатель на Данные
 			{
+
 				if (key_DATA == true)
 				{
 					SelectionCipher();
@@ -86,46 +88,141 @@ void readingFile::Read( void ) // Функция поиска данных
 }
 void readingFile::SelectionCipher( void )
 {
+
 	char TXX[4];
 	file.getline( TXX, 4 ,' ');
-	char * TTX = new char[2000] ;
+	char * code = new char[2000] ;
 	if ( strchr( TXX,'T')) 
 		switch (TXX[1])
 		{
 		case  'A':
 			{
-				file.getline(TTX,2000,'=');
-				TTXX.TTAA(TTX);
+				file.getline(code,2000,'=');
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTAA(code);
 				break;
 			}
 		case  'B':
 			{
-				file.getline(TTX,2000,'=');
-				TTXX.TTBB(TTX);
+				file.getline(code,2000,'=');
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTBB(code);
 				break;
 			}
 		case  'C':
 			{
-				file.getline(TTX,1000,'=');
-				TTXX.TTCC(TTX);
+				file.getline(code,2000,'=');
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTCC(code);
 				break;
 			}
 		case  'D':
 			{
-				file.getline(TTX,1000,'=');
+				file.getline(code,2000,'=');
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+				{}
 				break;
 			}
 		default:
 			{
-				cout << "Not good" <<'\n';
-				file.getline(TTX,1000,'=');
-				cout << TTX << endl;
+				// cout << "Not good" <<'\n';
+				// cout << code << endl;
 				break;
 			}
 		}
-	delete []TTX;
+	delete []code;
 }
-
+bool readingFile::FindDefectCipher(char * code)
+{
+	bool key = false;
+	int lenStr = strlen(code);
+	// for (int i = 0; i < lenStr; i++)
+	// {
+	// 	switch(code[i])
+	// 	{
+	// 		case '0':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '1':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '2':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '3':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '4':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '5':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '6':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '7':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '8':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '9':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case ' ':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '/':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case 'N':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case 'I':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case 'L':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '\0':
+	// 		{
+	// 			break;
+	// 		}
+	// 		case '\n':
+	// 		{
+	// 			break;
+	// 		}
+	// 		default:
+	// 		{
+	// 			// cout << code[i] << '\n';
+	// 			key = true;
+	// 			break;
+	// 		}
+	// 	}
+	// 		if(key == true) break;
+	// }	
+	return key;
+}
 
 
 string readingFile::MadeNameAeroindex( int period, const string _file )

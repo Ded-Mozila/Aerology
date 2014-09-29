@@ -17,7 +17,7 @@ public:
 	void Read( void );							// Функция поиска данных
 	void SelectionCipher( void) ;
 	void outDataFile( void ); //Вывод исходных данных в файл
-
+	bool FindDefectCipher(char * code);
 
 	// Модуль тестирования с выводом сканируемых данных
 	string outFile_name;		//Исходный файл
