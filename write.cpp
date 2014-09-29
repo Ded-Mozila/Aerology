@@ -54,8 +54,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				break;
 			}
 		}
-	file << ")\n-------------------------------------------------------\n";
-	file << "НЕТ ДАННЫХ от станций\n";
+	file << ")\n-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -83,8 +82,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 			file << "\n";
 		}
 	}
-	file << "\n-------------------------------------------------------\n";
-	file << "Уровень земли:\n\n";
+	file << "\n-------------------------------------------------------\nУровень земли:\n\n";
 	for ( i = i_begin; i != i_end; ++i )
 	{
 		if ((*i).info == true)
@@ -112,7 +110,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		}
 		
 	}
-	file << '\n' <<  "StandartLevels" << "\n";
+	file << "\n------------------------------------------------------\nStandartLevels\n\n";
 
 	for ( i = i_begin; i != i_end; ++i )
 	{	
@@ -325,10 +323,10 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 	TTBB_Database time_data;
 	file << "-------------------------------------------------------\nSpecialPoints ";
 	if( key == 1)
-		file << "TTBB\n\n";
+		file << "TTBB";
 	else
-		file << "TTDD\n\n";
-	file << "Temp";
+		file << "TTDD";
+	file << " Temp\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -349,7 +347,7 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 		if (i->info == true  && time_data.information == true)
 		{
 			OutFileListTTBB(time_data, file ,key);
-			file << endl;
+			file << '\n';
 		}
 	}
 }
@@ -362,7 +360,7 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 		file <<  "IND=" << j.number;
 		int pressure = L->pressure;
 		file <<  " P=" ;
-		if( pressure <= 99 ) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
+		if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
 		// if (pressure < 1000)file << " ";
 		// if (pressure < 100)file << " ";
 		// if (pressure < 10)file << " ";
@@ -516,6 +514,60 @@ void recording_and_write::OutSpecialPointWind(void)
 }
 void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 {
+	TTBB_Database time_data;
+	file << "-------------------------------------------------------\nSpecialPoints ";
+	if( key == 1)
+		file << "TTBB";
+	else
+		file << "TTDD";
+	file << "Wind\n\n";
+	list<Station>::iterator i;
+	list<Station>::iterator i_begin;
+	list<Station>::iterator i_end;
+	if( period == 0 )			// 00
+	{
+		i_begin = time_00.begin();
+		i_end = time_00.end();
+	}
+	if( period == 12 )		// 12
+	{
+		i_begin = time_12.begin();
+		i_end = time_12.end();
+	}
+	for ( i = i_begin; i != i_end; ++i )
+	{
+		if( key == 1 ) time_data = (*i).TTBB;
+		else time_data = (*i).TTDD;
+		if (i->info == true  && time_data.information == true)
+		{
 
+			OutFileListWind(time_data, file ,key);
+			file << '\n';
+		}
+	}
+}
+void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & file, int key)
+{
+	// cout << time_data.level_wind.size() << endl;
+	// list<list<Wind_Base>::iterator L;
+	// for ( L = j.level.begin(); L != j.level.end(); ++L )
+	// {
+	// 	file <<  "IND=" << j.number;
+	// 	int pressure = L->pressure;
+	// 	file <<  " P=" ;
+	// 	if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
+	// 	// if (pressure < 1000)file << " ";
+	// 	// if (pressure < 100)file << " ";
+	// 	// if (pressure < 10)file << " ";
+	// 	file << setfill (' ') << setw (4) << pressure << " ";
+	// 	file <<  "T=" ;
+	// 	double temp = L->info_temp.temp;
+	// 	if (temp > 0 )file << " ";
+	// 	if (fabs(temp) < 10)file << " ";
+	// 	if (fabs(temp) == 0)file << " ";
+	// 	file << temp;
+	// 	if((temp - (int)temp) == 0) file << ".0";
+	// 	file << '\n' ;
+	// }
 }
 

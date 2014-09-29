@@ -77,6 +77,7 @@ public:
 	double DewPoint ( int TTTDD );											// Äåôèöèò ðîñû
 
 	void OutSpecialPointWind(void);	//Вывод данных специальных тоек по ветру
+	void OutFileListWind(TTBB_Database time_data, fstream & file, int key);
 	void Write_file_Wind( int period, fstream & file , int key);
 	//Ôóíêöèè çàïèñè äàííûõ â ôàéë.
 	//////////////////////////////////////////////////////////////////////////
@@ -88,7 +89,7 @@ public:
 	void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
 	
 	void Write_file_TTBB( int period, fstream & file , int key );												// Вывод данных
-	void OutFileListTTBB( TTBB_Database j, fstream& file, int key  );
+	void OutFileListTTBB( TTBB_Database j, fstream& file, int key );
 
 	void OutCodTTBB( int key );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
 

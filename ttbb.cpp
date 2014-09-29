@@ -62,7 +62,8 @@ void recording_and_write::TTBB( char * code,  int key )
 				break;
 			}
 		case 4 :
-			{
+			{ 
+				cout <<"wind\n";
 				int GGPPP = strtol(code, &code, 10);
 				while( (*code) != '\0' && (GGPPP != 31313 || GGPPP != 51515)  )
 				{
@@ -81,6 +82,7 @@ void recording_and_write::TTBB( char * code,  int key )
 				}
 				theEnd = true;
 				step++;
+				cout << base.level_wind.size() << endl;
 				break;
 			}	
 		case 5 :
