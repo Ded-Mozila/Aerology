@@ -108,7 +108,7 @@ void readingFile::SelectionCipher( void )
 				file.getline(code,2000,'=');
 				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
 				if(FindDefectCipher(code) == false)
-					TTXX.TTBB(code);
+					TTXX.TTBB(code, 1);
 				break;
 			}
 		case  'C':
@@ -124,13 +124,14 @@ void readingFile::SelectionCipher( void )
 				file.getline(code,2000,'=');
 				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
 				if(FindDefectCipher(code) == false)
-				{}
+					TTXX.TTBB(code, 2);
 				break;
 			}
 		default:
 			{
-				// cout << "Not good" <<'\n';
-				// cout << code << endl;
+				file.getline(code,2000,'=');
+				cout << "Not good" <<'\n';
+				cout << code << endl;
 				break;
 			}
 		}
@@ -140,87 +141,87 @@ bool readingFile::FindDefectCipher(char * code)
 {
 	bool key = false;
 	int lenStr = strlen(code);
-	// for (int i = 0; i < lenStr; i++)
-	// {
-	// 	switch(code[i])
-	// 	{
-	// 		case '0':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '1':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '2':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '3':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '4':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '5':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '6':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '7':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '8':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '9':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case ' ':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '/':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case 'N':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case 'I':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case 'L':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '\0':
-	// 		{
-	// 			break;
-	// 		}
-	// 		case '\n':
-	// 		{
-	// 			break;
-	// 		}
-	// 		default:
-	// 		{
-	// 			// cout << code[i] << '\n';
-	// 			key = true;
-	// 			break;
-	// 		}
-	// 	}
-	// 		if(key == true) break;
-	// }	
+	for (int i = 0; i < lenStr; i++)
+	{
+		switch(code[i])
+		{
+			case '0':
+			{
+				break;
+			}
+			case '1':
+			{
+				break;
+			}
+			case '2':
+			{
+				break;
+			}
+			case '3':
+			{
+				break;
+			}
+			case '4':
+			{
+				break;
+			}
+			case '5':
+			{
+				break;
+			}
+			case '6':
+			{
+				break;
+			}
+			case '7':
+			{
+				break;
+			}
+			case '8':
+			{
+				break;
+			}
+			case '9':
+			{
+				break;
+			}
+			case ' ':
+			{
+				break;
+			}
+			case '/':
+			{
+				break;
+			}
+			case 'N':
+			{
+				break;
+			}
+			case 'I':
+			{
+				break;
+			}
+			case 'L':
+			{
+				break;
+			}
+			case '\0':
+			{
+				break;
+			}
+			case '\n':
+			{
+				break;
+			}
+			default:
+			{
+				cout << code << '\n';
+				key = true;
+				break;
+			}
+		}
+			if(key == true) break;
+	}	
 	return key;
 }
 

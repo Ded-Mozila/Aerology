@@ -1,6 +1,6 @@
 #include "WriteFile.h"
 
-void recording_and_write::TTBB(char * code)
+void recording_and_write::TTBB( char * code,  int key )
 {
 	TTBB_Database base;
 	base.code_ = code;
@@ -64,11 +64,11 @@ void recording_and_write::TTBB(char * code)
 		case 4 :
 			{
 				int GGPPP = strtol(code, &code, 10);
-				while( (*code) != '\0' && GGPPP != 31313 )
+				while( (*code) != '\0' && (GGPPP != 31313 || GGPPP != 51515)  )
 				{
 					list<Wind_Base> new_wind;
 					Wind_Base old_wind;
-					while (GGPPP != 31313 && (*code) != '\0' )
+					while ((GGPPP != 31313 || GGPPP != 51515) && (*code) != '\0' )
 					{
 						old_wind.number = GGPPP / 1000;
 						old_wind.information = true;
@@ -117,7 +117,9 @@ void recording_and_write::TTBB(char * code)
 		if(base.number == (*i).number )
 		{
 			(*i).info = true;
-			(*i).TTBB = base;
+			if(key == 1)
+				(*i).TTBB = base;
+			else (*i).TTDD = base;
 			break;
 		}
 	}

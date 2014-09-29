@@ -8,9 +8,13 @@ void recording_and_write::WriteFile(const string _file )
 
 	OutCodTTAA(_file);  // создание файла и запись кода TTAA
 
-	OutCodTTBB(_file);	// запись в созданный уже файла кода TTBB
+	OutCodTTBB(1);	// запись в созданный уже файла кода TTBB
 
 	OutCodTTCC(_file);	// запись в созданный уже файла кода TTCC
+
+	OutCodTTBB(2);	// запись в созданный уже файла кода TTDD
+
+	OutSpecialPointWind();
 
 	inFile_00.close();
 	inFile_12.close();
@@ -95,10 +99,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				if ((DAT.pressure) < 1000) file << " ";
 				file << DAT.pressure << " ";
 				file << "Tzem=";
-				if ( temp >= 0 )
-				{
-					file << " ";
-				}
+				if ( temp >= 0 ) file << " ";
 				if (fabs(temp) < 10) file << " ";
 				file << temp;
 				if ((temp - (int)temp) == 0) file << ".0";
@@ -311,16 +312,23 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 
 
 
-void recording_and_write::OutCodTTBB( const string _file )
+void recording_and_write::OutCodTTBB( int key )
 {
-	if(time_00.size() != 0)Write_file_TTBB( 0, _file, inFile_00);
+	//Вывод особых точек по температуре
+	if(time_00.size() != 0)Write_file_TTBB( 0 ,inFile_00 , key );
 		else cout << "00" ;				//Запуск программы на 0
-	if(time_12.size() != 0)Write_file_TTBB( 12, _file, inFile_12 );
+	if(time_12.size() != 0)Write_file_TTBB( 12, inFile_12 , key );
 		else cout << "12" ;			//Запуск программы на 0
 }
-void recording_and_write::Write_file_TTBB(int period , const string _file, fstream & file )
+void recording_and_write::Write_file_TTBB( int period , fstream & file , int key)
 {
-	file << "-------------------------------------------------------\nSpecialPoints T\n\n";
+	TTBB_Database time_data;
+	file << "-------------------------------------------------------\nSpecialPoints ";
+	if( key == 1)
+		file << "TTBB\n\n";
+	else
+		file << "TTDD\n\n";
+	file << "Temp";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -335,14 +343,18 @@ void recording_and_write::Write_file_TTBB(int period , const string _file, fstre
 		i_end = time_12.end();
 	}
 	for ( i = i_begin; i != i_end; ++i )
-		if (i->info == true  && (*i).TTBB.information == true)
+	{
+		if( key == 1 ) time_data = (*i).TTBB;
+		else time_data = (*i).TTDD;
+		if (i->info == true  && time_data.information == true)
 		{
-			OutFileListTTBB((*i).TTBB, file);
+			OutFileListTTBB(time_data, file ,key);
 			file << endl;
 		}
+	}
 }
 
-void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file )
+void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, int key)
 {
 	list<Temp_Base>::iterator L;
 	for ( L = j.level.begin(); L != j.level.end(); ++L )
@@ -350,11 +362,11 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file )
 		file <<  "IND=" << j.number;
 		int pressure = L->pressure;
 		file <<  " P=" ;
-		if( pressure <= 99) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-		if (pressure < 1000)file << " ";
-		if (pressure < 100)file << " ";
-		if (pressure < 10)file << " ";
-		file << pressure << "  ";
+		if( pressure <= 99 ) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
+		// if (pressure < 1000)file << " ";
+		// if (pressure < 100)file << " ";
+		// if (pressure < 10)file << " ";
+		file << setfill (' ') << setw (4) << pressure << " ";
 		file <<  "T=" ;
 		double temp = L->info_temp.temp;
 		if (temp > 0 )file << " ";
@@ -393,7 +405,7 @@ void recording_and_write::OutCodTTCC( const string _file )
 }
 void recording_and_write::Write_file_TTCC( int period, const string _file, fstream & file )
 {
-	file << "-------------------------------------------------------\nSpecialPoints D\n\n";
+	file << "-------------------------------------------------------\nSpecialPoints TTCC\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -494,3 +506,16 @@ bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 	}
 	return StopProcesingLevels;
 }
+
+void recording_and_write::OutSpecialPointWind(void)
+{
+	if(time_00.size() != 0)Write_file_Wind( 0, inFile_00 , 1 );
+		else cout << "00" ;				//Запуск программы на 0
+	if(time_12.size() != 0)Write_file_Wind( 12, inFile_12 , 2 );
+		else cout << "12" ;			//Запуск программы на 0
+}
+void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
+{
+
+}
+

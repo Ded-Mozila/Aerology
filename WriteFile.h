@@ -13,6 +13,7 @@ public:
 	TTAA_Database TTAA;					//Данные со станции
 	TTBB_Database TTBB;					//
 	TTCC_Database TTCC;					// до разборки с TTAA
+	TTBB_Database TTDD;
 	Station(void)
 	{
 		number = -1;
@@ -45,13 +46,12 @@ public:
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
 
-	void TTBB(char * code);
-	void Write_file_TTBB( int period, const string _file, fstream & file );												// Вывод данных
-	void OutFileListTTBB( TTBB_Database j, fstream& file );
+	void TTBB(char * code , int key );
 
 	void TTCC(char * code);
-	void Write_file_TTCC( int period, const string _file, fstream & file );												// Вывод данных
+												// Вывод данных
 	
+	void TTDD(char * code);
 	WIND_SHIFT WindShift( int GGPPP );										// Îïðåäåëåíèå ñäâèãà âåòðà
 	char * deleteEndl( char* code );  										// delete '\r\n' in string code
 	char * MaxWind ( char* code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
@@ -72,21 +72,25 @@ public:
 
 	double Temp ( bool presence_dewpoint, const int TTTDD );				// Âûäåëåíèå òåìïåðàòóðû
 
-	double DefinitionTenthTemp ( int m );									// Îïðåäåëåíèå äàííûõ î òåìïåðàòóðå
+ 	double DefinitionTenthTemp ( int m );									// Îïðåäåëåíèå äàííûõ î òåìïåðàòóðå
 
 	double DewPoint ( int TTTDD );											// Äåôèöèò ðîñû
 
-
+	void OutSpecialPointWind(void);	//Вывод данных специальных тоек по ветру
+	void Write_file_Wind( int period, fstream & file , int key);
 	//Ôóíêöèè çàïèñè äàííûõ â ôàéë.
 	//////////////////////////////////////////////////////////////////////////
 
 	void WriteFile( const string file);										//ñîðòèðîâêà äàííûõ äëÿ çàïèñè Êîäîâ ÒÒAA, TTBB
 
 	void OutCodTTAA( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÀÀ
-
+	void Write_file_TTCC( int period, const string _file, fstream & file );	
 	void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
 	
-	void OutCodTTBB( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
+	void Write_file_TTBB( int period, fstream & file , int key );												// Вывод данных
+	void OutFileListTTBB( TTBB_Database j, fstream& file, int key  );
+
+	void OutCodTTBB( int key );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
 
 	string StrNameFile(local_time st, int time, string _file );		//Ôîðìèðóåò ñòîðîêó äåðåêòîðèè äëÿ îòêðûòèÿ ôàéëà
 
@@ -108,6 +112,7 @@ public:
 
 
 	void ViewTimePeriod_12_(fstream & file);
+
 
 };
 
