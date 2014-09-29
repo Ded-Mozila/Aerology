@@ -34,7 +34,7 @@ public:
 	DATA_TIME memory;					// Данные о времени и дате запуска и + индентификатор
 	int number;							// Данные о територии запуска зонда и станции 
 	list<Temp_Base> level;				// Уровни по температуре 
-	list<list<Wind_Base> >level_wind;	// Уровни по ветру
+	list<Wind_Base> level_wind;			// Уровни по ветру
 	bool operator< (const TTBB_Database & right) 
 	{
 		int m = right.number;

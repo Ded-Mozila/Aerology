@@ -25,7 +25,9 @@ void recording_and_write::TTBB( char * code,  int key )
 			}
 		case 3:
 			{
-				if( strstr( code, "NIL" ) == NULL ) //Ïðîâåðêà íà îòñóòñòâèå äàííûõ
+								step++;
+				cout << step<< "temp!\n" ;
+				if( strstr( code, "N" ) == NULL ) //Ïðîâåðêà íà îòñóòñòâèå äàííûõ
 				{
 					int GGPPP = strtol(code, &code, 10);
 					while( (*code) != '\0' )
@@ -47,11 +49,9 @@ void recording_and_write::TTBB( char * code,  int key )
 						GGPPP = strtol(code, &code, 10);
 						if (GGPPP == 21212)
 						{
-							step++;
-							theEnd = true;
 							break;
 						}
-						step++;
+						
 					}
 				}
 				else
@@ -59,30 +59,31 @@ void recording_and_write::TTBB( char * code,  int key )
 					theEnd = true;
 					base.information = false;
 				}
+
 				break;
 			}
 		case 4 :
-			{ 
-				cout <<"wind\n";
+			{
 				int GGPPP = strtol(code, &code, 10);
-				while( (*code) != '\0' && (GGPPP != 31313 || GGPPP != 51515)  )
+				while( (*code) != '\0' )
 				{
-					list<Wind_Base> new_wind;
+					
 					Wind_Base old_wind;
-					while ((GGPPP != 31313 || GGPPP != 51515) && (*code) != '\0' )
+					old_wind.number = GGPPP / 1000;
+					old_wind.information = true;
+					old_wind.pressure = GGPPP % 1000;
+					code = Wind( code, old_wind.wind );
+					base.level_wind.push_back(old_wind);
+					GGPPP = strtol(code, &code, 10);
+					if (GGPPP == 31313 || GGPPP == 51515)
 					{
-						old_wind.number = GGPPP / 1000;
-						old_wind.information = true;
-						old_wind.pressure = GGPPP % 1000;
-						code = Wind( code, old_wind.wind );
-						new_wind.push_front(old_wind);
-						GGPPP = strtol(code, &code, 10);
+						cout <<base.number;
+					cout << " "<< code<< "wind!\n" ;
+						break;
 					}
-					base.level_wind.push_back(new_wind);
 				}
 				theEnd = true;
 				step++;
-				cout << base.level_wind.size() << endl;
 				break;
 			}	
 		case 5 :

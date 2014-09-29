@@ -201,6 +201,10 @@ bool readingFile::FindDefectCipher(char * code)
 			{
 				break;
 			}
+			case 'T':
+			{
+				break;
+			}
 			case 'L':
 			{
 				break;
