@@ -25,8 +25,7 @@ void recording_and_write::TTBB( char * code,  int key )
 			}
 		case 3:
 			{
-								step++;
-				cout << step<< "temp!\n" ;
+				step++;
 				if( strstr( code, "N" ) == NULL ) //Ïðîâåðêà íà îòñóòñòâèå äàííûõ
 				{
 					int GGPPP = strtol(code, &code, 10);
@@ -44,7 +43,8 @@ void recording_and_write::TTBB( char * code,  int key )
 							new_level.pressure = GGPPP % 1000; 
 						}
 						new_level.information = true;	
-						code = TempDewpoint(code, new_level.info_temp);
+						int i=0;
+						code = TempDewpoint(code, new_level.info_temp,i);
  						base.level.push_back(new_level);
 						GGPPP = strtol(code, &code, 10);
 						if (GGPPP == 21212)
@@ -82,8 +82,8 @@ void recording_and_write::TTBB( char * code,  int key )
 						old_wind.number = GGPPP / 1000;
 						old_wind.pressure = GGPPP % 1000; 
 					}
-
-					code = Wind( code, old_wind.wind );
+					int i =0;
+					code = Wind( code, old_wind.wind ,i);
 					base.level_wind.push_back(old_wind);
 					GGPPP = strtol(code, &code, 10);
 					if (GGPPP == 31313 || GGPPP == 51515)

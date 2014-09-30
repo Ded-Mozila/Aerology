@@ -52,7 +52,9 @@ void recording_and_write::TTCC( char * code )
 						//2. ...
 						if (i == STOP)
 							break;
-						code = ReturnSurface( code, time_data.data );
+						code = ReturnSurface( code, time_data.data, i );
+						if (i == STOP)
+							break;
 						//3. Добавление элемента в конец списока
 						base.level.push_back(time_data);
 

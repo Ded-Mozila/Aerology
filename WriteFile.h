@@ -64,11 +64,11 @@ public:
 
 	char * Pressure ( char * code, int & press );							// Çíà÷åíèå äàâëåíèÿ
 
-	char * ReturnSurface ( char * code , surface & info );					// Çàáèâàåò äàííûìè î òåìïåðàòóðå è î âåòðå  type surfase
+	char * ReturnSurface ( char * code , surface & info , int& i);					// Çàáèâàåò äàííûìè î òåìïåðàòóðå è î âåòðå  type surfase
 
-	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp );		// Äàåò äàííûå îò òåìïåðàòóðå è äåôåöèòå ðîñû âîçâðàùàåò êîä ñòðîêè (ñòðîêà ñ êîäîì, ñòðóêòóðà â êîòîðóþ ñîõðàíèòüñÿ äàííûå î òåìïåðàòóðå è äåôèöèòå ðîñû
+	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp, int& i );		// Äàåò äàííûå îò òåìïåðàòóðå è äåôåöèòå ðîñû âîçâðàùàåò êîä ñòðîêè (ñòðîêà ñ êîäîì, ñòðóêòóðà â êîòîðóþ ñîõðàíèòüñÿ äàííûå î òåìïåðàòóðå è äåôèöèòå ðîñû
 
-	char * Wind ( char * code, WIND & new_wind );							// Çíà÷åíèå âåòðà
+	char * Wind ( char * code, WIND & new_wind , int& i);							// Çíà÷åíèå âåòðà
 
 	double Temp ( bool presence_dewpoint, const int TTTDD );				// Âûäåëåíèå òåìïåðàòóðû
 

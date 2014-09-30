@@ -45,9 +45,10 @@ void recording_and_write::TTAA( char * code )
 				{
 					if( strstr( code, "NIL" ) == NULL ) //Проверка на отсутствие данных
 					{
+						int i;
 						base.information = true;
-						code = Pressure(code, base.land_surface.pressure);  
-						code = ReturnSurface( code , base.land_surface );
+						code = Pressure(code, base.land_surface.pressure );  
+						code = ReturnSurface( code , base.land_surface ,i );
 					}
 					else
 					{	
@@ -68,7 +69,9 @@ void recording_and_write::TTAA( char * code )
 						//2. ...
 						if (i == STOP)
 							break;
-						code = ReturnSurface( code, time_data.data );
+						code = ReturnSurface( code, time_data.data, i);
+						if (i == STOP)
+							break;
 						//3. Добавление элемента в список
 						base.level.push_back(time_data);
 					}

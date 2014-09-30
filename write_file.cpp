@@ -58,21 +58,20 @@ double recording_and_write::Temp( bool presence_dewpoint,const int TTTDD )
 	return temp_;
 }
 
-char* recording_and_write::ReturnSurface( char* code, surface& info )
+char* recording_and_write::ReturnSurface( char* code, surface& info , int& i )
 {
 	//2. Определение температуры воздуха и дифицит точки росы
 	//////////////////////////////////////////////////////////////////////////
 	surface land = info;
-	code = TempDewpoint(code, land.info_temp);
+	code = TempDewpoint(code, land.info_temp , i);
 	//////////////////////////////////////////////////////////////////////////
 	//3.. Определение направления  и скорости ветра
-	code = Wind( code, land.wind );
-
+	code = Wind( code, land.wind, i);
 	info = land;
 	return code;
 }
 
-char* recording_and_write::Wind( char * code, WIND& new_wind )
+char* recording_and_write::Wind( char * code, WIND& new_wind , int& i)
 {
 	//3. Определенипе направление и скорость ветра
 	if(*(code+1) =='/') //Проверка на присутствие скороти ветра
@@ -92,29 +91,35 @@ char* recording_and_write::Wind( char * code, WIND& new_wind )
 	else
 	{
 		int ddfff = strtol(code, &code, 10);
-		new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
-		if ((*code) =='/') 
+		if((ddfff/1000) == 88 || (ddfff/1000) ==77)
 		{
-			new_wind.wind_direction = ddfff* 10 ; // Определение направление ветра
-			code += 3;
-			new_wind.wind_speed = 999;			// Отсутствие данных о направлении ветра
-		} 
-		else
+			i = STOP;
+		}else
 		{
 			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
-			int fff = ddfff % 1000;
-			if(( fff - 500 ) >= 0)
+			if ((*code) =='/') 
 			{
-				fff -=500;
-				new_wind.wind_direction +=5;
+				new_wind.wind_direction = ddfff* 10 ; // Определение направление ветра
+				code += 3;
+				new_wind.wind_speed = 999;			// Отсутствие данных о направлении ветра
+			} 
+			else
+			{
+				new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
+				int fff = ddfff % 1000;
+				if(( fff - 500 ) >= 0)
+				{
+					fff -=500;
+					new_wind.wind_direction +=5;
+				}
+				new_wind.wind_speed = fff;
 			}
-			new_wind.wind_speed = fff;
 		}
 	}	
 	return code;
 }
 
-char * recording_and_write::Pressure( char * code, int & press)
+char * recording_and_write::Pressure( char * code, int & press )
 {
 	int pressure_ = strtol( code , &code , 10);
 	pressure_ %= 1000;
@@ -126,36 +131,48 @@ char * recording_and_write::Pressure( char * code, int & press)
 	return code;
 }
 
-char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_temp )
+char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_temp , int& i)
 {
 	if(*(code+1) == '/')
 	{
 		code +=4;
 		new_info_temp.temp = 999;
-		if(*code == '/')
-		{
-			code += 2;
-			new_info_temp.dewpoint = 999;
-		}			
-		else
-		{
-			int DD = strtol( code , &code , 10);
-			new_info_temp.dewpoint = DewPoint(DD);
-		}
+		// if(*code == '/')
+		// {
+			// code += 2;
+		new_info_temp.dewpoint = 999;
+		// }			
+		// else
+		// {
+		// 	int DD = strtol( code , &code , 10);
+		// 	if((DD/1000) == 88 || (DD/1000) ==77)
+		// 	{
+		// 		i = STOP;
+		// 		return code;
+		// 	}
+		// 	new_info_temp.dewpoint = DewPoint(DD);
+		// }
 	}
 	else
 	{
 		int TTTDD = strtol( code , &code , 10);
-		if(*code == '/')
+		if((TTTDD/1000) == 88 || (TTTDD/1000) ==77)
 		{
-			code += 2;
-			new_info_temp.dewpoint = 999;
-			new_info_temp.temp = Temp( false, TTTDD );
+			i = STOP;
+			return code;
 		}
-		else
 		{
-			new_info_temp.dewpoint = DewPoint(TTTDD);
-			new_info_temp.temp = Temp( true, TTTDD );
+			if(*code == '/')
+			{
+				code += 2;
+				new_info_temp.dewpoint = 999;
+				new_info_temp.temp = Temp( false, TTTDD );
+			}
+			else
+			{
+				new_info_temp.dewpoint = DewPoint(TTTDD);
+				new_info_temp.temp = Temp( true, TTTDD );
+			}
 		}
 	}	
 	return code;
@@ -224,7 +241,8 @@ char * recording_and_write::MaxWind(  char * code, surfaceWind& new_max_wind, in
 	if ((GGPPP % 1000) != 999)
 	{
 		new_max_wind.data.information = true;
-		code = Wind(code,new_max_wind.data.wind);
+		int i=0;
+		code = Wind(code,new_max_wind.data.wind, i );
 	} 
 	else
 	{
