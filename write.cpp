@@ -16,9 +16,21 @@ void recording_and_write::WriteFile(const string _file )
 
 	OutSpecialPointWind();
 
+	finishApp(inFile_00);
+	finishApp(inFile_12);
 	inFile_00.close();
 	inFile_12.close();
 }
+
+void recording_and_write::finishApp(fstream & file )
+{
+	local_time st;
+	file << "------------------------------------------------\n\nЗавершение программы \"отбор аэрологии\" " \
+	<< setfill ('0')\
+	<< setw (2)	<< st.whour << "(часы):" << setw (2) << st.wmin << "(минуты):" << setw (2) << st.wsec << "(секунды)  "\
+	<< setw (2) << setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (4) << st.wYear << " ВСВ ";
+}
+
 void recording_and_write::Write_file_TTAA(int period , const string _file, fstream & file  )
 {
 	local_time st;
@@ -32,9 +44,9 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 	}
 	file << "Старт программы отбора аэрологии: " << setfill ('0') << setw (2) << st.whour \
 		<< ":"<< setw (2)  << st.wmin << ":" << setw (2) << st.wsec << " ВСВ "\
-		<< setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (2) << st.wYear\
+		<< setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (4) << st.wYear\
 		<< "\n-------------------------------------------------------\nОтбор аэрологии из базы данных ТПК \"Прометей\" за срок "\
-		<< setw (2) << period << " ВСВ " << setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (2) << st.wYear \
+		<< setw (2) << period << " ВСВ " << setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (4) << st.wYear \
 		<< "\n(Выборка за период: ";
 	switch (period) //12 или 00
 		{
@@ -71,9 +83,9 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 	int k = 0;
 	for ( i = i_begin; i != i_end; ++i )
 	{
-		if ((*i).info == true && (*i).TTAA.information == false)
+		if ((*i).info != true || (*i).TTAA.information == false)
 		{
-			file << (*i).TTAA.number << " ";
+			file << (*i).number << " ";
 			k++;
 		}
 		if(k == 5)
@@ -344,8 +356,9 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 	{
 		if( key == 1 ) time_data = (*i).TTBB;
 		else time_data = (*i).TTDD;
-		if (i->info == true  && time_data.information == true)
+		if ( time_data.information == true )
 		{
+
 			OutFileListTTBB(time_data, file ,key);
 		}
 	}
@@ -356,21 +369,24 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 	list<Temp_Base>::iterator L;
 	for ( L = j.level.begin(); L != j.level.end(); ++L )
 	{
-		file <<  "IND=" << j.number;
-		int pressure = L->pressure;
-		file <<  " P=" ;
-		if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-		file << setfill (' ') << setw (4) << pressure << " ";
-		file <<  "T=" ;
-		double temp = L->info_temp.temp;
-		if (temp > 0 )file << " ";
-		if (fabs(temp) < 10)file << " ";
-		if (fabs(temp) == 0)file << " ";
-		file << temp;
-		if((temp - (int)temp) == 0) file << ".0";
-		file << '\n' ;
+		if(L->information == true)
+		{
+			file <<  "IND=" << j.number;
+			int pressure = L->pressure;
+			file <<  " P=" ;
+			if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
+			file << setfill (' ') << setw (4) << pressure << " ";
+			file <<  "T=" ;
+			double temp = L->info_temp.temp;
+			if (temp > 0 )file << " ";
+			if (fabs(temp) < 10)file << " ";
+			if (fabs(temp) == 0)file << " ";
+			file << temp;
+			if((temp - (int)temp) == 0) file << ".0";
+			file << '\n' ;
+		}
 	}
-	file << '\n' ;
+	file <<j.number<< "!\n";
 }
 
 string recording_and_write::StrNameFile(local_time st, int time_, string _file )
@@ -504,10 +520,12 @@ bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 
 void recording_and_write::OutSpecialPointWind(void)
 {
+	//BB
 	if(time_00.size() != 0)Write_file_Wind( 0, inFile_00 , 1 );
 		else cout << "00" ;				//Запуск программы на 0
 	if(time_12.size() != 0)Write_file_Wind( 12, inFile_12 , 1 );
 		else cout << "12" ;			//Запуск программы на 0
+	//DD
 	if(time_00.size() != 0)Write_file_Wind( 0, inFile_00 , 2 );
 		else cout << "00" ;				//Запуск программы на 0
 	if(time_12.size() != 0)Write_file_Wind( 12, inFile_12 , 2 );
@@ -539,7 +557,8 @@ void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 	{
 		if( key == 1 ) time_data = (*i).TTBB;
 		else time_data = (*i).TTDD;
-		if (i->info == true  && time_data.information == true)
+
+		if ((*i).info == true && time_data.information == true)
 		{
 			OutFileListWind(time_data, file ,key);
 		}

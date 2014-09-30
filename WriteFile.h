@@ -114,7 +114,7 @@ public:
 
 	void ViewTimePeriod_12_(fstream & file);
 
-
+	void finishApp(fstream & file );
 };
 
 #endif // !WRITEFILE_H

@@ -35,6 +35,7 @@ void Settings::init()
 	dataDirectory = ToDayData(dir3);
 	mkdirp(dataDirectory.c_str());
 	char stat[256];
+	fileSettings.getline ( stat, 256, '\n');
 	while(!fileSettings.getline ( stat, 256, '\n').eof())
 	{
 		stations.push_back(atoi(stat));
