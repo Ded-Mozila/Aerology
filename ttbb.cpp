@@ -67,18 +67,27 @@ void recording_and_write::TTBB( char * code,  int key )
 				int GGPPP = strtol(code, &code, 10);
 				while( (*code) != '\0' )
 				{
-					
 					Wind_Base old_wind;
-					old_wind.number = GGPPP / 1000;
-					old_wind.information = true;
-					old_wind.pressure = GGPPP % 1000;
+					if ((*code) == '/') 
+					{
+						code +=3;
+						old_wind.number = GGPPP ;
+						old_wind.information = false;
+						old_wind.pressure = 999;
+
+					} 
+					else
+					{
+						old_wind.information = true;
+						old_wind.number = GGPPP / 1000;
+						old_wind.pressure = GGPPP % 1000; 
+					}
+
 					code = Wind( code, old_wind.wind );
 					base.level_wind.push_back(old_wind);
 					GGPPP = strtol(code, &code, 10);
 					if (GGPPP == 31313 || GGPPP == 51515)
 					{
-						cout <<base.number;
-					cout << " "<< code<< "wind!\n" ;
 						break;
 					}
 				}

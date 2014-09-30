@@ -102,7 +102,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 			TTAA_Database outA = (*i).TTAA;
 			surface DAT = outA.land_surface;
 			double temp = DAT.info_temp.temp;
-			file << outA.number <<" " ;
+			file << outA.number << " ";
 			if ( outA.information == true )
 			{
 				file << "Pzem=";
@@ -112,7 +112,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				if ( temp >= 0 ) file << " ";
 				if (fabs(temp) < 10) file << " ";
 				file << temp;
-				if ((temp - (int)temp) == 0) file << ".0";
+				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
 				file << '\n' ;
 			}
 			if ( outA.information != true )
@@ -229,7 +229,7 @@ void recording_and_write::WriteLand( const TTAA_Database time_data,fstream & fil
 		}
 		if (fabs(temp) < 10) file << " ";
 		file << temp;
-		if ((temp - (int)temp) == 0) file << ".0";
+		if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
 		file << '\n' ;
 	}
 	else
@@ -270,7 +270,7 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 							file << StandartLevels[a];
 							if ( StandartLevels[a] == 92 ) file << "5";
 							else file << "0";
-							file << "==========================\n";
+							file << " ============================\n";
 						}
 					}
 				}
@@ -358,8 +358,8 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 		else time_data = (*i).TTDD;
 		if ( time_data.information == true )
 		{
-
 			OutFileListTTBB(time_data, file ,key);
+			if( time_data.level_wind.size() != 0 )file << '\n';
 		}
 	}
 }
@@ -382,11 +382,10 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 			if (fabs(temp) < 10)file << " ";
 			if (fabs(temp) == 0)file << " ";
 			file << temp;
-			if((temp - (int)temp) == 0) file << ".0";
+			if((temp - (int)temp) == 0 && temp != 999) file << ".0";
 			file << '\n' ;
 		}
 	}
-	file <<j.number<< "!\n";
 }
 
 string recording_and_write::StrNameFile(local_time st, int time_, string _file )
@@ -431,11 +430,11 @@ void recording_and_write::Write_file_TTCC( int period, const string _file, fstre
 		i_end = time_12.end();
 	}
 	for ( i = i_begin; i != i_end; ++i )
-		if (i->info == true && (*i).TTCC.information == true)
+		if ((*i).info == true && (*i).TTCC.information == true)
 		{
 			bool controllerEmptyLevels = true;
 			controllerEmptyLevels = WriteStandateSurfase_TTCC( (*i).TTCC , file ,controllerEmptyLevels);
-			file << '\n' ;
+			if( (*i).TTCC.level.size() != 0 )file << '\n'  ;
 		}
 }
 bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels)
@@ -561,6 +560,7 @@ void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 		if ((*i).info == true && time_data.information == true)
 		{
 			OutFileListWind(time_data, file ,key);
+			if( time_data.level_wind.size() != 0 )file << '\n';
 		}
 	}
 }
@@ -570,13 +570,14 @@ void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & fil
 	for ( L = time_data.level_wind.begin(); L != time_data.level_wind.end(); ++L )
 	{
 		file <<  "IND=" << time_data.number;
-		int pressure = L->pressure;
-		file <<  " P=" ;
-		if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-		file << setfill (' ') << setw (4) << pressure\
-		<< " d=" << setw (3) << (*L).wind.wind_direction\
-		<< " f=" << setw (3) << (*L).wind.wind_speed << '\n' ;
+		if(L->information ==false) file << " ==================\n";
+		else
+		{
+			file <<  " P=" ;
+			if( L->pressure <= 99 && key == 1) (*L).pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
+			file << setfill (' ') << setw (4) << L->pressure\
+			<< " d=" << setw (3) << (*L).wind.wind_direction\
+			<< " f=" << setw (3) << (*L).wind.wind_speed << '\n' ;
+		}
 	}
-	file << '\n';
 }
-
