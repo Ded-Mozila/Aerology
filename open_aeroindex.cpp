@@ -261,7 +261,7 @@ void readingFile::outInfoFileDecodePeriod(int period)
 			i_begin = TTXX.time_12.begin();
 			i_end = TTXX.time_12.end();
 		}
-	for ( int k = 0; k <3 ;++k )
+	for ( int k = 0; k <4 ;++k )
 	{
 		for ( i =i_begin; i != i_end; ++i )
 		{
@@ -288,6 +288,14 @@ void readingFile::outInfoFileDecodePeriod(int period)
 					if ((*i).info == true && (*i).TTCC.information == true)
 					{
 						dataFile << "TTCC " << (*i).TTCC.code_ << "=\n";
+					}
+					break;
+				}
+				case 3: // TTDD
+				{
+					if ((*i).info == true && (*i).TTDD.information == true)
+					{
+						dataFile << "TTDD " << (*i).TTDD.code_ << "=\n";
 					}
 					break;
 				}
