@@ -3,8 +3,7 @@
 void recording_and_write::TTCC( char * code )
 {
 	TTCC_Database base;
-	base.code_ = code;
-	code = deleteEndl(code);                //Замена '\n' на пробел
+	base.code_ = code;          
 	base.information = true;
 	bool theEnd = false;                    // Завершение программы
 	int step = 1;                           // Шаг выполнения программы 

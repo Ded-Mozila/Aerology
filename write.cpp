@@ -359,7 +359,7 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 		if ( time_data.information == true )
 		{
 			OutFileListTTBB(time_data, file ,key);
-			if( time_data.level_wind.size() != 0 )file << '\n';
+			if( time_data.level.size() != 0 )file << '\n';
 		}
 	}
 }

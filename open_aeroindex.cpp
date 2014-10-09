@@ -59,6 +59,7 @@ void readingFile::Read( void ) // Функция поиска данных
 				timeFile = atoi(stringTime);
 				if (st.wYear == timeFile/10000 && st.wMonth == (timeFile/100)%100 && st.wDay == timeFile%100 )
 				{
+					cout << timeFile << endl;
 					TTXX.data = timeFile;
 					key_DATA = true;
 				}
@@ -79,10 +80,11 @@ void readingFile::Read( void ) // Функция поиска данных
 				}
 				break;
 			}
-			default://Пропуск данных (мусор)
-			{
-				break;
-			}
+			// default://Пропуск данных (мусор)
+			// {
+			// 	cout << 
+			// 	break;
+			// }
 		}
 	}
 }
@@ -219,7 +221,7 @@ bool readingFile::FindDefectCipher(char * code)
 			}
 			default:
 			{
-				cout << code << '\n';
+				cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"<<  code << '\n';
 				key = true;
 				break;
 			}

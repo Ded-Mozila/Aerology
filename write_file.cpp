@@ -137,21 +137,21 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 	{
 		code +=4;
 		new_info_temp.temp = 999;
-		// if(*code == '/')
-		// {
-			// code += 2;
-		new_info_temp.dewpoint = 999;
-		// }			
-		// else
-		// {
-		// 	int DD = strtol( code , &code , 10);
-		// 	if((DD/1000) == 88 || (DD/1000) ==77)
-		// 	{
-		// 		i = STOP;
-		// 		return code;
-		// 	}
-		// 	new_info_temp.dewpoint = DewPoint(DD);
-		// }
+		if(*code == '/')
+		{
+			code += 2;
+			new_info_temp.dewpoint = 999;
+		}			
+		else
+		{
+			int DD = strtol( code , &code , 10);
+			if((DD/1000) == 88 || (DD/1000) ==77)
+			{
+				i = STOP;
+				return code;
+			}
+			new_info_temp.dewpoint = DewPoint(DD);
+		}
 	}
 	else
 	{

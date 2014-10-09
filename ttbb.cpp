@@ -8,12 +8,14 @@ void recording_and_write::TTBB( char * code,  int key )
 	base.information = true;
 	bool theEnd = false;					// Çàâåðøåíèå ïðîãðàììû
 	int step = 1;							// Øàã âûïîëíåíèÿ ïðîãðàììû	
+
 	while ((*code) != '\0')
 	{
 		switch (step)
 		{
 		case 1 : // Íàõîæäåíèå âðåìåíè è äàòû çàïóñêà çîíäà
 			{
+
 				code = DateTime(code,base.memory);
 				step++;
 				break;
@@ -25,10 +27,12 @@ void recording_and_write::TTBB( char * code,  int key )
 			}
 		case 3:
 			{
+				// if ( base.number  == 24641)
+				// 		cout << code << endl;
 				step++;
 				if( strstr( code, "N" ) == NULL ) //Ïðîâåðêà íà îòñóòñòâèå äàííûõ
 				{
-					int GGPPP = strtol(code, &code, 10);
+					int GGPPP = strtol(code, &code, 10);  
 					while( (*code) != '\0' )
 					{
 						Temp_Base new_level;
@@ -64,33 +68,42 @@ void recording_and_write::TTBB( char * code,  int key )
 			}
 		case 4 :
 			{
-				int GGPPP = strtol(code, &code, 10);
-				while( (*code) != '\0' )
-				{
-					Wind_Base old_wind;
-					if ((*code) == '/') 
-					{
-						code +=3;
-						old_wind.number = GGPPP ;
-						old_wind.information = false;
-						old_wind.pressure = 999;
+				// int k= 0;
+				// cout << base.number << '\n';
+				// cout << code << endl;
+				// int GGPPP = strtol(code, &code, 10);
+				// cout << GGPPP << endl;
+				// while( (*code) != '\0' )
+				// {
+				// 	if ( base.number  == 24641)
+				// 	{
+				// 		cout << code << endl;
+				// 		cin  >> k;
+				// 	}
+				// 	Wind_Base old_wind;
+				// 	if ((*code) == '/') 
+				// 	{
+				// 		code +=3;
+				// 		old_wind.number = GGPPP ;
+				// 		old_wind.information = false;
+				// 		old_wind.pressure = 999;
 
-					} 
-					else
-					{
-						old_wind.information = true;
-						old_wind.number = GGPPP / 1000;
-						old_wind.pressure = GGPPP % 1000; 
-					}
-					int i =0;
-					code = Wind( code, old_wind.wind ,i);
-					base.level_wind.push_back(old_wind);
-					GGPPP = strtol(code, &code, 10);
-					if (GGPPP == 31313 || GGPPP == 51515)
-					{
-						break;
-					}
-				}
+				// 	} 
+				// 	else
+				// 	{
+				// 		old_wind.information = true;
+				// 		old_wind.number = GGPPP / 1000;
+				// 		old_wind.pressure = GGPPP % 1000; 
+				// 	}
+				// 	int i =0;
+				// 	code = Wind( code, old_wind.wind ,i);
+				// 	base.level_wind.push_back(old_wind);
+				// 	GGPPP = strtol(code, &code, 10);
+				// 	if (GGPPP == 31313 || GGPPP == 51515)
+				// 	{
+				// 		break;
+				// 	}
+				// }
 				theEnd = true;
 				step++;
 				break;
@@ -98,6 +111,7 @@ void recording_and_write::TTBB( char * code,  int key )
 		case 5 :
 			{
 				step++;
+				theEnd = true;
 				//case 4 : 31313 èëè 41414
 			}
 		default:

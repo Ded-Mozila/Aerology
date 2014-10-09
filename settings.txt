@@ -1,4 +1,4 @@
-/home/aleksander/Work/aerology/dataSpecialPoints/28092014aeroindex.txt;
+/home/aleksander/Work/aerology/dataSpecialPoints/aeroinde02102014x.txt;
 /home/aleksander/Work/aerology/SpecialPoints/Aerology;
 /home/aleksander/Work/aerology/SpecialPoints/DataAerology;
 21824

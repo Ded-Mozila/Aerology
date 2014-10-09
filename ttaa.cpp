@@ -22,6 +22,7 @@ void recording_and_write::TTAA( char * code )
 	TTAA_Database base;
 	base.code_ = code;
 	base.information = true;
+	code = deleteEndl(code);code = deleteEndl(code);code = deleteEndl(code);code = deleteEndl(code);
 	bool theEnd = false;					// Завершение программы
 	int step = 1;							// Шаг выполнения программы
 	base.code_ = code;
@@ -103,8 +104,11 @@ void recording_and_write::TTAA( char * code )
 	{
 		if(base.number == (*i).number )
 		{
-			(*i).info = true;
-			(*i).TTAA = base;
+			if( (*i).TTAA.information == false )
+			{
+				(*i).info = true;
+				(*i).TTAA = base;
+			}
 			break;
 		}
 	}
