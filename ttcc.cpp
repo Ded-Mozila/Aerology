@@ -86,6 +86,7 @@ void recording_and_write::TTCC( char * code )
 	{
 		if(base.number == (*i).number )
 		{
+			//cout << base.number << endl;
 			(*i).info = true;
 			(*i).TTCC = base;
 			break;

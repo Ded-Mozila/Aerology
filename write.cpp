@@ -429,9 +429,11 @@ void recording_and_write::Write_file_TTCC( int period, const string _file, fstre
 		i_begin = time_12.begin();
 		i_end = time_12.end();
 	}
+//	cout << "out\n";
 	for ( i = i_begin; i != i_end; ++i )
 		if ((*i).info == true && (*i).TTCC.information == true)
-		{
+		{	
+			//cout << (*i).TTCC.number << '\n';
 			bool controllerEmptyLevels = true;
 			controllerEmptyLevels = WriteStandateSurfase_TTCC( (*i).TTCC , file ,controllerEmptyLevels);
 			if( (*i).TTCC.level.size() != 0 )file << '\n'  ;

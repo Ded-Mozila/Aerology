@@ -100,16 +100,16 @@ void recording_and_write::TTAA( char * code )
 			i_begin = time_12.begin();
 			i_end = time_12.end();
 		}
+	//bool qwerty = false;
 	for ( i =i_begin; i != i_end; ++i )
 	{
 		if(base.number == (*i).number )
 		{
-			if( (*i).TTAA.information == false )
-			{
-				(*i).info = true;
-				(*i).TTAA = base;
-			}
+			//qwerty = true;
+			(*i).info = true;
+			(*i).TTAA = base;		
 			break;
 		}
 	}
+	//if (qwerty == false ) cout << base.number << endl;
 }
