@@ -1,6 +1,7 @@
 *.out
 *.a
 */
-Aerology.sublime-project
+*.sublime-project
+*.sublime-workspace
 *.name
 *.xml

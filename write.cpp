@@ -27,7 +27,7 @@ void recording_and_write::finishApp(fstream & file )
 	local_time st;
 	file << "------------------------------------------------\n\nЗавершение программы \"отбор аэрологии\" " \
 	<< setfill ('0')\
-	<< setw (2)	<< st.whour << "(часы):" << setw (2) << st.wmin << "(минуты):" << setw (2) << st.wsec << "(секунды)  "\
+	<< setw (2)	<< st.whour << ":" << setw (2) << st.wmin << ":" << setw (2) << st.wsec << "  "\
 	<< setw (2) << setw (2) << st.wDay <<"."<< setw (2)  << st.wMonth << "." << setw (4) << st.wYear << " ВСВ ";
 }
 
@@ -81,9 +81,10 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		i_end = time_12.end();
 	}
 	int k = 0;
+
 	for ( i = i_begin; i != i_end; ++i )
 	{
-		if ((*i).info != true || (*i).TTAA.information == false)
+		if (((*i).info != true || (*i).TTAA.information == false) && (*i).number != 0)
 		{
 			file << (*i).number << " ";
 			k++;

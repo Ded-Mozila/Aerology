@@ -27,8 +27,6 @@ void recording_and_write::TTBB( char * code,  int key )
 			}
 		case 3:
 			{
-				// if ( base.number  == 24641)
-				// 		cout << code << endl;
 				step++;
 				if( strstr( code, "N" ) == NULL ) //Ïðîâåðêà íà îòñóòñòâèå äàííûõ
 				{
@@ -67,43 +65,43 @@ void recording_and_write::TTBB( char * code,  int key )
 				break;
 			}
 		case 4 :
-			{
-				// int k= 0;
-				// cout << base.number << '\n';
-				// cout << code << endl;
-				// int GGPPP = strtol(code, &code, 10);
-				// cout << GGPPP << endl;
-				// while( (*code) != '\0' )
-				// {
-				// 	if ( base.number  == 24641)
-				// 	{
-				// 		cout << code << endl;
-				// 		cin  >> k;
-				// 	}
-				// 	Wind_Base old_wind;
-				// 	if ((*code) == '/') 
-				// 	{
-				// 		code +=3;
-				// 		old_wind.number = GGPPP ;
-				// 		old_wind.information = false;
-				// 		old_wind.pressure = 999;
+			{	
+				//fstream test("test_file.txt", ios_base::out);
+				int k= 0;
+				//test<< base.number << '\n';
+				//test << code << endl;
+				int GGPPP = strtol(code, &code, 10);
 
-				// 	} 
-				// 	else
-				// 	{
-				// 		old_wind.information = true;
-				// 		old_wind.number = GGPPP / 1000;
-				// 		old_wind.pressure = GGPPP % 1000; 
-				// 	}
-				// 	int i =0;
-				// 	code = Wind( code, old_wind.wind ,i);
-				// 	base.level_wind.push_back(old_wind);
-				// 	GGPPP = strtol(code, &code, 10);
-				// 	if (GGPPP == 31313 || GGPPP == 51515)
-				// 	{
-				// 		break;
-				// 	}
-				// }
+				while( (*code) != '\0' )
+				{
+					//
+					//test << code << endl;
+					//cin  >> k;
+					Wind_Base old_wind;
+					if ((*code) == '/') 
+					{
+						code +=3;
+						old_wind.number = GGPPP ;
+						old_wind.information = false;
+						old_wind.pressure = 999;
+
+					} 
+					else
+					{
+						old_wind.information = true;
+						old_wind.number = GGPPP / 1000;
+						old_wind.pressure = GGPPP % 1000; 
+					}
+					int i =0;
+					code = Wind( code, old_wind.wind ,i);
+					base.level_wind.push_back(old_wind);
+					GGPPP = strtol(code, &code, 10);
+					if (GGPPP == 31313 || GGPPP == 51515)
+					{
+						break;
+					}
+				}
+				//test.close();
 				theEnd = true;
 				step++;
 				break;

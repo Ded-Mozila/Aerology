@@ -8,6 +8,11 @@ char* recording_and_write::deleteEndl( char* code )
 	{
 		if (code[i] != '\r')
 		{
+			if(code[i] == '\n' && code[i+1] == '\0')
+			{
+				ss << '\0';
+				break;
+			}
 			if(code[i] == '\n')
 				ss << ' ';
 			else ss << code[i];

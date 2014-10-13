@@ -29,7 +29,7 @@ void readingFile::OpenFile_(  )
 	else
 	{
 		Read();
-		cout << "Read Good \n";
+		cout << "Read_Good \n";
 		file.close();
 		TTXX.WriteFile( app.inDirectory );
 		outDataFile();
@@ -63,6 +63,8 @@ void readingFile::Read( void ) // Функция поиска данных
 					TTXX.data = timeFile;
 					key_DATA = true;
 				}
+				//условие проверки другого дня
+				else key_DATA = false;
 				break;
 			}
 			case 'T':// Указатель на Данные
