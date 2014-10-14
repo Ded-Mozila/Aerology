@@ -82,11 +82,6 @@ void readingFile::Read( void ) // Функция поиска данных
 				}
 				break;
 			}
-			// default://Пропуск данных (мусор)
-			// {
-			// 	cout << 
-			// 	break;
-			// }
 		}
 	}
 }
@@ -223,7 +218,7 @@ bool readingFile::FindDefectCipher(char * code)
 			}
 			default:
 			{
-				cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"<<  code << '\n';
+				cout << "Found a broken cipher!  :"<<  code << '\n';
 				key = true;
 				break;
 			}
@@ -243,7 +238,6 @@ string readingFile::MadeNameAeroindex( int period, const string _file )
 	<< setw (2)  << st.wMonth << setw (4) << st.wYear << "_"\
 	<< setw (2) << period << ".txt";
 	ss >> str;
-	cout << str.c_str() << '\n';
 	return str;
 }
 

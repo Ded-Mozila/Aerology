@@ -402,7 +402,16 @@ string recording_and_write::StrNameFile(local_time st, int time_, string _file )
 	time_name << st.wMonth << st.wYear << "_";
 	if (time_ == 0)
 		time_name << "0";
-	time_name << time_ << ".txt";
+	//Модуль для сохранения файлов по времени
+
+	time_name << time_ ;
+///////////////////
+	time_name<<"t";
+	if (st.whour <= 10)
+		time_name << "0";
+	time_name << st.whour;
+/////////////////////////
+	time_name << ".txt";
 	time_name >> name;
 	return name;
 }
