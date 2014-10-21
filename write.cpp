@@ -81,19 +81,26 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		i_end = time_12.end();
 	}
 	int k = 0;
-
+ 	int district = 0;
 	for ( i = i_begin; i != i_end; ++i )
 	{
+		
 		if (((*i).info != true || (*i).TTAA.information == false) && (*i).number != 0)
 		{
+			if(((*i).number)/1000 != district )
+				{
+					cout << district << '\n';
+					file << '\n';
+					district = ((*i).number)/1000;
+				}
 			file << (*i).number << " ";
 			k++;
 		}
-		if(k == 5)
+		/*if(k == 5)
 		{
 			k = 0;
 			file << "\n";
-		}
+		}*/
 	}
 	file << "\n-------------------------------------------------------\nУровень земли:\n\n";
 	for ( i = i_begin; i != i_end; ++i )
@@ -123,7 +130,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		}
 		
 	}
-	file << "\n------------------------------------------------------\nStandartLevels\n\n";
+	file << "\n------------------------------------------------------\nСтандартные уровни (гПа): ТЕМР-А(1000-100), ТЕМР-С(70-10)\n\n";
 
 	for ( i = i_begin; i != i_end; ++i )
 	{	
@@ -334,12 +341,12 @@ void recording_and_write::OutCodTTBB( int key )
 void recording_and_write::Write_file_TTBB( int period , fstream & file , int key)
 {
 	TTBB_Database time_data;
-	file << "-------------------------------------------------------\nSpecialPoints ";
+	file << "-------------------------------------------------------\nСпециальные точки: ТЕМР-";
 	if( key == 1)
-		file << "TTBB";
+		file << "B";
 	else
-		file << "TTDD";
-	file << " Temp\n\n";
+		file << "D";
+	file << " (Температура: земля - и т.д.)\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;

@@ -1,8 +1,8 @@
 #include "readingFile.h"
 int main()
 {
-	cout << "Start test app 3.3 \n";
+	cout << "Start test app 4.1\n";
 	readingFile Code;
 	Code.OpenFile_();
 	return 0;
-}
+} 
