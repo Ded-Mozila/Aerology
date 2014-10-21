@@ -97,8 +97,8 @@ public:
 
 
 	void WriteLand(const TTAA_Database time_data, fstream & file);			// Ôóíêöèÿ çàïèñè äàííûõ íà óðîâíè çåìëè
-
-	bool WriteStandateSurfase( const TTAA_Database time_data, fstream & file , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
+//новая версия
+	bool WriteStandateSurfase( const Station time_station, fstream & file , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
 
 	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels);
 

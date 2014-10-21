@@ -10,7 +10,7 @@ void recording_and_write::WriteFile(const string _file )
 
 	OutCodTTBB(1);	// запись в созданный уже файла кода TTBB
 
-	OutCodTTCC(_file);	// запись в созданный уже файла кода TTCC
+	//OutCodTTCC(_file);	// запись в созданный уже файла кода TTCC
 
 	OutCodTTBB(2);	// запись в созданный уже файла кода TTDD
 
@@ -89,7 +89,6 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		{
 			if(((*i).number)/1000 != district )
 				{
-					cout << district << '\n';
 					file << '\n';
 					district = ((*i).number)/1000;
 				}
@@ -137,7 +136,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 		bool controllerEmptyLevels = true;
 		if ((*i).info == true)
 		{
-			controllerEmptyLevels = WriteStandateSurfase( (*i).TTAA , file ,controllerEmptyLevels);
+			controllerEmptyLevels = WriteStandateSurfase( (*i) , file ,controllerEmptyLevels);
 		}
 		
 	}
@@ -246,9 +245,9 @@ void recording_and_write::WriteLand( const TTAA_Database time_data,fstream & fil
 	}
 }
 
-bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, fstream & file , bool StopProcesingLevels)
+bool recording_and_write::WriteStandateSurfase( const Station time_station, fstream & file , bool StopProcesingLevels)
 {
-	TTAA_Database date = time_data;
+	TTAA_Database date = time_station.TTAA;
 	list<standardSurface>::iterator i;
 	if (date.information == true)
 	{
@@ -271,7 +270,7 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 						}
 						else
 						{
-							file << "IND="<<  time_data.number <<" ";
+							file << "IND="<<  time_station.number <<" ";
 							file << "P=";
 							if (StandartLevels[a] != 0) file << " ";
 							else file << "10";
@@ -283,7 +282,7 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 					}
 				}
 				//Íîìåð ñòàíöèè è ðàéîíà
-				file << "IND="<<  time_data.number <<" ";
+				file << "IND="<<  time_station.number <<" ";
 
 				//äàâëåíèå
 				file << "P=";
@@ -323,6 +322,14 @@ bool recording_and_write::WriteStandateSurfase( const TTAA_Database time_data, f
 				if ( dewpoint != 999 ) file << "0";
 				file << "\n" ;
 		}
+		if (time_station.info == true && time_station.TTCC.information == true)
+		{	
+			//cout << time_station.TTCC.number << '\n';
+			bool controllerEmptyLevels = true;
+			controllerEmptyLevels = WriteStandateSurfase_TTCC( time_station.TTCC , file ,controllerEmptyLevels);
+			//if( time_station.TTCC.level.size() != 0 )file << '\n'  ;
+		}
+		//перенос стройки только после проходафункции TTCC
 		file << "\n" ;
 	}
 	return StopProcesingLevels;
@@ -343,10 +350,10 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 	TTBB_Database time_data;
 	file << "-------------------------------------------------------\nСпециальные точки: ТЕМР-";
 	if( key == 1)
-		file << "B";
+		file << "B (Температура: земля - и 100 гПа )";
 	else
-		file << "D";
-	file << " (Температура: земля - и т.д.)\n\n";
+		file << "D (Температура: 100 гПа - и т.д.)";
+	file << "\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -383,7 +390,8 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 			int pressure = L->pressure;
 			file <<  " P=" ;
 			if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-			file << setfill (' ') << setw (4) << pressure << " ";
+			if(key != 1) { file << setfill (' ') << setw (3) << pressure/10 << "." << pressure%10 << ' ' ; }
+			else {file << setfill (' ') << setw (4) << pressure << " ";}
 			file <<  "T=" ;
 			double temp = L->info_temp.temp;
 			if (temp > 0 )file << " ";
@@ -497,7 +505,7 @@ bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 
 			//äàâëåíèå
 			file << "P=";
-			if (number != 0) file << " ";
+			if (number != 0) file << "  ";
 			else file << "10";
 			file << number;
 			if ( number == 92 ) file << "5";
@@ -552,12 +560,12 @@ void recording_and_write::OutSpecialPointWind(void)
 void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 {
 	TTBB_Database time_data;
-	file << "-------------------------------------------------------\nSpecialPoints ";
+	file << "-------------------------------------------------------\nСпециальные точки: WIND-";
 	if( key == 1)
-		file << "TTBB";
+		file << "B (Ветер: земля - 100 гПа)";
 	else
-		file << "TTDD";
-	file << " Wind\n\n";
+		file << "D (Ветер: 100 гПа - и т.д.)";
+	file << "\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -594,8 +602,9 @@ void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & fil
 		{
 			file <<  " P=" ;
 			if( L->pressure <= 99 && key == 1) (*L).pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-			file << setfill (' ') << setw (4) << L->pressure\
-			<< " d=" << setw (3) << (*L).wind.wind_direction\
+			if(key != 1) { file << setfill (' ') << setw (3) << L->pressure/10 << "." << L->pressure%10 << ' ' ; }
+			else {file << setfill (' ') << setw (4) << L->pressure << " ";}
+			file << "d=" << setw (3) << (*L).wind.wind_direction\
 			<< " f=" << setw (3) << (*L).wind.wind_speed << '\n' ;
 		}
 	}
