@@ -49,7 +49,8 @@ void recording_and_write::TTAA( char * code )
 				}
 			case 3 : // Сортировка и находние поверхностей
 				{
-					if( strstr( code, "NIL" ) == NULL ) //Проверка на отсутствие данных
+
+					if( strstr( code, "N" ) == NULL ) //Проверка на отсутствие данных
 					{
 						int i;
 						base.information = true;

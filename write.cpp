@@ -12,7 +12,7 @@ void recording_and_write::WriteFile(const string _file )
 
 	//OutCodTTCC(_file);	// запись в созданный уже файла кода TTCC
 
-	OutCodTTBB(2);	// запись в созданный уже файла кода TTDD
+	//OutCodTTBB(2);	// запись в созданный уже файла кода TTDD
 
 	OutSpecialPointWind();
 
@@ -66,7 +66,10 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				break;
 			}
 		}
-	file << ")\n-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
+	file << ")\nСтандартные уровни (гПа): ТЕМР-А(1000-100), ТЕМР-С(70-10)\n"\
+ 		<<"Специальные точки по температуре: ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа) \n"\
+ 		<<"Специальные точки по ветру (гПа): ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа)\nрезкое изменение направления (≥10°) или скорости (≥5 м/сек)\n"\
+ 		<<"-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -348,12 +351,7 @@ void recording_and_write::OutCodTTBB( int key )
 void recording_and_write::Write_file_TTBB( int period , fstream & file , int key)
 {
 	TTBB_Database time_data;
-	file << "-------------------------------------------------------\nСпециальные точки: ТЕМР-";
-	if( key == 1)
-		file << "B (Температура: земля - и 100 гПа )";
-	else
-		file << "D (Температура: 100 гПа - и т.д.)";
-	file << "\n\n";
+	file << "-------------------------------------------------------\nСпециальные точки по температуре: ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа) \n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -369,13 +367,20 @@ void recording_and_write::Write_file_TTBB( int period , fstream & file , int key
 	}
 	for ( i = i_begin; i != i_end; ++i )
 	{
-		if( key == 1 ) time_data = (*i).TTBB;
-		else time_data = (*i).TTDD;
+		time_data = (*i).TTBB;
+		//time_data = (*i).TTDD;
 		if ( time_data.information == true )
 		{
-			OutFileListTTBB(time_data, file ,key);
-			if( time_data.level.size() != 0 )file << '\n';
+			OutFileListTTBB(time_data, file ,1);
+			//if( time_data.level.size() != 0 )file << '\n';
 		}
+		time_data = (*i).TTDD;
+		if ( time_data.information == true )
+		{
+			OutFileListTTBB(time_data, file ,0);
+			//if( time_data.level.size() != 0  )file << '\n';
+		}
+		if( (*i).TTBB.level.size() != 0 )file << '\n';
 	}
 }
 
@@ -390,8 +395,8 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 			int pressure = L->pressure;
 			file <<  " P=" ;
 			if( pressure <= 99 && key == 1) pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-			if(key != 1) { file << setfill (' ') << setw (3) << pressure/10 << "." << pressure%10 << ' ' ; }
-			else {file << setfill (' ') << setw (4) << pressure << " ";}
+			if(key != 1) { file << setfill (' ') << setw (4) << pressure/10 << "." << pressure%10 << ' ' ; }
+			else {file << setfill (' ') << setw (4) << pressure << ".0 ";}
 			file <<  "T=" ;
 			double temp = L->info_temp.temp;
 			if (temp > 0 )file << " ";
@@ -552,20 +557,16 @@ void recording_and_write::OutSpecialPointWind(void)
 	if(time_12.size() != 0)Write_file_Wind( 12, inFile_12 , 1 );
 		else cout << "12" ;			//Запуск программы на 0
 	//DD
-	if(time_00.size() != 0)Write_file_Wind( 0, inFile_00 , 2 );
+	/*if(time_00.size() != 0)Write_file_Wind( 0, inFile_00 , 2 );
 		else cout << "00" ;				//Запуск программы на 0
 	if(time_12.size() != 0)Write_file_Wind( 12, inFile_12 , 2 );
 		else cout << "12" ;			//Запуск программы на 0
+		*/
 }
 void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 {
 	TTBB_Database time_data;
-	file << "-------------------------------------------------------\nСпециальные точки: WIND-";
-	if( key == 1)
-		file << "B (Ветер: земля - 100 гПа)";
-	else
-		file << "D (Ветер: 100 гПа - и т.д.)";
-	file << "\n\n";
+	file << "-------------------------------------------------------\nСпециальные точки по ветру (гПа): ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа)\nрезкое изменение направления (≥10°) или скорости (≥5 м/сек)\n\n";
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
@@ -581,14 +582,22 @@ void recording_and_write::Write_file_Wind( int period, fstream & file, int key)
 	}
 	for ( i = i_begin; i != i_end; ++i )
 	{
-		if( key == 1 ) time_data = (*i).TTBB;
-		else time_data = (*i).TTDD;
+		time_data = (*i).TTBB;
+	//	time_data = (*i).TTDD;
 
 		if ((*i).info == true && time_data.information == true)
 		{
-			OutFileListWind(time_data, file ,key);
-			if( time_data.level_wind.size() != 0 )file << '\n';
+			OutFileListWind(time_data, file ,1);
+			//if( time_data.level_wind.size() != 0 )file << '\n';
 		}
+		time_data = (*i).TTDD;
+		if ((*i).info == true && time_data.information == true)
+		{
+			OutFileListWind(time_data, file ,0);
+			//if( time_data.level_wind.size() != 0 )file << '\n';
+		}
+
+		if( (*i).TTBB.level_wind.size() != 0 )file << '\n';
 	}
 }
 void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & file, int key)
@@ -602,8 +611,8 @@ void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & fil
 		{
 			file <<  " P=" ;
 			if( L->pressure <= 99 && key == 1) (*L).pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
-			if(key != 1) { file << setfill (' ') << setw (3) << L->pressure/10 << "." << L->pressure%10 << ' ' ; }
-			else {file << setfill (' ') << setw (4) << L->pressure << " ";}
+			if(key != 1) { file << setfill (' ') << setw (4) << L->pressure/10 << "." << L->pressure%10 << ' ' ; }
+			else {file << setfill (' ') << setw (4) << L->pressure << ".0 ";}
 			file << "d=" << setw (3) << (*L).wind.wind_direction\
 			<< " f=" << setw (3) << (*L).wind.wind_speed << '\n' ;
 		}
