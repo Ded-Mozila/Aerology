@@ -113,7 +113,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 			surface DAT = outA.land_surface;
 			double temp = DAT.info_temp.temp;
 			file << outA.number << " ";
-			if ( outA.information == true )
+			if ( outA.information == true && DAT.pressure != -1)
 			{
 				file << "Pzem=";
 				if ((DAT.pressure) < 1000) file << " ";
@@ -125,7 +125,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
 				file << '\n' ;
 			}
-			if ( outA.information != true )
+			if ( outA.information != true || DAT.pressure == -1)
 			{
 				file << "Нет данных\n";
 			}
@@ -425,11 +425,11 @@ string recording_and_write::StrNameFile(local_time st, int time_, string _file )
 	//Модуль для сохранения файлов по времени
 
 	time_name << time_ ;
-///////////////////
+/*///////////////////
 	time_name<<"t";
 	if (st.whour <= 10)
 		time_name << "0";
-	time_name << st.whour;
+	time_name << st.whour;*/
 /////////////////////////
 	time_name << ".txt";
 	time_name >> name;
