@@ -125,7 +125,7 @@ void recording_and_write::Write_file_TTAA(int period , const string _file, fstre
 				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
 				file << '\n' ;
 			}
-			if ( outA.information != true || DAT.pressure == -1)
+			if ( outA.information != true || DAT.pressure== -1)
 			{
 				file << "Нет данных\n";
 			}

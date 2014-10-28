@@ -2,6 +2,7 @@
 
 char* recording_and_write::deleteEndl( char* code )
 {
+	//cout << code << endl;
 	int len = strlen(code)+1;
 	stringstream ss;
 	for (int i = 0; i < len; ++i)
@@ -96,16 +97,16 @@ void recording_and_write::TTAA( char * code )
 	list<Station>::iterator i;
 	list<Station>::iterator i_begin;
 	list<Station>::iterator i_end;
-		if( base.memory.time == 23 || base.memory.time == 0 || base.memory.time == 1 )			// 00
-		{
-			i_begin = time_00.begin();
-			i_end = time_00.end();
-		}
-		if( base.memory.time == 11 || base.memory.time == 12 || base.memory.time == 13 )		// 12
-		{
-			i_begin = time_12.begin();
-			i_end = time_12.end();
-		}
+	if( base.memory.time == 23 || base.memory.time == 0 || base.memory.time == 1 )			// 00
+	{
+		i_begin = time_00.begin();
+		i_end = time_00.end();
+	}
+	if( base.memory.time == 11 || base.memory.time == 12 || base.memory.time == 13 )		// 12
+	{
+		i_begin = time_12.begin();
+		i_end = time_12.end();
+	}
 	//bool qwerty = false;
 	for ( i =i_begin; i != i_end; ++i )
 	{

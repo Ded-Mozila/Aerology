@@ -69,16 +69,19 @@ void readingFile::Read( void ) // Функция поиска данных
 			}
 			case 'T':// Указатель на Данные
 			{
-
-				if (key_DATA == true)
+				file.get(s);
+				if(s == 'T')
 				{
-					SelectionCipher();
-				}
-				else// Ускорение поиска -> пропуск ненужных данных
-				{
-					char * TTX = new char[2000] ;
-					file.getline(TTX,2000,'=');
-					delete []TTX;
+					if (key_DATA == true)
+					{
+						SelectionCipher();
+					}
+					else// Ускорение поиска -> пропуск ненужных данных
+					{
+						char * TTX = new char[2000] ;
+						file.getline(TTX,2000,'=');
+						delete []TTX;
+					}
 				}
 				break;
 			}
@@ -91,8 +94,8 @@ void readingFile::SelectionCipher( void )
 	char TXX[4];
 	file.getline( TXX, 4 ,' ');
 	char * code = new char[2000] ;
-	if ( strchr( TXX,'T')) 
-		switch (TXX[1])
+	//if ( strchr( TXX,'T')) 
+		switch (TXX[0])
 		{
 		case  'A':
 			{

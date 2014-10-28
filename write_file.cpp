@@ -90,7 +90,9 @@ char* recording_and_write::Wind( char * code, WIND& new_wind , int& i)
 	}
 	else
 	{
+
 		int ddfff = strtol(code, &code, 10);
+		//cout << code << endl;
 		if((ddfff/1000) == 88 || (ddfff/1000) ==77)
 		{
 			i = STOP;
@@ -181,7 +183,7 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 char * recording_and_write::DateTime( char * code, DATA_TIME & new_data_tim )
 {
 	int month_time = strtol( code , &code , 10);
-	if ((*code)=='/')
+	if ((*code)=='/' || month_time < 10000)
 	{
 		new_data_tim.date = month_time / 100;
 		if( new_data_tim.date > 50) new_data_tim.date-=50; 

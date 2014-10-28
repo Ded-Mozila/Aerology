@@ -68,14 +68,11 @@ void recording_and_write::TTBB( char * code,  int key )
 			{	
 				//fstream test("test_file.txt", ios_base::out);
 				int k= 0;
-				//test<< base.number << '\n';
-				//test << code << endl;
 				int GGPPP = strtol(code, &code, 10);
 
 				while( (*code) != '\0' )
 				{
-					//
-					//test << code << endl;
+					//cout << code << endl;
 					//cin  >> k;
 					Wind_Base old_wind;
 					if ((*code) == '/') 
@@ -96,7 +93,7 @@ void recording_and_write::TTBB( char * code,  int key )
 					code = Wind( code, old_wind.wind ,i);
 					base.level_wind.push_back(old_wind);
 					GGPPP = strtol(code, &code, 10);
-					if (GGPPP == 31313 || GGPPP == 51515)
+					if (GGPPP == 31313 || GGPPP == 51515 )
 					{
 						break;
 					}
