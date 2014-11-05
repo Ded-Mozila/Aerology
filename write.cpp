@@ -313,7 +313,7 @@ bool recording_and_write::WriteStandateSurfase( const Station time_station, fstr
 				file << " f=";
 				if ( abs(wind.wind_speed) < 100 )file << " ";
 				if ( abs(wind.wind_speed) < 10 )file << " ";
-				file << wind.wind_speed;
+				file << round(wind.wind_speed);
 
 				//äåôèöèò òî÷êè ðîñû
 				file << " D=";
@@ -533,7 +533,7 @@ bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 			file << " f=";
 			if ( abs(wind.wind_speed) < 100 )file << " ";
 			if ( abs(wind.wind_speed) < 10 )file << " ";
-			file << wind.wind_speed;
+			file << round(wind.wind_speed);
 
 			//äåôèöèò òî÷êè ðîñû
 			file << " D=";
@@ -613,8 +613,10 @@ void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & fil
 			if( L->pressure <= 99 && key == 1) (*L).pressure+=1000;//äàííûé ñëó÷àé ñðàáàòûâàåò òîëüêî òîãäà êîãäà
 			if(key != 1) { file << setfill (' ') << setw (4) << L->pressure/10 << "." << L->pressure%10 << ' ' ; }
 			else {file << setfill (' ') << setw (4) << L->pressure << ".0 ";}
-			file << "d=" << setw (3) << (*L).wind.wind_direction\
-			<< " f=" << setw (3) << (*L).wind.wind_speed << '\n' ;
+			file << "d=" << setw (3) << (*L).wind.wind_direction << " f=" ;
+			if ( abs((*L).wind.wind_speed) < 100 )file << " ";
+			if ( abs((*L).wind.wind_speed) < 10 )file << " ";
+			file << (*L).wind.wind_speed << '\n' ;
 		}
 	}
 }

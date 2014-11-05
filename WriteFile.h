@@ -60,7 +60,7 @@ public:
 
 	char * DistrictStation ( char * code, int & new_number);	// Îïðåäåëåíèå Íîìåðà ðàéîíà è ñòàíöèè
 
-	char * DateTime ( char * code, DATA_TIME & new_data_tim );				// Îïðåäåëåíèå Äàòû è âðÿìû çàïóñêà çîíäà + îïðåäåëåíèå èíäåíòèôîêàòîðà ïîñëåäíåé èçîáàðè÷åñêîé ïîâåðõíîñòè(ÒÒÀÀ) ëèáî òèïà îáîðóäîâàíèÿ(ÒÒÂÂ)
+	char * DateTime ( char * code, bool& node, DATA_TIME & new_data_tim );				// Îïðåäåëåíèå Äàòû è âðÿìû çàïóñêà çîíäà + îïðåäåëåíèå èíäåíòèôîêàòîðà ïîñëåäíåé èçîáàðè÷åñêîé ïîâåðõíîñòè(ÒÒÀÀ) ëèáî òèïà îáîðóäîâàíèÿ(ÒÒÂÂ)
 
 	char * Pressure ( char * code, int & press );							// Çíà÷åíèå äàâëåíèÿ
 
@@ -68,7 +68,7 @@ public:
 
 	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp, int& i );		// Äàåò äàííûå îò òåìïåðàòóðå è äåôåöèòå ðîñû âîçâðàùàåò êîä ñòðîêè (ñòðîêà ñ êîäîì, ñòðóêòóðà â êîòîðóþ ñîõðàíèòüñÿ äàííûå î òåìïåðàòóðå è äåôèöèòå ðîñû
 
-	char * Wind ( char * code, WIND & new_wind , int& i);							// Çíà÷åíèå âåòðà
+	char * Wind ( char * code, WIND & new_wind ,bool node, int& i);							// Çíà÷åíèå âåòðà
 
 	double Temp ( bool presence_dewpoint, const int TTTDD );				// Âûäåëåíèå òåìïåðàòóðû
 

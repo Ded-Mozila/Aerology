@@ -7,6 +7,7 @@ void recording_and_write::TTBB( char * code,  int key )
 	code = deleteEndl(code);
 	base.information = true;
 	bool theEnd = false;					// Çàâåðøåíèå ïðîãðàììû
+	bool wind_node = false;
 	int step = 1;							// Øàã âûïîëíåíèÿ ïðîãðàììû	
 
 	while ((*code) != '\0')
@@ -16,7 +17,7 @@ void recording_and_write::TTBB( char * code,  int key )
 		case 1 : // Íàõîæäåíèå âðåìåíè è äàòû çàïóñêà çîíäà
 			{
 
-				code = DateTime(code,base.memory);
+				code = DateTime(code,wind_node,base.memory);
 				step++;
 				break;
 			}
@@ -90,7 +91,7 @@ void recording_and_write::TTBB( char * code,  int key )
 						old_wind.pressure = GGPPP % 1000; 
 					}
 					int i =0;
-					code = Wind( code, old_wind.wind ,i);
+					code = Wind( code, old_wind.wind, wind_node ,i);
 					base.level_wind.push_back(old_wind);
 					GGPPP = strtol(code, &code, 10);
 					if (GGPPP == 31313 || GGPPP == 51515 )

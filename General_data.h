@@ -7,7 +7,7 @@
 struct WIND
 {
 	int wind_direction;					// Направление ветра
-	int wind_speed;						// Скорость ветра;
+	double wind_speed;						// Скорость ветра;
 };
 
 struct DATA_TIME
@@ -45,12 +45,14 @@ struct NUMBER_HEIGHT
 class surface                       // Все стандартыне данные для всех повехностей
 {
 public:
+	bool wind_node;						// В телеграмме ветер передается в узлах
 	bool information;                   // Идентификатор существования данных  
 	TEMP_DEWPOINT info_temp;            // Информация о данных температуры и дефекта точки росы
 	WIND wind;                          // Данные по ветру
 	int pressure;                       // Давление на уровне 
 	surface()
 	{
+		wind_node = false;
 		information = false;
 		pressure = -1;
 	}

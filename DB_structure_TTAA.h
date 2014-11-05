@@ -8,7 +8,6 @@ using namespace std;
 class TTAA_Database						// класс для хранения и обработки данных из кода TTAA
 {
 public:
-
 	bool information;					// Отсутствие информации
 	DATA_TIME memory;					// Данные о времени и дате запуска и + индентификатор
 	int number;							// Данные о територии запуска зонда и станции 

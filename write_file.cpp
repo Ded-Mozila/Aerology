@@ -66,14 +66,13 @@ char* recording_and_write::ReturnSurface( char* code, surface& info , int& i )
 	code = TempDewpoint(code, land.info_temp , i);
 	//////////////////////////////////////////////////////////////////////////
 	//3.. Определение направления  и скорости ветра
-	code = Wind( code, land.wind, i);
+	code = Wind( code, land.wind,land.wind_node, i);
 	info = land;
 	return code;
 }
 
-char* recording_and_write::Wind( char * code, WIND& new_wind , int& i)
+char* recording_and_write::Wind( char * code, WIND& new_wind , bool node,  int& i)
 {
-	//3. Определенипе направление и скорость ветра
 	if(*(code+1) =='/') //Проверка на присутствие скороти ветра
 	{
 		code +=3;
@@ -86,13 +85,13 @@ char* recording_and_write::Wind( char * code, WIND& new_wind , int& i)
 		else
 		{
 			new_wind.wind_speed = strtol (code, &code, 10);
+			if(node == true)new_wind.wind_speed *=0.514;
 		}
 	}
 	else
 	{
 
 		int ddfff = strtol(code, &code, 10);
-		//cout << code << endl;
 		if((ddfff/1000) == 88 || (ddfff/1000) ==77)
 		{
 			i = STOP;
@@ -115,6 +114,7 @@ char* recording_and_write::Wind( char * code, WIND& new_wind , int& i)
 					new_wind.wind_direction +=5;
 				}
 				new_wind.wind_speed = fff;
+				if(node == true)new_wind.wind_speed *=0.514;
 			}
 		}
 	}	
@@ -180,13 +180,23 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 	return code;
 }
 
-char * recording_and_write::DateTime( char * code, DATA_TIME & new_data_tim )
+char * recording_and_write::DateTime( char * code, bool& node, DATA_TIME & new_data_tim )
 {
+	// local_time st;
+	// int sizeCout = 10000;
+	// if (st.wDay < 10)
+	// {
+	// 	sizeCout = 1000;
+	// }
 	int month_time = strtol( code , &code , 10);
-	if ((*code)=='/' || month_time < 10000)
+	if ((*code)=='/')// || month_time < sizeCout)
 	{
 		new_data_tim.date = month_time / 100;
-		if( new_data_tim.date > 50) new_data_tim.date-=50; 
+		if( new_data_tim.date > 50) 
+			{
+				node = true;
+				new_data_tim.date-=50;
+			}
 		new_data_tim.time = month_time % 100;
 		new_data_tim.id_surface = '/';
 		code++;
@@ -194,7 +204,11 @@ char * recording_and_write::DateTime( char * code, DATA_TIME & new_data_tim )
 	else
 	{
 		new_data_tim.date = month_time / 1000;
-		if( new_data_tim.date > 50) new_data_tim.date-=50; 
+		if( new_data_tim.date > 50) 
+			{
+				node = true;
+				new_data_tim.date-=50; 
+			}
 		new_data_tim.time = (month_time % 1000)/10;
 		new_data_tim.id_surface = (month_time % 10) + '0';	
 	}
@@ -240,18 +254,18 @@ char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_heigh
 
 char * recording_and_write::MaxWind(  char * code, surfaceWind& new_max_wind, int GGPPP )
 {
-	if ((GGPPP % 1000) != 999)
-	{
-		new_max_wind.data.information = true;
-		int i=0;
-		code = Wind(code,new_max_wind.data.wind, i );
-	} 
-	else
-	{
-		new_max_wind.information = false;
-		new_max_wind.data.information = false;
-	}	
-	return code;
+// 	if ((GGPPP % 1000) != 999)
+// 	{
+// 		new_max_wind.data.information = true;
+// 		int i=0;
+// 		code = Wind(code,new_max_wind.data.wind, i );
+// 	} 
+// 	else
+// 	{
+// 		new_max_wind.information = false;
+// 		new_max_wind.data.information = false;
+// 	}	
+// 	return code;
 }
 
 WIND_SHIFT recording_and_write::WindShift( int GGPPP )

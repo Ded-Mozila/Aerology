@@ -31,6 +31,7 @@ void recording_and_write::TTAA( char * code )
 	code = deleteEndl(code);code = deleteEndl(code);code = deleteEndl(code);code = deleteEndl(code);
 	bool theEnd = false;					// Завершение программы
 	int step = 1;							// Шаг выполнения программы
+	bool wind_node = false;
 	base.code_ = code;
 	while((*code) != '\0')
 	{
@@ -38,7 +39,7 @@ void recording_and_write::TTAA( char * code )
 		{
 			case 1 : // Нахождение времени и даты запуска зонда
 				{
-					code = DateTime(code,base.memory);
+					code = DateTime(code,wind_node,base.memory);
 					step++; // преход к новому шагу
 					break;
 				}
@@ -72,6 +73,7 @@ void recording_and_write::TTAA( char * code )
 					while((*(code)) != '\0' )
 					{
 						standardSurface time_data;
+						time_data.data.wind_node = wind_node;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
 						code = NumberHeight( code, time_data.height, i);
 						//2. ...

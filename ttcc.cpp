@@ -7,13 +7,14 @@ void recording_and_write::TTCC( char * code )
 	base.information = true;
 	bool theEnd = false;                    // Завершение программы
 	int step = 1;                           // Шаг выполнения программы 
+	bool wind_node = false;
 	while((*code) != '\0')
 	{
 		switch (step)
 		{
 			case 1 : // Нахождение времени и даты запуска зонда
 				{
-					code = DateTime(code,base.memory);
+					code = DateTime(code,wind_node,base.memory);
 					step++; // преход к новому шагу
 					break;
 				}
@@ -25,7 +26,7 @@ void recording_and_write::TTCC( char * code )
 				}
 			case 3 : // Сортировка и находние поверхностей
 				{
-					if( strstr( code, "NIL" ) == NULL ) //Проверка на отсутствие данных
+					if( strstr( code, "N" ) == NULL ) //Проверка на отсутствие данных
 					{
 						base.information = true;
 						//code = Pressure(code, base.land_surface.pressure);  
@@ -46,6 +47,7 @@ void recording_and_write::TTCC( char * code )
 					{
 
 						standardSurface time_data;
+						time_data.data.wind_node = wind_node;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
 						code = NumberHeight( code, time_data.height, i);
 						//2. ...
