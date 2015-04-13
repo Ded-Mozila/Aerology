@@ -1,6 +1,6 @@
-/home/aleksander/Work/aerology/dataSpecialPoints/aeroindex04112014.txt;
-/home/aleksander/Work/aerology/SpecialPoints/Aerology;
-/home/aleksander/Work/aerology/SpecialPoints/DataAerology;
+/home/aleks/Aleksander/work/aerology/dataSpecialPoints/aeroindex04112014.txt;
+/home/aleks/Aleksander/work/aerology/SpecialPoints/Aerology;
+/home/aleks/Aleksander/work/aerology/SpecialPoints/DataAerology;
 21824
 21946
 24125
