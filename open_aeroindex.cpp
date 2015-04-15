@@ -244,6 +244,12 @@ string readingFile::MadeNameAeroindex( int period, const string _file )
 	return str;
 }
 
+void readingFile::outDataFile( void )
+{
+	outInfoFileDecodePeriod(0);
+	outInfoFileDecodePeriod(12);
+}
+
 void readingFile::outInfoFileDecodePeriod(int period)
 {
 	dataFile.open((MadeNameAeroindex(period, app.dataDirectory)).c_str(), ios_base::out);
@@ -305,10 +311,5 @@ void readingFile::outInfoFileDecodePeriod(int period)
 	dataFile.close();
 }
 
-void readingFile::outDataFile( void )
-{
-	outInfoFileDecodePeriod(0);
-	outInfoFileDecodePeriod(12);
-}
 
 

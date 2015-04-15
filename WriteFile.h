@@ -49,7 +49,6 @@ public:
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
 	// Вывод данных
-	void Write_file_TTAA(int period , const string _file , fstream & file );
 	
 	void Write_file_TTBB( int period, fstream & file , int key );					// Вывод данных TTBB
 	
@@ -89,10 +88,15 @@ public:
 	
 	// Функции записи данных в файл.
 
-	void WriteFile( const string file);										//Cортировка данных для записи Кодов ТТAA, TTBB
-
-	void OutCodTTAA( const string _file );									//Процесс открытия файла для записи кода ТТАА
-
+	void WriteFile(const string);											//Cортировка данных для записи Кодов ТТAA, TTBB
+	//вывод кода А
+	void OutCodTTAA(const string);											//Процесс открытия файла для записи кода ТТАА
+	void WriteStandateSurfase(const Station,fstream&);// (возвращает ключ на остановку) Функция записи стандартных изобарических поверхностей TTAA
+	void TopHeaderFileAerology(fstream&, const int,const local_time&);		// Вывод Заголовичных данных aerology<>.txt
+	void Write_file_TTAA(const int,const string,fstream&);					//Вывод данных кода А
+	void ViewTimePeriod_00_(fstream&);										//Вывод периода 00 часов
+	void ViewTimePeriod_12_(fstream&);										//Вывод периода 12 часов
+	//////////////////
 	void OutCodTTBB( int key );												//Процесс открытия файла для записи кода ТТВВ
 	
 	void OutCodTTCC( const string _file );									//Процесс открытия файла для записи кода TTCC
@@ -104,7 +108,6 @@ public:
 
 	void WriteLand(const TTAA_Database time_data, fstream & file);			// Функция записи данных на уровни земли
 	//новая версия
-	bool WriteStandateSurfase( const Station time_station, fstream & file , bool StopProcesingLevels);// (возвращает ключ на остановку) Функция записи стандартных изобарических поверхностей поверхностей
 
 	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels);
 
@@ -115,10 +118,6 @@ public:
 	int LastDayPrecedingMonth(void);
 
 
-	void ViewTimePeriod_00_(fstream & file);
-
-
-	void ViewTimePeriod_12_(fstream & file);
 
 	void finishApp(fstream & file );
 };
