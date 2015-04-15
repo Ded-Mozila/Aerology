@@ -19,6 +19,7 @@ public:
 		number = -1;
 		info = false;
 	};
+	Station(int z):number(z),info(false){};
 	~Station(void)
 	{
 	};
@@ -42,68 +43,73 @@ public:
 	fstream inFile_12;						//Файл с выходной файл
 
 	void TTAA(char * code);
-	void Write_file_TTAA(int period , const string _file , fstream & file );												// Вывод данных
+	void TTBB(char * code , int key );
+	void TTCC(char * code);
+	void TTDD(char * code);
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
-
-	void TTBB(char * code , int key );
-
-	void TTCC(char * code);
-												// Вывод данных
+	// Вывод данных
+	void Write_file_TTAA(int period , const string _file , fstream & file );
 	
-	void TTDD(char * code);
-	WIND_SHIFT WindShift( int GGPPP );										// Îïðåäåëåíèå ñäâèãà âåòðà
-	char * deleteEndl( char* code );  										// delete '\r\n' in string code
-	char * MaxWind ( char* code, surfaceWind & new_max_wind,  int GGPPP );	// Îïðåäåëåíèå ìàêñèìàëüíîãî âåòðà
-
-	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i);	// Îïðåäåëåíèå íîìåðà óðîëâíÿ è âûñîòû íàä óðîâíåì ìîðÿ
-
-	char * DistrictStation ( char * code, int & new_number);	// Îïðåäåëåíèå Íîìåðà ðàéîíà è ñòàíöèè
-
-	char * DateTime ( char * code, bool& node, DATA_TIME & new_data_tim );				// Îïðåäåëåíèå Äàòû è âðÿìû çàïóñêà çîíäà + îïðåäåëåíèå èíäåíòèôîêàòîðà ïîñëåäíåé èçîáàðè÷åñêîé ïîâåðõíîñòè(ÒÒÀÀ) ëèáî òèïà îáîðóäîâàíèÿ(ÒÒÂÂ)
-
-	char * Pressure ( char * code, int & press );							// Çíà÷åíèå äàâëåíèÿ
-
-	char * ReturnSurface ( char * code , surface & info , int& i);					// Çàáèâàåò äàííûìè î òåìïåðàòóðå è î âåòðå  type surfase
-
-	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp, int& i );		// Äàåò äàííûå îò òåìïåðàòóðå è äåôåöèòå ðîñû âîçâðàùàåò êîä ñòðîêè (ñòðîêà ñ êîäîì, ñòðóêòóðà â êîòîðóþ ñîõðàíèòüñÿ äàííûå î òåìïåðàòóðå è äåôèöèòå ðîñû
-
-	char * Wind ( char * code, WIND & new_wind ,bool node, int& i);							// Çíà÷åíèå âåòðà
-
-	double Temp ( bool presence_dewpoint, const int TTTDD );				// Âûäåëåíèå òåìïåðàòóðû
-
- 	double DefinitionTenthTemp ( int m );									// Îïðåäåëåíèå äàííûõ î òåìïåðàòóðå
-
-	double DewPoint ( int TTTDD );											// Äåôèöèò ðîñû
-
-	void OutSpecialPointWind(void);	//Вывод данных специальных тоек по ветру
-	void OutFileListWind(TTBB_Database time_data, fstream & file, int key);
-	void Write_file_Wind( int period, fstream & file , int key);
-	//Ôóíêöèè çàïèñè äàííûõ â ôàéë.
-	//////////////////////////////////////////////////////////////////////////
-
-	void WriteFile( const string file);										//ñîðòèðîâêà äàííûõ äëÿ çàïèñè Êîäîâ ÒÒAA, TTBB
-
-	void OutCodTTAA( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÀÀ
+	void Write_file_TTBB( int period, fstream & file , int key );					// Вывод данных TTBB
+	
 	void Write_file_TTCC( int period, const string _file, fstream & file );	
-	void OutCodTTCC( const string _file );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà 
+
+	WIND_SHIFT WindShift( int GGPPP );												// Определение сдвига ветра
 	
-	void Write_file_TTBB( int period, fstream & file , int key );												// Вывод данных
+	char * deleteEndl( char* code );  												// delete '\r\n' in string code
+
+	char * MaxWind ( char* code, surfaceWind & new_max_wind,  int GGPPP );			// Определение максимального ветра
+
+	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i);		// Определение номера уровня и высоты над уровнем моря
+
+	char * DistrictStation ( char * code, int & new_number);						// Определение Номера района и станции
+
+	char * DateTime ( char * code, bool& node, DATA_TIME & new_data_tim );			// Определение Даты и врямы запуска зонда + определение индентифокатора последней изобарической поверхности(ТТАА) либо типа оборудования(ТТВВ)
+	
+	char * Pressure ( char * code, int & press );									// Значение давления
+
+	char * ReturnSurface ( char * code , surface & info , int& i);					// Забивает данными о температуре и о ветре type surfase
+
+	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp, int& i );		// Дает данные от температуре и дефеците росы возвращает код строки (строка с кодом, структура в которую сохраниться данные о температуре и дефиците росы
+
+	char * Wind ( char * code, WIND & new_wind ,bool node, int& i);					// Значение ветра
+
+	double Temp ( bool presence_dewpoint, const int TTTDD );						// Выделение температуры
+
+ 	double DefinitionTenthTemp ( int m );											// Определение данных о температуре
+
+	double DewPoint ( int TTTDD );													// Дефицит росы
+
+	void OutSpecialPointWind(void);													//Вывод данных специальных тоек по ветру
+	
+	void OutFileListWind(TTBB_Database time_data, fstream & file, int key);
+	
+	void Write_file_Wind( int period, fstream & file , int key);
+	
+	// Функции записи данных в файл.
+
+	void WriteFile( const string file);										//Cортировка данных для записи Кодов ТТAA, TTBB
+
+	void OutCodTTAA( const string _file );									//Процесс открытия файла для записи кода ТТАА
+
+	void OutCodTTBB( int key );												//Процесс открытия файла для записи кода ТТВВ
+	
+	void OutCodTTCC( const string _file );									//Процесс открытия файла для записи кода TTCC
+
 	void OutFileListTTBB( TTBB_Database j, fstream& file, int key );
 
-	void OutCodTTBB( int key );									//Ïðîöåññ îòêðûòèÿ ôàéëà äëÿ çàïèñè êîäà ÒÒÂÂ
-
-	string StrNameFile(local_time st, int time, string _file );		//Ôîðìèðóåò ñòîðîêó äåðåêòîðèè äëÿ îòêðûòèÿ ôàéëà
+	string StrNameFile(local_time st, int time, string _file );				//Формирует стороку деректории для открытия файла
 
 
-	void WriteLand(const TTAA_Database time_data, fstream & file);			// Ôóíêöèÿ çàïèñè äàííûõ íà óðîâíè çåìëè
-//новая версия
-	bool WriteStandateSurfase( const Station time_station, fstream & file , bool StopProcesingLevels);// (âîçâðàùàåò  êëþ÷ íà îñòàíîâêó) Ôóíêöèÿ çàïèñè ñòàíäàðòíûõ èçîáàðè÷åñêèõ ïîâåðõíîñòåé ïîâåðõíîñòåé
+	void WriteLand(const TTAA_Database time_data, fstream & file);			// Функция записи данных на уровни земли
+	//новая версия
+	bool WriteStandateSurfase( const Station time_station, fstream & file , bool StopProcesingLevels);// (возвращает ключ на остановку) Функция записи стандартных изобарических поверхностей поверхностей
 
 	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels);
 
-	void WriteSpecialPoints(const TTAA_Database time_data, fstream & file);	// Ôóíêöèÿ çàïèñè ñïåöèàëüíûõ ïóíêòîâ êîäà ÒÒÂÂ
-
+	void WriteSpecialPoints(const TTAA_Database time_data, fstream & file);	// Функция записи специальных пунктов кода ТТВВ
+	
 	int DayPeriod(int time , int day);
 
 	int LastDayPrecedingMonth(void);

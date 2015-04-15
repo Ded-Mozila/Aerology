@@ -295,6 +295,8 @@ bool recording_and_write::WriteStandateSurfase( const Station time_station, fstr
 				if ( number == 92 ) file << "5";
 				else file << "0";
 
+				//
+
 				//òåìïåðàòóðà
 				file << " T=";
 				if ( temp == 999 ) file << " ";
