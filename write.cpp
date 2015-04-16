@@ -438,118 +438,116 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 // 	return name;
 // }
 
-void recording_and_write::OutCodTTCC( const string _file )
-{
-	if(time_00.size() != 0)Write_file_TTCC( 0, _file, inFile_00);
-		else cout << "00" ;				//Запуск программы на 0
-	if(time_12.size() != 0)Write_file_TTCC( 12, _file, inFile_12 );
-		else cout << "12" ;			//Запуск программы на 0
-}
-void recording_and_write::Write_file_TTCC( int period, const string _file, fstream & file )
-{
-	file << "-------------------------------------------------------\nSpecialPoints TTCC\n\n";
-	list<Station>::iterator i;
-	list<Station>::iterator i_begin;
-	list<Station>::iterator i_end;
-	if( period == 0 )			// 00
-	{
-		i_begin = time_00.begin();
-		i_end = time_00.end();
-	}
-	if( period == 12 )		// 12
-	{
-		i_begin = time_12.begin();
-		i_end = time_12.end();
-	}
-//	cout << "out\n";
-	for ( i = i_begin; i != i_end; ++i )
-		if ((*i).info == true && (*i).TTCC.information == true)
-		{	
-			//cout << (*i).TTCC.number << '\n';
-			bool controllerEmptyLevels = true;
-			controllerEmptyLevels = WriteStandateSurfase_TTCC( (*i).TTCC , file ,controllerEmptyLevels);
-			if( (*i).TTCC.level.size() != 0 )file << '\n'  ;
-		}
-}
-bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels)
-{
-	TTCC_Database date = time_data;
-	list<standardSurface>::iterator i;
-	if (date.information == true)
-	{
+// void recording_and_write::OutCodTTCC( const string _file )
+// {
+// 	if(!time_00.empty())Write_file_TTCC( 0, _file, inFile_00);//Запуск программы на 0
+// 	if(!time_12.empty())Write_file_TTCC( 12, _file, inFile_12 );//Запуск программы на 12	
+// }
+// void recording_and_write::Write_file_TTCC( int period, const string _file, fstream & file )
+// {
+// 	file << "-------------------------------------------------------\nSpecialPoints TTCC\n\n";
+// 	list<Station>::iterator i;
+// 	list<Station>::iterator i_begin;
+// 	list<Station>::iterator i_end;
+// 	if( period == 0 )			// 00
+// 	{
+// 		i_begin = time_00.begin();
+// 		i_end = time_00.end();
+// 	}
+// 	if( period == 12 )		// 12
+// 	{
+// 		i_begin = time_12.begin();
+// 		i_end = time_12.end();
+// 	}
+// //	cout << "out\n";
+// 	for ( i = i_begin; i != i_end; ++i )
+// 		if ((*i).info == true && (*i).TTCC.information == true)
+// 		{	
+// 			//cout << (*i).TTCC.number << '\n';
+// 			bool controllerEmptyLevels = true;
+// 			controllerEmptyLevels = WriteStandateSurfase_TTCC( (*i).TTCC , file ,controllerEmptyLevels);
+// 			if( (*i).TTCC.level.size() != 0 )file << '\n'  ;
+// 		}
+// }
+// bool recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels)
+// {
+// 	TTCC_Database date = time_data;
+// 	list<standardSurface>::iterator i;
+// 	if (date.information == true)
+// 	{
 
-		for(i = date.level.begin(); i != date.level.end(); ++i )
-		{
-			int  StandartLevels[6] = {70,50,30,20,10};
-			standardSurface new_surfase = *i;
-			double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
-			int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
-			WIND wind = new_surfase.data.wind;
-			if (StopProcesingLevels)
-			{
-				for (int a = 0; a < 5; a++)
-				{
-					if (StandartLevels[a] == new_surfase.height.number)
-					{
-						StopProcesingLevels = false;
-						break;
-					}
-					else
-					{
-						file << "IND="<<  time_data.number <<" ";
-						file << "P=";
-						if (StandartLevels[a] != 0) file << " ";
-						else file << "10";
-						file << StandartLevels[a];
-						if ( StandartLevels[a] == 92 ) file << "5";
-						else file << "0";
-						file << "==========================\n";
-					}
-				}
-			}
-			//Íîìåð ñòàíöèè è ðàéîíà
-			file << "IND="<<  time_data.number <<" ";
+// 		for(i = date.level.begin(); i != date.level.end(); ++i )
+// 		{
+// 			int  StandartLevels[6] = {70,50,30,20,10};
+// 			standardSurface new_surfase = *i;
+// 			double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
+// 			int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
+// 			WIND wind = new_surfase.data.wind;
+// 			if (StopProcesingLevels)
+// 			{
+// 				for (int a = 0; a < 5; a++)
+// 				{
+// 					if (StandartLevels[a] == new_surfase.height.number)
+// 					{
+// 						StopProcesingLevels = false;
+// 						break;
+// 					}
+// 					else
+// 					{
+// 						file << "IND="<<  time_data.number <<" ";
+// 						file << "P=";
+// 						if (StandartLevels[a] != 0) file << " ";
+// 						else file << "10";
+// 						file << StandartLevels[a];
+// 						if ( StandartLevels[a] == 92 ) file << "5";
+// 						else file << "0";
+// 						file << "==========================\n";
+// 					}
+// 				}
+// 			}
+// 			//Íîìåð ñòàíöèè è ðàéîíà
+// 			file << "IND="<<  time_data.number <<" ";
 
-			//äàâëåíèå
-			file << "P=";
-			if (number != 0) file << "  ";
-			else file << "10";
-			file << number;
-			if ( number == 92 ) file << "5";
+// 			//äàâëåíèå
+// 			file << "P=";
+// 			if (number != 0) file << "  ";
+// 			else file << "10";
+// 			file << number;
+// 			if ( number == 92 ) file << "5";
 
-			//òåìïåðàòóðà
-			file << " T=";
-			if ( temp == 999 ) file << " ";
-			if ( temp >= 0 ) file << " ";
-			if ( fabs(temp) < 10 ) file << " ";
-			file << temp;
-			if ( ( temp - (int)temp ) == 0 && temp != 999 ) file << ".0";
+// 			//òåìïåðàòóðà
+// 			file << " T=";
+// 			if ( temp == 999 ) file << " ";
+// 			if ( temp >= 0 ) file << " ";
+// 			if ( fabs(temp) < 10 ) file << " ";
+// 			file << temp;
+// 			if ( ( temp - (int)temp ) == 0 && temp != 999 ) file << ".0";
 
-			//íàïðàâëåíèå âåòðà
-			file << " d=";
-			if ( wind.wind_direction < 100 ) file << " ";
-			if ( wind.wind_direction < 10 ) file << " ";
-			file << wind.wind_direction;
+// 			//íàïðàâëåíèå âåòðà
+// 			file << " d=";
+// 			if ( wind.wind_direction < 100 ) file << " ";
+// 			if ( wind.wind_direction < 10 ) file << " ";
+// 			file << wind.wind_direction;
 
-			//ñêîðîòü âåòðà
-			file << " f=";
-			if ( abs(wind.wind_speed) < 100 )file << " ";
-			if ( abs(wind.wind_speed) < 10 )file << " ";
-			file << round(wind.wind_speed);
+// 			//ñêîðîòü âåòðà
+// 			file << " f=";
+// 			if ( abs(wind.wind_speed) < 100 )file << " ";
+// 			if ( abs(wind.wind_speed) < 10 )file << " ";
+// 			file << round(wind.wind_speed);
 
-			//äåôèöèò òî÷êè ðîñû
-			file << " D=";
-			double dewpoint = new_surfase.data.info_temp.dewpoint;
-			if ( abs(dewpoint) < 100 )file << " ";
-			if ( abs(dewpoint) < 10 )file << " ";
-			file << dewpoint;
-			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
-			if ( dewpoint != 999 ) file << "0";
-			file << "\n" ;
-		}
-	}
-	return StopProcesingLevels;
-}
+// 			//äåôèöèò òî÷êè ðîñû
+// 			file << " D=";
+// 			double dewpoint = new_surfase.data.info_temp.dewpoint;
+// 			if ( abs(dewpoint) < 100 )file << " ";
+// 			if ( abs(dewpoint) < 10 )file << " ";
+// 			file << dewpoint;
+// 			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
+// 			if ( dewpoint != 999 ) file << "0";
+// 			file << "\n" ;
+// 		}
+// 	}
+// 	return StopProcesingLevels;
+// }
 
 void recording_and_write::OutSpecialPointWind(void)
 {

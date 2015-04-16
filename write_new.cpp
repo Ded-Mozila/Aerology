@@ -8,9 +8,10 @@ void recording_and_write::WriteFile(const string _file )
 
 	OutCodTTAA(_file);  		// создание файла и запись кода TTAA
 
+	// OutCodTTCC(_file);			// запись в созданный уже файла кода TTCC
+
 	// OutCodTTBB(1);				// запись в созданный уже файла кода TTBB
 
-	// //OutCodTTCC(_file);		// запись в созданный уже файла кода TTCC
 
 	// //OutCodTTBB(2);			// запись в созданный уже файла кода TTDD
 
@@ -127,17 +128,10 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 		}
 	}
 	file << "\n------------------------------------------------------\nСтандартные уровни (гПа): ТЕМР-А(1000-100), ТЕМР-С(70-10)\n\n";
-
+	//Вывод стандартных уровней TTAA 
 	for ( i = i_begin; i != i_end; ++i )
-	{	
-		//bool controllerEmptyLevels = true;
 		if ((*i).info == true)
-		{
-			// controllerEmptyLevels = WriteStandateSurfase( (*i) , file ,controllerEmptyLevels);
-			WriteStandateSurfase((*i), file);
-		}
-		
-	}
+			WriteStandateSurfase((*i), file);		
 }
 
 string recording_and_write::StrNameFile(local_time st, int time_, string _file )
@@ -230,7 +224,7 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 {
 	TTAA_Database date = time_station.TTAA;
 	list<standardSurface>::iterator i;
-	if (date.information == true)
+	if (date.information == true && time_station.info == true)
 	{
 		int  StandartLevels[11] = {0,92,85,70,50,40,30,25,20,15,10};	
 		bool emptyLevel = true;					// Пустой уровень
@@ -263,18 +257,97 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 				}
 			//Номер станции
 			file << "IND="<<  time_station.number <<" ";
+			OutPressure(file,10*number);								//Давление
+			OutGeopotencial((new_surfase.height).height, number,file);	//Геопотенциал
+			OutTemp(file,temp);											//Температура		
+			OutWindSpeed(file,wind.wind_direction);						//Направление ветра
 
-			//Давление
+			// file << " d=";
+			// if ( wind.wind_direction < 100 ) file << " ";
+			// if ( wind.wind_direction < 10 ) file << " ";
+			// file << wind.wind_direction;
+
+			//Скорость ветра
+			file << " f=";
+			if ( abs(wind.wind_speed) < 100 )file << " ";
+			if ( abs(wind.wind_speed) < 10 )file << " ";
+			file << round(wind.wind_speed);
+
+			//Дифицит точки росы
+			file << " D=";
+			double dewpoint = new_surfase.data.info_temp.dewpoint;
+			if ( abs(dewpoint) < 100 )file << " ";
+			if ( abs(dewpoint) < 10 )file << " ";
+			file << dewpoint;
+			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
+			if ( dewpoint != 999 ) file << "0";
+			file << "\n" ;
+		}
+		if (time_station.info == true && time_station.TTCC.information == true)
+		{	
+			WriteStandateSurfase_TTCC( time_station.TTCC , file );
+			//перенос стройки только после прохода функции TTCC
+		}
+			file << "\n" ;
+	}
+	// return StopProcesingLevels;
+}
+void recording_and_write::OutGeopotencial(int geopot, int number, fstream& file)
+{
+	file << " H=";
+	if (number == 0 || number >= 70 )	
+		file << setfill (' ')<< setw (4) << geopot /*<< " "*/;
+	if (number != 0 && number <= 50)
+		file << setfill ('0')<< setw (3) << geopot << "0";
+}
+
+void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file)
+{
+	TTCC_Database date = time_data;
+	list<standardSurface>::iterator i;
+	if (date.information == true)
+	{
+		int  StandartLevels[6]= {70,50,30,20,10};
+		bool emptyLevel = true;					// Пустой уровень
+		for(i = date.level.begin(); i != date.level.end(); ++i )
+		{
+			standardSurface new_surfase = *i;
+			double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
+			int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
+			WIND wind = new_surfase.data.wind;
+			if (emptyLevel)
+			{
+				for (int a = 0; a < 5; a++)
+				{
+					if (StandartLevels[a] == new_surfase.height.number)
+					{
+						emptyLevel = false;
+						break;
+					}
+					else
+					{
+						file << "IND="<<  time_data.number <<" ";
+						file << "P=";
+						if (StandartLevels[a] != 0) file << " ";
+						else file << "10";
+						file << StandartLevels[a];
+						if ( StandartLevels[a] == 92 ) file << "5";
+						else file << "0";
+						file << "==========================\n";
+					}
+				}
+			}
+			//Íîìåð ñòàíöèè è ðàéîíà
+			file << "IND="<<  time_data.number <<" ";
+
+			//äàâëåíèå
 			file << "P=";
-			if (number != 0) file << " ";
+			if (number != 0) file << "  ";
 			else file << "10";
 			file << number;
 			if ( number == 92 ) file << "5";
-			else file << "0";
 
-			//Геопотенциал
-
-			//Температура
+			//òåìïåðàòóðà
 			file << " T=";
 			if ( temp == 999 ) file << " ";
 			if ( temp >= 0 ) file << " ";
@@ -304,15 +377,29 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 			if ( dewpoint != 999 ) file << "0";
 			file << "\n" ;
 		}
-		if (time_station.info == true && time_station.TTCC.information == true)
-		{	
-			//cout << time_station.TTCC.number << '\n';
-			bool controllerEmptyLevels = true;
-			controllerEmptyLevels = WriteStandateSurfase_TTCC( time_station.TTCC , file ,controllerEmptyLevels);
-			//if( time_station.TTCC.level.size() != 0 )file << '\n'  ;
-		}
-		//перенос стройки только после проходафункции TTCC
-		file << "\n" ;
 	}
-	// return StopProcesingLevels;
+}
+
+void recording_and_write::OutPressure(fstream& file,int pressure)
+{
+	file << "P=" << setfill (' ')<<  setw (4);
+	if ( pressure == 920 ) file << 925;
+	else if (pressure == 0 ) file << 1000;
+	else file << pressure;
+}
+void recording_and_write::OutTemp(fstream& file, float temp)
+{
+	file << " T=";
+	if ( temp == 999 ) file << " ";
+	if ( temp >= 0 ) file << " ";
+	if ( fabs(temp) < 10 ) file << " ";
+	file << temp;
+	if ( ( temp - (int)temp ) == 0 && temp != 999 ) file << ".0";
+}
+void recording_and_write::OutWindSpeed(fstream& file, const int& speed)
+{
+	file << " d=";
+	// if ( wind.wind_direction < 100 ) file << " ";
+	// if ( wind.wind_direction < 10 ) file << " ";
+	file << setfill (' ')<<  setw (3) << speed;
 }

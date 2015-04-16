@@ -96,6 +96,12 @@ public:
 	void Write_file_TTAA(const int,const string,fstream&);					//Вывод данных кода А
 	void ViewTimePeriod_00_(fstream&);										//Вывод периода 00 часов
 	void ViewTimePeriod_12_(fstream&);										//Вывод периода 12 часов
+	void WriteStandateSurfase_TTCC(const TTCC_Database,fstream&);			//Вывод стандартых уровней кода ТТСС
+	//Оптимизация вывода кодов А и С
+	void OutPressure(fstream&,int);											//Вывод в файл давления P= (Номер изобарической поверхности)
+	void OutGeopotencial(int,int,fstream&);									//Вывод в файл геопотенциалла
+	void OutTemp(fstream&,float);											//Вывод в файл температуры T=
+	void OutWindDirection(fstream&,const int&);									//Вывод в файл направлении ветра d=
 	//////////////////
 	void OutCodTTBB( int key );												//Процесс открытия файла для записи кода ТТВВ
 	
@@ -109,7 +115,6 @@ public:
 	void WriteLand(const TTAA_Database time_data, fstream & file);			// Функция записи данных на уровни земли
 	//новая версия
 
-	bool WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file , bool StopProcesingLevels);
 
 	void WriteSpecialPoints(const TTAA_Database time_data, fstream & file);	// Функция записи специальных пунктов кода ТТВВ
 	

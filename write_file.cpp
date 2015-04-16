@@ -241,12 +241,7 @@ char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_heigh
 		else
 		{
 			new_height.number = PPhhh / 1000;
-			if (i < 2)
-			{
-				if ( ((PPhhh % 1000) - 500) > 0 ) new_height.height = ((PPhhh % 1000) - 500 )*(-1);
-				else new_height.height = PPhhh % 1000;
-			}
-			else new_height.height = PPhhh % 1000;
+			new_height.height = PPhhh % 1000;
 		}
 	}
 	return code;
