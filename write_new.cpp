@@ -374,7 +374,7 @@ void recording_and_write::OutGeopotencial(int geopot, int number, fstream& file)
 {
 	file << " H=";
 	if (number == 0 || number >= 70 )	
-		file << setfill (' ')<< setw (4) << geopot /*<< " "*/;
+		file << " "<< setfill ('0')<< setw (3) << geopot /*<< " "*/;
 	if (number != 0 && number <= 50)
 		file << setfill ('0')<< setw (3) << geopot << "0";
 }
