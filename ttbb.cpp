@@ -2,6 +2,11 @@
 
 void recording_and_write::TTBB( char * code,  int key )
 {
+						//Заглушки
+						surface trop;		// новая тропопауза
+						surfaceWind wind77;	// Максимальный ветер
+						WIND_SHIFT shift;	// Вертикальный сдвиг
+						//////
 	TTBB_Database base;
 	base.code_ = code;
 	code = deleteEndl(code);
@@ -47,7 +52,7 @@ void recording_and_write::TTBB( char * code,  int key )
 						}
 						new_level.information = true;	
 						int i=0;
-						code = TempDewpoint(code, new_level.info_temp,i);
+						code = TempDewpoint(code,trop,wind77,shift, new_level.info_temp,i);
  						base.level.push_back(new_level);
 						GGPPP = strtol(code, &code, 10);
 						if (GGPPP == 21212)
@@ -91,7 +96,7 @@ void recording_and_write::TTBB( char * code,  int key )
 						old_wind.pressure = GGPPP % 1000; 
 					}
 					int i =0;
-					code = Wind( code, old_wind.wind, wind_node ,i);
+					code = Wind( code,trop,wind77,shift, old_wind.wind, wind_node ,i);
 					base.level_wind.push_back(old_wind);
 					GGPPP = strtol(code, &code, 10);
 					if (GGPPP == 31313 || GGPPP == 51515 )

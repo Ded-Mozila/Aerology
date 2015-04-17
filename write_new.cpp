@@ -252,7 +252,7 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 						file << StandartLevels[a];
 						if ( StandartLevels[a] == 92 ) file << "5";
 						else file << "0";
-						file << " ============================\n";
+						file << " ===================================\n";
 					}
 				}
 			//Номер станции
@@ -260,45 +260,58 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 			OutPressure(file,10*number);								//Давление
 			OutGeopotencial((new_surfase.height).height, number,file);	//Геопотенциал
 			OutTemp(file,temp);											//Температура		
-			OutWindSpeed(file,wind.wind_direction);						//Направление ветра
-
-			// file << " d=";
-			// if ( wind.wind_direction < 100 ) file << " ";
-			// if ( wind.wind_direction < 10 ) file << " ";
-			// file << wind.wind_direction;
-
-			//Скорость ветра
-			file << " f=";
-			if ( abs(wind.wind_speed) < 100 )file << " ";
-			if ( abs(wind.wind_speed) < 10 )file << " ";
-			file << round(wind.wind_speed);
-
-			//Дифицит точки росы
-			file << " D=";
-			double dewpoint = new_surfase.data.info_temp.dewpoint;
-			if ( abs(dewpoint) < 100 )file << " ";
-			if ( abs(dewpoint) < 10 )file << " ";
-			file << dewpoint;
-			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
-			if ( dewpoint != 999 ) file << "0";
+			OutWindDirection(file,wind.wind_direction);					//Направление ветра
+			OutWindSpeed(file,wind.wind_speed);							//Скорость ветра
+			OutDewpoint(file,new_surfase.data.info_temp.dewpoint);		//Дифицит точки росы
 			file << "\n" ;
 		}
-		if (time_station.info == true && time_station.TTCC.information == true)
-		{	
-			WriteStandateSurfase_TTCC( time_station.TTCC , file );
-			//перенос стройки только после прохода функции TTCC
+		// Выввод данных кода С
+		// if (time_station.info == true && time_station.TTCC.information == true)
+		// {	
+		// 	WriteStandateSurfase_TTCC( time_station.TTCC , file );
+		// }
+		if (!date.tropopause.empty())
+		{
+			file<< "Сведения о тропопауза:\n";
+			list<surface>::iterator k;
+			for (k = date.tropopause.begin(); k != date.tropopause.end() ; ++k)
+			{
+				surface Tr = (*k);
+				file << "IND="<<  time_station.number <<" ";
+				file << "P=";
+				if ((Tr.pressure) < 1000) file << " ";
+				file << Tr.pressure;										//Давление
+				OutTemp(file,Tr.info_temp.temp);							//Температура		
+				OutWindDirection(file,Tr.wind.wind_direction);				//Направление ветра
+				OutWindSpeed(file,Tr.wind.wind_speed);						//Скорость ветра
+				OutDewpoint(file,Tr.info_temp.dewpoint);					//Дифицит точки росы
+				file << "\n" ;	
+
+			}
+		}
+		if (!date.max_wind.empty())
+		{
+			file<< "Сведения о максимальном ветре :\n";
+			list<surfaceWind>::iterator k;
+			for (k = date.max_wind.begin(); k != date.max_wind.end() ; ++k)
+			{
+				surfaceWind Wn = (*k);
+				file << "IND="<<  time_station.number <<" ";
+				file <<"N="<< Wn.point\
+				<< " P="<<Wn.data.pressure<< " ";
+				OutWindDirection(file,Wn.data.wind.wind_direction);				//Направление ветра
+				OutWindSpeed(file,Wn.data.wind.wind_speed);						//Скорость ветра
+				if(Wn.shift.information == true)
+				{
+					file << " Vb=" << Wn.shift.up_speed\
+					 << " Va=" << Wn.shift.below_speed;
+				}
+				file << "\n" ;	
+
+			}
 		}
 			file << "\n" ;
 	}
-	// return StopProcesingLevels;
-}
-void recording_and_write::OutGeopotencial(int geopot, int number, fstream& file)
-{
-	file << " H=";
-	if (number == 0 || number >= 70 )	
-		file << setfill (' ')<< setw (4) << geopot /*<< " "*/;
-	if (number != 0 && number <= 50)
-		file << setfill ('0')<< setw (3) << geopot << "0";
 }
 
 void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_data, fstream & file)
@@ -312,8 +325,8 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 		for(i = date.level.begin(); i != date.level.end(); ++i )
 		{
 			standardSurface new_surfase = *i;
-			double temp = new_surfase.data.info_temp.temp;				//Òåìïåðàòóðà
-			int number = new_surfase.height.number;						//Íîìåð óðîâíÿ
+			double temp = new_surfase.data.info_temp.temp;				//Температура
+			int number = new_surfase.height.number;						//Номер уровня
 			WIND wind = new_surfase.data.wind;
 			if (emptyLevel)
 			{
@@ -337,44 +350,14 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 					}
 				}
 			}
-			//Íîìåð ñòàíöèè è ðàéîíà
+			//Номер станции
 			file << "IND="<<  time_data.number <<" ";
-
-			//äàâëåíèå
-			file << "P=";
-			if (number != 0) file << "  ";
-			else file << "10";
-			file << number;
-			if ( number == 92 ) file << "5";
-
-			//òåìïåðàòóðà
-			file << " T=";
-			if ( temp == 999 ) file << " ";
-			if ( temp >= 0 ) file << " ";
-			if ( fabs(temp) < 10 ) file << " ";
-			file << temp;
-			if ( ( temp - (int)temp ) == 0 && temp != 999 ) file << ".0";
-
-			//íàïðàâëåíèå âåòðà
-			file << " d=";
-			if ( wind.wind_direction < 100 ) file << " ";
-			if ( wind.wind_direction < 10 ) file << " ";
-			file << wind.wind_direction;
-
-			//ñêîðîòü âåòðà
-			file << " f=";
-			if ( abs(wind.wind_speed) < 100 )file << " ";
-			if ( abs(wind.wind_speed) < 10 )file << " ";
-			file << round(wind.wind_speed);
-
-			//äåôèöèò òî÷êè ðîñû
-			file << " D=";
-			double dewpoint = new_surfase.data.info_temp.dewpoint;
-			if ( abs(dewpoint) < 100 )file << " ";
-			if ( abs(dewpoint) < 10 )file << " ";
-			file << dewpoint;
-			if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
-			if ( dewpoint != 999 ) file << "0";
+			OutPressure(file,number);										//Давление
+			OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
+			OutTemp(file,temp);												//Температура		
+			OutWindDirection(file,wind.wind_direction);						//Направление ветра
+			OutWindSpeed(file,wind.wind_speed);								//Скорость ветра
+			OutDewpoint(file,new_surfase.data.info_temp.dewpoint);			//Дифицит точки росы
 			file << "\n" ;
 		}
 	}
@@ -387,6 +370,14 @@ void recording_and_write::OutPressure(fstream& file,int pressure)
 	else if (pressure == 0 ) file << 1000;
 	else file << pressure;
 }
+void recording_and_write::OutGeopotencial(int geopot, int number, fstream& file)
+{
+	file << " H=";
+	if (number == 0 || number >= 70 )	
+		file << setfill (' ')<< setw (4) << geopot /*<< " "*/;
+	if (number != 0 && number <= 50)
+		file << setfill ('0')<< setw (3) << geopot << "0";
+}
 void recording_and_write::OutTemp(fstream& file, float temp)
 {
 	file << " T=";
@@ -396,10 +387,23 @@ void recording_and_write::OutTemp(fstream& file, float temp)
 	file << temp;
 	if ( ( temp - (int)temp ) == 0 && temp != 999 ) file << ".0";
 }
-void recording_and_write::OutWindSpeed(fstream& file, const int& speed)
+void recording_and_write::OutWindDirection(fstream& file, const int& speed)
 {
 	file << " d=";
-	// if ( wind.wind_direction < 100 ) file << " ";
-	// if ( wind.wind_direction < 10 ) file << " ";
 	file << setfill (' ')<<  setw (3) << speed;
+}
+void recording_and_write::OutWindSpeed(fstream& file, const int& speed)
+{
+	file << " f=";
+	file << setfill (' ')<<  setw (3) << speed;
+}
+void recording_and_write::OutDewpoint(fstream& file, const float& dewpoint)
+{
+	file << " D=";
+	if ( abs(dewpoint) < 100 )file << " ";
+	if ( abs(dewpoint) < 10 )file << " ";
+	if (dewpoint == 999) file << " ";
+	file << dewpoint;
+	if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
+	if ( dewpoint != 999 ) file << "0";
 }

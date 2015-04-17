@@ -49,16 +49,25 @@ void recording_and_write::TTCC( char * code )
 						standardSurface time_data;
 						time_data.data.wind_node = wind_node;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
-						code = NumberHeight( code, time_data.height, i);
-						//2. ...
-						if (i == STOP)
-							break;
-						code = ReturnSurface( code, time_data.data, i );
-						if (i == STOP)
-							break;
-						//3. Добавление элемента в конец списока
-						base.level.push_back(time_data);
-
+						surface trop;		// новая тропопауза
+						surfaceWind wind77;	// Максимальный ветер
+						WIND_SHIFT shift;	// Вертикальный сдвиг
+						code = NumberHeight( code,trop,wind77,shift,time_data.height, i); //<<-- Анализ Тропопаузы))
+						if (i == 888 && trop.information == true)
+						{
+							//base.tropopause.push_back(trop);
+						}
+						else
+						// if 
+						{
+							if (i == STOP)
+								break;
+							code = ReturnSurface( code, time_data.data, i);
+							if (i == STOP)
+								break;
+							//3. Добавление элемента в список
+							base.level.push_back(time_data);
+						}	
 					}
 					theEnd = true;
 					break;

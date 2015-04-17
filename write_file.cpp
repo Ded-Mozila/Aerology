@@ -60,18 +60,21 @@ double recording_and_write::Temp( bool presence_dewpoint,const int TTTDD )
 
 char* recording_and_write::ReturnSurface( char* code, surface& info , int& i )
 {
+	surface trop;		// новая тропопауза
+	surfaceWind wind77;	// Максимальный ветер
+	WIND_SHIFT shift;	// Вертикальный сдвиг
 	//2. Определение температуры воздуха и дифицит точки росы
 	//////////////////////////////////////////////////////////////////////////
 	surface land = info;
-	code = TempDewpoint(code, land.info_temp , i);
+	code = TempDewpoint(code,trop,wind77,shift, land.info_temp , i);
 	//////////////////////////////////////////////////////////////////////////
 	//3.. Определение направления  и скорости ветра
-	code = Wind( code, land.wind,land.wind_node, i);
+	code = Wind(code,trop,wind77,shift, land.wind,land.wind_node, i);
 	info = land;
 	return code;
 }
 
-char* recording_and_write::Wind( char * code, WIND& new_wind , bool node,  int& i)
+char* recording_and_write::Wind(char * code,surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, WIND& new_wind , bool node,  int& i)
 {
 	if(*(code+1) =='/') //Проверка на присутствие скороти ветра
 	{
@@ -92,15 +95,17 @@ char* recording_and_write::Wind( char * code, WIND& new_wind , bool node,  int& 
 	{
 
 		int ddfff = strtol(code, &code, 10);
-		if((ddfff/1000) == 88 || (ddfff/1000) ==77)
+		if((ddfff/1000) == 88 || (ddfff/1000) ==77 || (ddfff/1000) == 66 )
 		{
-			i = STOP;
-		}else
+			//Получение данных о тропопаузе
+			code = endGroup(ddfff,code,trop,wind77,shift,i);
+		}
+		else
 		{
 			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
 			if ((*code) =='/') 
 			{
-				new_wind.wind_direction = ddfff* 10 ; // Определение направление ветра
+				new_wind.wind_direction = ddfff * 10 ; // Определение направление ветра
 				code += 3;
 				new_wind.wind_speed = 999;			// Отсутствие данных о направлении ветра
 			} 
@@ -133,7 +138,7 @@ char * recording_and_write::Pressure( char * code, int & press )
 	return code;
 }
 
-char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_temp , int& i)
+char * recording_and_write::TempDewpoint( char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, TEMP_DEWPOINT & new_info_temp , int& i)
 {
 	if(*(code+1) == '/')
 	{
@@ -147,9 +152,10 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 		else
 		{
 			int DD = strtol( code , &code , 10);
-			if((DD/1000) == 88 || (DD/1000) ==77)
+			if((DD/1000) == 88 || (DD/1000) ==77 || (DD/1000) == 66 )
 			{
-				i = STOP;
+				//Получение данных о тропопаузе
+				code = endGroup(DD,code,trop,wind77,shift,i);
 				return code;
 			}
 			new_info_temp.dewpoint = DewPoint(DD);
@@ -158,11 +164,12 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 	else
 	{
 		int TTTDD = strtol( code , &code , 10);
-		if((TTTDD/1000) == 88 || (TTTDD/1000) ==77)
+		if((TTTDD/1000) == 88 || (TTTDD/1000) ==77 || (TTTDD/1000) == 66 )
 		{
-			i = STOP;
-			return code;
+			//Получение данных о тропопаузе
+			code = endGroup(TTTDD,code,trop,wind77,shift,i);
 		}
+		else
 		{
 			if(*code == '/')
 			{
@@ -182,12 +189,6 @@ char * recording_and_write::TempDewpoint( char * code, TEMP_DEWPOINT & new_info_
 
 char * recording_and_write::DateTime( char * code, bool& node, DATA_TIME & new_data_tim )
 {
-	// local_time st;
-	// int sizeCout = 10000;
-	// if (st.wDay < 10)
-	// {
-	// 	sizeCout = 1000;
-	// }
 	int month_time = strtol( code , &code , 10);
 	if ((*code)=='/')// || month_time < sizeCout)
 	{
@@ -222,13 +223,19 @@ char* recording_and_write::DistrictStation( char * code, int & new_number)
 	 return code;
  }
 
-char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_height, int & i)
+char * recording_and_write::NumberHeight( char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, NUMBER_HEIGHT & new_height, int & i)
 {
 	int PPhhh = strtol(code, &code, 10);
 	//1. îïðåäåëåíèå ÷òî ýòî: äàííûå  î òðîïîïàóçå èëè äàííûå î âåòðå
-	if((PPhhh/1000) == 88 || (PPhhh/1000) ==77)
+	if(PPhhh == 31313 || (PPhhh/1000) == 88 || (PPhhh/1000) ==77 || (PPhhh/1000) == 66 )
 	{
-		i = STOP;
+		//Получение данных о тропопаузе
+		if (PPhhh == 31313 ) {
+			i = 31313;
+			return code;
+		}
+		else
+		code = endGroup(PPhhh,code,trop,wind77,shift,i);
 	}
 	else
 	{
@@ -246,21 +253,83 @@ char * recording_and_write::NumberHeight( char * code, NUMBER_HEIGHT & new_heigh
 	}
 	return code;
 }
+char * recording_and_write::endGroup(const int PPhhh,char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, int & i)
+{
+	
+	if((PPhhh/1000) == 88  ) 
+	{
+		i = 888;//есть тропопауза
+		if(PPhhh%1000 != 999)
+		{
+			trop.pressure = PPhhh%1000;
+			trop.information = true;
+			code = ReturnSurface( code , trop ,i );
+		}
+		else trop.information = false;
+	}
+	if((PPhhh/1000) ==77 )
+	{
+		i = 777;
+		if(PPhhh%1000 != 999)
+		{
+			wind77.information = true;
+			wind77.point = 77;
+			wind77.data.pressure = PPhhh%1000;
+			code = Wind(code,trop,wind77,shift,wind77.data.wind,false, i );
+			int vb = strtol(code, &code, 10);
+			if((vb/10000) == 4 && ((vb/1000)%10 >= 0 ))
+			{
+				wind77.shift.information = true;
+				wind77.shift.up_speed = (vb/100)%100;
+				wind77.shift.below_speed = vb%100;
+			}
+			else code-=5;
 
+		}
+		else wind77.information = false;
+	}
+	if((PPhhh/1000) ==66 )
+	{
+		i = 666;
+		if(PPhhh%1000 != 999)
+		{
+			wind77.information = true;
+			wind77.point = 66;
+			wind77.data.pressure = PPhhh%1000;
+			code = Wind(code,trop,wind77,shift,wind77.data.wind,false, i );
+			int vb = strtol(code, &code, 10);
+			if((vb/10000) == 4 && ((vb/1000)%10 >= 0 ))
+			{
+				wind77.shift.information = true;
+				wind77.shift.up_speed = (vb/100)%100;
+				wind77.shift.below_speed = vb%100;
+			}
+			else code-=5;
+		}
+		else wind77.information = false;
+	}
+	// if((PPhhh/10000) == 4 && ((PPhhh/1000)%10 >0 || (PPhhh/1000) == 88 || (PPhhh/1000) ==77 || (PPhhh/1000) == 66))
+	// {
+	// 	i == 444;
+	// 	shift.up_speed = (PPhhh/100)%100;
+	// 	shift.below_speed = PPhhh%100;
+	// }
+	return code;
+}
 char * recording_and_write::MaxWind(  char * code, surfaceWind& new_max_wind, int GGPPP )
 {
-// 	if ((GGPPP % 1000) != 999)
-// 	{
-// 		new_max_wind.data.information = true;
-// 		int i=0;
-// 		code = Wind(code,new_max_wind.data.wind, i );
-// 	} 
-// 	else
-// 	{
-// 		new_max_wind.information = false;
-// 		new_max_wind.data.information = false;
-// 	}	
-// 	return code;
+	// if ((GGPPP % 1000) != 999)
+	// {
+	// 	new_max_wind.data.information = true;
+	// 	int i=0;
+	// 	code = Wind(code,new_max_wind.data.wind, i );
+	// } 
+	// else
+	// {
+	// 	new_max_wind.information = false;
+	// 	new_max_wind.data.information = false;
+	// }	
+	// return code;
 }
 
 WIND_SHIFT recording_and_write::WindShift( int GGPPP )

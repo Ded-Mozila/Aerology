@@ -58,9 +58,11 @@ public:
 	
 	char * deleteEndl( char* code );  												// delete '\r\n' in string code
 
-	char * MaxWind ( char* code, surfaceWind & new_max_wind,  int GGPPP );			// Определение максимального ветра
+	char * MaxWind( char* code, surfaceWind & new_max_wind,  int GGPPP );			// Определение максимального ветра
 
-	char * NumberHeight ( char * code, NUMBER_HEIGHT & new_height, int & i);		// Определение номера уровня и высоты над уровнем моря
+	char * NumberHeight(char *,surface&,surfaceWind&,WIND_SHIFT&, NUMBER_HEIGHT&, int&);		// Определение номера уровня и высоты над уровнем моря
+
+	char * endGroup(const int,char *,surface&,surfaceWind&,WIND_SHIFT&,int&);
 
 	char * DistrictStation ( char * code, int & new_number);						// Определение Номера района и станции
 
@@ -68,11 +70,11 @@ public:
 	
 	char * Pressure ( char * code, int & press );									// Значение давления
 
-	char * ReturnSurface ( char * code , surface & info , int& i);					// Забивает данными о температуре и о ветре type surfase
+	char * ReturnSurface (char*,surface&,int&);										// Забивает данными о температуре и о ветре type surfase
 
-	char * TempDewpoint ( char * code, TEMP_DEWPOINT & new_info_temp, int& i );		// Дает данные от температуре и дефеците росы возвращает код строки (строка с кодом, структура в которую сохраниться данные о температуре и дефиците росы
+	char * TempDewpoint(char*,surface&,surfaceWind&,WIND_SHIFT&,TEMP_DEWPOINT&,int&);// Дает данные от температуре и дефеците росы возвращает код строки (строка с кодом, структура в которую сохраниться данные о температуре и дефиците росы
 
-	char * Wind ( char * code, WIND & new_wind ,bool node, int& i);					// Значение ветра
+	char * Wind(char*, surface&, surfaceWind&, WIND_SHIFT&, WIND&, bool, int&);		// Значение ветра
 
 	double Temp ( bool presence_dewpoint, const int TTTDD );						// Выделение температуры
 
@@ -99,9 +101,11 @@ public:
 	void WriteStandateSurfase_TTCC(const TTCC_Database,fstream&);			//Вывод стандартых уровней кода ТТСС
 	//Оптимизация вывода кодов А и С
 	void OutPressure(fstream&,int);											//Вывод в файл давления P= (Номер изобарической поверхности)
-	void OutGeopotencial(int,int,fstream&);									//Вывод в файл геопотенциалла
+	void OutGeopotencial(int,int,fstream&);									//Вывод в файл геопотенциалла H=
 	void OutTemp(fstream&,float);											//Вывод в файл температуры T=
-	void OutWindDirection(fstream&,const int&);									//Вывод в файл направлении ветра d=
+	void OutWindDirection(fstream&,const int&);								//Вывод в файл направлении ветра d=
+	void OutWindSpeed(fstream&,const int&);									//Вывод в файл скорости ветра f=
+	void OutDewpoint(fstream&,const float&);								//Вывод в файл дефицита точки росы D=
 	//////////////////
 	void OutCodTTBB( int key );												//Процесс открытия файла для записи кода ТТВВ
 	

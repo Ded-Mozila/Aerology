@@ -75,20 +75,56 @@ void recording_and_write::TTAA( char * code )
 						standardSurface time_data;
 						time_data.data.wind_node = wind_node;
 						//1. Нахождение стандартного изобаричких поверхностей и её высоты
-						code = NumberHeight( code, time_data.height, i);
+						surface trop;		// новая тропопауза
+						surfaceWind wind77;	// Максимальный ветер
+						WIND_SHIFT shift;	// Вертикальный сдвиг
+						code = NumberHeight( code,trop,wind77,shift,time_data.height, i); //<<-- Анализ Тропопаузы))
 						//2. ...
-						if (i == STOP)
+						if (i == 888 /*&& trop.information == true*/)
+						{
+							if(trop.information == true)base.tropopause.push_back(trop);
+							else continue;
+						}
+						else
+						if (((i == 777)||(i == 666))/*&& wind77.information == true*/)
+						{
+							if(wind77.information == true && wind77.data.pressure != -1)base.max_wind.push_back(wind77);
+							else continue;
+							
+						}
+						else 
+						if (i == 444)
+						{
+							base.vertical.push_back(shift);
+						}
+						else
+						if(i == 31313 )
+						{
+							theEnd  = true;
 							break;
-						code = ReturnSurface( code, time_data.data, i);
-						if (i == STOP)
-							break;
-						//3. Добавление элемента в список
-						base.level.push_back(time_data);
+						}
+						else
+						{
+							code = ReturnSurface( code, time_data.data, i);
+							if (i == STOP)
+							{
+								base.tropopause.push_back(trop);// Провекка на пропущенные тропокаузы
+								break;
+							}
+							//3. Добавление элемента в список
+							base.level.push_back(time_data);
+						}
 					}
+					// step++; // преход к новому шагу
 					theEnd  = true;
 					break;
 
 				}
+			case 5 :
+				{
+					break;
+				}
+
 			default:
 				break;
 		}

@@ -14,8 +14,8 @@ public:
 	surface land_surface;				// Поверхность земли 99 
 	list<standardSurface> level ;		// Стандартные уровни 00 92 85 70 50 40 30 25 20 15 10
 	string code_;						// Исходный шифрованный код
-	//list<surface> tropopause;           // Сведения о тропопаузе 88
-	//list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
-	//list<WIND_SHIFT> vertical;          // Сведения о вертикальном сдвиге ветра 4
+	list<surface> tropopause;           // Сведения о тропопаузе 88
+	list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
+	list<WIND_SHIFT> vertical;          // Сведения о вертикальном сдвиге ветра 4
 };
 #endif // !DB_STRUCTURE_TTAA_H
