@@ -41,7 +41,6 @@ void readingFile::Read( void ) // Функция поиска данных
 {
 	local_time st;
 	bool key_DATA = false;		// Отсутствие информации о Дате(нужна дата)
-	bool thEnd = false;			// Окончание работы программы
 	char s;						// Символ считывания (для обхода всего документа)
 	while (!file.get(s).eof())	// Отбор проходит по символам & T U
 	{
@@ -88,55 +87,54 @@ void readingFile::Read( void ) // Функция поиска данных
 		}
 	}
 }
-void readingFile::SelectionCipher( void )
+void readingFile::SelectionCipher( void ) //
 {
 
 	char TXX[4];
 	file.getline( TXX, 4 ,' ');
 	char * code = new char[2000] ;
-	//if ( strchr( TXX,'T')) 
-		switch (TXX[0])
+	switch (TXX[0])
+	{
+	case  'A':
 		{
-		case  'A':
-			{
-				file.getline(code,2000,'=');
-				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-				if(FindDefectCipher(code) == false)
-					TTXX.TTAA(code);
-				break;
-			}
-		case  'B':
-			{
-				file.getline(code,2000,'=');
-				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-				if(FindDefectCipher(code) == false)
-					TTXX.TTBB(code, 1);
-				break;
-			}
-		case  'C':
-			{
-				file.getline(code,2000,'=');
-				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-				if(FindDefectCipher(code) == false)
-					TTXX.TTCC(code);
-				break;
-			}
-		case  'D':
-			{
-				file.getline(code,2000,'=');
-				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-				if(FindDefectCipher(code) == false)
-					TTXX.TTBB(code, 2);
-				break;
-			}
-		default:
-			{
-				file.getline(code,2000,'=');
-				cout << "Not good" <<'\n';
-				cout << code << endl;
-				break;
-			}
+			file.getline(code,2000,'=');
+			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+			if(FindDefectCipher(code) == false)
+				TTXX.TTAA(code);
+			break;
 		}
+	case  'B':
+		{
+			file.getline(code,2000,'=');
+			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+			if(FindDefectCipher(code) == false)
+				TTXX.TTBB(code, 1);
+			break;
+		}
+	case  'C':
+		{
+			file.getline(code,2000,'=');
+			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+			if(FindDefectCipher(code) == false)
+				TTXX.TTCC(code);
+			break;
+		}
+	case  'D':
+		{
+			file.getline(code,2000,'=');
+			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+			if(FindDefectCipher(code) == false)
+				TTXX.TTBB(code, 2);
+			break;
+		}
+	default:
+		{
+			file.getline(code,2000,'=');
+			cout << "Not good" <<'\n';
+			cout << code << endl;
+			break;
+		}
+	}
 	delete []code;
 }
 bool readingFile::FindDefectCipher(char * code)

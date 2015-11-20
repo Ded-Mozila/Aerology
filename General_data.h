@@ -7,7 +7,7 @@
 struct WIND
 {
 	int wind_direction;					// Направление ветра
-	double wind_speed;						// Скорость ветра;
+	double wind_speed;					// Скорость ветра;
 };
 
 struct DATA_TIME
@@ -29,7 +29,7 @@ struct TEMP_DEWPOINT
 	double dewpoint;					// Дефицит точки росы
 };
 
-struct  WIND_SHIFT					// Сведения о вертикальном сдвиге ветра
+struct  WIND_SHIFT						// Сведения о вертикальном сдвиге ветра
 {
 	bool information;
 	int up_speed;						// Абсолютная величина векторной разности в м/с на  уровне максимума и ветра на 1 км выше него
@@ -43,7 +43,7 @@ struct NUMBER_HEIGHT
 };
 
 
-class surface                       // Все стандартыне данные для всех повехностей
+class surface                       	// Все стандартыне данные для всех повехностей
 {
 public:
 	bool wind_node;						// В телеграмме ветер передается в узлах

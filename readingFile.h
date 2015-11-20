@@ -6,9 +6,9 @@ class readingFile
 {
 public:
 
-	Settings app;
+	Settings app;								// Осовные настройки для программы 
 	fstream file;								// Исходный файл
-	recording_and_write TTXX;					// Êëàññ ðàçêîäèðîâàíèÿ è çàïèñè
+	recording_and_write TTXX;					// База декодированнной информации
 	readingFile(void);							// Конструктор по умолчанию
 	~readingFile(void);
 	void OpenFile_(void);
@@ -23,7 +23,7 @@ public:
 	string outFile_name;		//Исходный файл
 	string inFile_name;			//Выходной файл
 	string dataFile_name;		// название файла + директроия с исходными данными
-	fstream dataFile;					//Файл с отсортированными данными
+	fstream dataFile;			//Файл с отсортированными данными
 };
 
 #endif	// !READINGFILE_H 

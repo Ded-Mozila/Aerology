@@ -3,7 +3,8 @@
 #define SETTINGS_H 
 #define DEFAULT_MODE S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 
-struct Time_Period
+//Безполезный код
+struct Time_Period		
 {
 	int hour;
 	int minutes;
@@ -12,20 +13,20 @@ struct Time_Period
 class Settings
 {
 public:
-    string outDirectory;
-	string inDirectory;
-	string dataDirectory;		// директория сохранения исходных данных
-	list<int> stations;			//
-	fstream fileSettings;
+    string outDirectory;		//Исходный файл с кодами 
+	string inDirectory;			//Дериктория записи декодируемой информации
+	string dataDirectory;		//Директория записи кодов которые разкодировались
+	list<int> stations;			//Список станция которых нужно декодировать
+	fstream fileSettings;		//Поток файла с настройками
 	Settings();
 	~Settings();
 				
-	string ToDayData(char * address);							// Ïîëó÷àíèå ñòðîêè ñîäåðæàùÿÿ ìåñÿö è ãîä â ôîðìàòå ÃÃÃÃ\Ìåñÿö
-	string WhatMonth(const long month);							// Ïåðåâîä è ç ÷èñëà â íàçâàíèå ìåñÿöà
-	void init(void);											// èíèöèàëèçàöèÿ ïàðàìåòðîâ ïðîãðàììû	
+	string ToDayData(char * address);							// Формирование пути YYYY/MM 
+	string WhatMonth(const long month);							// Формирование ММ
+	void init(void);											// Чтение файла с настройками	
 	void InitTimePeriodSart(char * dir);						// Инициализации времени запуска программы
 };
 
 
-bool mkdirp(const char* path, mode_t mode = DEFAULT_MODE);
+bool mkdirp(const char* path, mode_t mode = DEFAULT_MODE);		// Создание дериктории по исходному пити
 #endif // !SETTINGS_H

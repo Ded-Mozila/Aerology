@@ -23,18 +23,18 @@ Settings::~Settings()
 
 void Settings::init()
 {
-	char dir1[256];
+	char dir1[256]; //Исходный файл с кодами 
 	fileSettings.getline ( dir1, 256, ';' );
 	outDirectory =  dir1;
-	char dir2[256];
+	char dir2[256]; //Дериктория записи декодируемой информации
 	fileSettings.getline ( dir2, 256, ';' );
 	inDirectory = ToDayData(dir2);
 	mkdirp(inDirectory.c_str());
-	char dir3[256];
+	char dir3[256];  //Директория записи кодов которые разкодировались
 	fileSettings.getline ( dir3, 256, ';' );
 	dataDirectory = ToDayData(dir3);
 	mkdirp(dataDirectory.c_str());
-	char stat[256];
+	char stat[256]; // Промежуточная страка для станций
 	fileSettings.getline ( stat, 256, '\n');
 	while(!fileSettings.getline ( stat, 256, '\n').eof())
 	{
