@@ -42,14 +42,28 @@ public:
 	fstream inFile_00;						//Файл с выходной файл
 	fstream inFile_12;						//Файл с выходной файл
 
-	void TTAA(char * code);
+	void TTAA(char * code, string strCode);
 	void TTBB(char * code , int key );
 	void TTCC(char * code);
 	void TTDD(char * code);
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
 	// Вывод данных
+	//функции для способа декодирования основанных на Split
+	DATA_TIME DateTime(string,bool&);				//Принимает строку с закодированным временем и возвращает заполненную структуру
+
+	int DistrictStation(string);
+
+	int Pressure (string);									// Значение давления
 	
+	TEMP_DEWPOINT TempDewpoint(string);
+
+	WIND Wind(string, bool);
+
+	NUMBER_HEIGHT NumberHeight(string);
+
+
+
 	void Write_file_TTBB( int period, fstream & file , int key );					// Вывод данных TTBB
 	
 	void Write_file_TTCC( int period, const string _file, fstream & file );	
@@ -106,6 +120,9 @@ public:
 	void OutWindDirection(fstream&,const int&);								//Вывод в файл направлении ветра d=
 	void OutWindSpeed(fstream&,const int&);									//Вывод в файл скорости ветра f=
 	void OutDewpoint(fstream&,const float&);								//Вывод в файл дефицита точки росы D=
+	void OutTime(fstream&,const int&,const int&);							//Вывод в файл начала зондирования t=	
+	void OutInfoZond(fstream&,const InfoRadiationAmendment&);				//Вывод в файл Сведения о радиационной обстановке s=	
+
 	//////////////////
 	void OutCodTTBB( int key );												//Процесс открытия файла для записи кода ТТВВ
 	

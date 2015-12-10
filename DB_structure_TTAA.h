@@ -16,6 +16,6 @@ public:
 	string code_;						// Исходный шифрованный код
 	list<surface> tropopause;           // Сведения о тропопаузе 88
 	list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
-	list<WIND_SHIFT> vertical;          // Сведения о вертикальном сдвиге ветра 4
+	InfoRadiationAmendment radioData;	// Сведения о радиационной поправке
 };
 #endif // !DB_STRUCTURE_TTAA_H

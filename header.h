@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <sys/stat.h>
 #include <fstream>
-#include <cstring>
 #include <list>
 #include <cmath>
 #include <iomanip>

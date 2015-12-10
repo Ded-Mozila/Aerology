@@ -1,5 +1,3 @@
-
-
 #include "WriteFile.h"
 
 recording_and_write::recording_and_write( void )
@@ -125,7 +123,45 @@ char* recording_and_write::Wind(char * code,surface& trop, surfaceWind& wind77,W
 	}	
 	return code;
 }
-
+WIND recording_and_write::Wind(string code, bool node)
+{
+	WIND new_wind;
+	int ddfff = atoi(code.c_str());
+	if(code[0] !='/') //Проверка на присутствие скороти ветра
+	{
+		if (code[2] !='/') 
+		{
+			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
+			int fff = ddfff % 1000;
+			if(( fff - 500 ) >= 0)
+			{
+				fff -=500;
+				new_wind.wind_direction +=5;
+			}
+			new_wind.wind_speed = fff;
+		}
+		else
+		{
+			new_wind.wind_direction = ddfff * 10 ; // Определение направление ветра
+		}
+	}
+	else
+	{
+		if (code[2] !='/') 
+		{
+			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
+			int fff = ddfff % 1000;
+			if(( fff - 500 ) >= 0)
+			{
+				fff -=500;
+				new_wind.wind_direction +=5;
+			}
+			new_wind.wind_speed = fff;
+		}
+	}
+	if(node == true && new_wind.wind_speed != 999)new_wind.wind_speed *=0.514;	
+	return new_wind;
+}
 char * recording_and_write::Pressure( char * code, int & press )
 {
 	int pressure_ = strtol( code , &code , 10);
@@ -136,6 +172,17 @@ char * recording_and_write::Pressure( char * code, int & press )
 	} 
 	press = pressure_;
 	return code;
+}
+
+int recording_and_write::Pressure(string code)
+{
+	int pressure_ = atoi(code.c_str());
+	pressure_ %= 1000;
+	if (pressure_ < 100)
+	{
+		pressure_ = pressure_ + 1000;
+	} 
+	return pressure_;
 }
 
 char * recording_and_write::TempDewpoint( char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, TEMP_DEWPOINT & new_info_temp , int& i)
@@ -187,6 +234,25 @@ char * recording_and_write::TempDewpoint( char * code, surface& trop, surfaceWin
 	return code;
 }
 
+TEMP_DEWPOINT recording_and_write::TempDewpoint(string code)
+{
+	TEMP_DEWPOINT new_info_temp;
+	
+		if(code.at(3) != '/')
+		{
+			int DD = atoi(code.c_str());
+			new_info_temp.dewpoint = DewPoint(DD);
+			if(code.at(0) != '/')
+				new_info_temp.temp = Temp( true, DD );
+		}
+		else
+		{
+			int TTT = atoi(code.c_str());
+			new_info_temp.temp = Temp( false, TTT );
+		}
+	return new_info_temp;
+}
+
 char * recording_and_write::DateTime( char * code, bool& node, DATA_TIME & new_data_tim )
 {
 	int month_time = strtol( code , &code , 10);
@@ -215,13 +281,48 @@ char * recording_and_write::DateTime( char * code, bool& node, DATA_TIME & new_d
 	}
 	return code;	
 }
+//Новая версия программы
+DATA_TIME recording_and_write::DateTime( string code, bool& node)
+{
+	int month_time = atoi(code.c_str());
+	//cout << "Time " << code <<" -- " << month_time << " " << code[4] <<  "\n";
+	DATA_TIME now; 
+	if (code[4] == '/')
+	{
+		now.date = month_time / 100;
+		if( now.date > 50) 
+			{
+				node = true;
+				now.date-=50;
+			}
+		now.time = month_time % 100;
+		now.id_surface = code[4];
+	} 
+	else
+	{
+		now.date = month_time / 1000;
+		if( now.date > 50) 
+			{
+				node = true;
+				now.date-=50; 
+			}
+		now.time = (month_time % 1000)/10;
+		now.id_surface = (month_time % 10) + '0';	
+	}
+	return now;	
+}
 
 char* recording_and_write::DistrictStation( char * code, int & new_number)
- {
+{
 	 int area = strtol( code , &code , 10);
 	 new_number = area;
 	 return code;
- }
+}
+
+int recording_and_write::DistrictStation(string code)
+{
+	return atoi(code.c_str());
+}
 
 char * recording_and_write::NumberHeight( char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, NUMBER_HEIGHT & new_height, int & i)
 {
@@ -253,6 +354,23 @@ char * recording_and_write::NumberHeight( char * code, surface& trop, surfaceWin
 	}
 	return code;
 }
+
+NUMBER_HEIGHT recording_and_write::NumberHeight(string code)
+{
+	NUMBER_HEIGHT data;
+	int PPhhh = atoi(code.c_str());
+	if(code[2] == '/')
+	{
+		data.number = PPhhh;
+	}
+	else
+	{
+		data.number = PPhhh / 1000;
+		data.height = PPhhh % 1000;
+	}
+	return data;
+}
+
 char * recording_and_write::endGroup(const int PPhhh,char * code, surface& trop, surfaceWind& wind77,WIND_SHIFT& shift, int & i)
 {
 	

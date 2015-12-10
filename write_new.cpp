@@ -8,7 +8,7 @@ void recording_and_write::WriteFile(const string _file )
 
 	OutCodTTAA(_file);  		// создание файла и запись кода TTAA
 
-	// OutCodTTCC(_file);			// запись в созданный уже файла кода TTCC
+	//OutCodTTCC(_file);			// запись в созданный уже файла кода TTCC
 
 	// OutCodTTBB(1);				// запись в созданный уже файла кода TTBB
 
@@ -109,8 +109,8 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 		if ((*i).info == true)
 		{
 			TTAA_Database outA = (*i).TTAA;
-			surface land = outA.land_surface;	//Поверхность земли 99
-			file << (*i).number << " ";////Ошибка с непоказанием найдена вывод был исправлен
+			surface land = outA.land_surface;		//Поверхность земли 99
+			file << (*i).number << " ";				//Ошибка с непоказанием найдена вывод был исправлен
 			if ( outA.information == true && land.pressure != -1)
 			{
 				file << "Pzem=";
@@ -122,6 +122,11 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 				if (fabs(temp) < 10) file << " ";
 				file << temp;
 				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
+				//Экспериментальный вывод времений!
+				file << " ";
+				if(outA.radioData.informationTime) OutTime(file,outA.radioData.GG,outA.radioData.gg);
+				file << " ";
+				if(outA.radioData.informationRadia) OutInfoZond(file,outA.radioData);
 				file << '\n' ;
 			}else file << "Нет данных\n";
 			// if ( outA.information != true || land.pressure== -1) file << "Нет данных\n";
@@ -133,6 +138,7 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 		if ((*i).info == true)
 			WriteStandateSurfase((*i), file);		
 }
+
 
 string recording_and_write::StrNameFile(local_time st, int time_, string _file )
 {
@@ -224,8 +230,10 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 {
 	TTAA_Database date = time_station.TTAA;
 	list<standardSurface>::iterator i;
+
 	if (date.information == true && time_station.info == true)
 	{
+		file << "TTAA " << date.code_ << "\n";
 		int  StandartLevels[11] = {0,92,85,70,50,40,30,25,20,15,10};	
 		bool emptyLevel = true;					// Пустой уровень
 		for(i = date.level.begin(); i != date.level.end(); ++i )
@@ -272,7 +280,7 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 		// }
 		if (!date.tropopause.empty())
 		{
-			file<< "Сведения о тропопауза:\n";
+			file<< "Тропопауза:\n";
 			list<surface>::iterator k;
 			for (k = date.tropopause.begin(); k != date.tropopause.end() ; ++k)
 			{
@@ -351,7 +359,7 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 				}
 			}
 			//Номер станции
-			file << "IND="<<  time_data.number <<" ";
+			file << "IND=" <<  time_data.number <<" ";
 			OutPressure(file,number);										//Давление
 			OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
 			OutTemp(file,temp);												//Температура		
@@ -362,10 +370,20 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 		}
 	}
 }
+void recording_and_write::OutTime(fstream& file,const int& hh,const int& mm)
+{
+	file << "t=" << setfill (' ') <<  setw (3);
+	file << hh << ":" <<  setw (2) << mm;
+}
 
+void recording_and_write::OutInfoZond(fstream& file,const InfoRadiationAmendment& info)
+{
+	file << "s=" << setfill (' ') <<  setw (3);
+	file << info.s << ": rr=" <<  setw (2) << info.rr << " ss=" <<  setw (2) << info.ss;
+}
 void recording_and_write::OutPressure(fstream& file,int pressure)
 {
-	file << "P=" << setfill (' ')<<  setw (4);
+	file << "P=" << setfill (' ') <<  setw (4);
 	if ( pressure == 920 ) file << 925;
 	else if (pressure == 0 ) file << 1000;
 	else file << pressure;
@@ -390,12 +408,12 @@ void recording_and_write::OutTemp(fstream& file, float temp)
 void recording_and_write::OutWindDirection(fstream& file, const int& speed)
 {
 	file << " d=";
-	file << setfill (' ')<<  setw (3) << speed;
+	file << setfill (' ') <<  setw (3) << speed;
 }
 void recording_and_write::OutWindSpeed(fstream& file, const int& speed)
 {
 	file << " f=";
-	file << setfill (' ')<<  setw (3) << speed;
+	file << setfill (' ') <<  setw (3) << speed;
 }
 void recording_and_write::OutDewpoint(fstream& file, const float& dewpoint)
 {
