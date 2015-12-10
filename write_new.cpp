@@ -2,6 +2,13 @@
 #include <string>
 #include <cmath>
 #include "settings.h"
+int metround(double x)
+{
+        int d = trunc(x*10.0);
+        if(d%10 > 5 )return ((d/10)-1);
+        if(d%10 < 5 )return ((d/10));
+        if(d%10 == 5 )return ((d-5)%2 ==0 ? d/10 : ((d/10) -1) );
+}
 
 void recording_and_write::WriteFile(const string _file )
 {
@@ -233,7 +240,8 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 
 	if (date.information == true && time_station.info == true)
 	{
-		file << "TTAA " << date.code_ << "\n";
+		file << "TTAA " << date.code_ << "\n++++++++++++++++++++++++++++++++++++\n";
+		file << "TTCC " << time_station.TTCC.code_ << "\n";
 		int  StandartLevels[11] = {0,92,85,70,50,40,30,25,20,15,10};	
 		bool emptyLevel = true;					// Пустой уровень
 		for(i = date.level.begin(); i != date.level.end(); ++i )
@@ -274,10 +282,10 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 			file << "\n" ;
 		}
 		// Выввод данных кода С
-		// if (time_station.info == true && time_station.TTCC.information == true)
-		// {	
-		// 	WriteStandateSurfase_TTCC( time_station.TTCC , file );
-		// }
+		if (time_station.info == true && time_station.TTCC.information == true)
+		{	
+			WriteStandateSurfase_TTCC( time_station.TTCC , file );
+		}
 		if (!date.tropopause.empty())
 		{
 			file<< "Тропопауза:\n";
@@ -361,7 +369,7 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 			//Номер станции
 			file << "IND=" <<  time_data.number <<" ";
 			OutPressure(file,number);										//Давление
-			OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
+			// OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
 			OutTemp(file,temp);												//Температура		
 			OutWindDirection(file,wind.wind_direction);						//Направление ветра
 			OutWindSpeed(file,wind.wind_speed);								//Скорость ветра
@@ -410,10 +418,10 @@ void recording_and_write::OutWindDirection(fstream& file, const int& speed)
 	file << " d=";
 	file << setfill (' ') <<  setw (3) << speed;
 }
-void recording_and_write::OutWindSpeed(fstream& file, const int& speed)
+void recording_and_write::OutWindSpeed(fstream& file, const double& speed)
 {
 	file << " f=";
-	file << setfill (' ') <<  setw (3) << speed;
+	file << setfill (' ') <<  setw (3) << metround(speed);
 }
 void recording_and_write::OutDewpoint(fstream& file, const float& dewpoint)
 {

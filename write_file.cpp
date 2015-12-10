@@ -143,19 +143,17 @@ WIND recording_and_write::Wind(string code, bool node)
 		else
 		{
 			new_wind.wind_direction = ddfff * 10 ; // Определение направление ветра
+			if( code[2] == '5')
+			{
+				new_wind.wind_direction +=5;
+			}
 		}
 	}
 	else
 	{
 		if (code[2] !='/') 
 		{
-			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
 			int fff = ddfff % 1000;
-			if(( fff - 500 ) >= 0)
-			{
-				fff -=500;
-				new_wind.wind_direction +=5;
-			}
 			new_wind.wind_speed = fff;
 		}
 	}
@@ -237,7 +235,8 @@ char * recording_and_write::TempDewpoint( char * code, surface& trop, surfaceWin
 TEMP_DEWPOINT recording_and_write::TempDewpoint(string code)
 {
 	TEMP_DEWPOINT new_info_temp;
-	
+	if(code != "/////")
+	{
 		if(code.at(3) != '/')
 		{
 			int DD = atoi(code.c_str());
@@ -250,6 +249,7 @@ TEMP_DEWPOINT recording_and_write::TempDewpoint(string code)
 			int TTT = atoi(code.c_str());
 			new_info_temp.temp = Temp( false, TTT );
 		}
+	}
 	return new_info_temp;
 }
 

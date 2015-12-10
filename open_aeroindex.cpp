@@ -113,14 +113,15 @@ void readingFile::SelectionCipher( void ) //
 	// 			TTXX.TTBB(code, 1);
 	// 		break;
 	// 	}
-	// case  'C':
-	// 	{
-	// 		file.getline(code,2000,'=');
-	// 		code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-	// 		if(FindDefectCipher(code) == false)
-	// 			TTXX.TTCC(code);
-	// 		break;
-	// 	}
+	case  'C':
+		{
+			file.getline(code,2000,'=');
+			string cloneCode(code); 
+			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+			if(FindDefectCipher(code) == false)
+				TTXX.TTCC(code,cloneCode);
+			break;
+		}
 	// case  'D':
 	// 	{
 	// 		file.getline(code,2000,'=');
@@ -129,13 +130,13 @@ void readingFile::SelectionCipher( void ) //
 	// 			TTXX.TTBB(code, 2);
 	// 		break;
 	// 	}
-	// default:
-	// 	{
-	// 		file.getline(code,2000,'=');
-	// 		cout << "Not good" <<'\n';
-	// 		cout << code << endl;
-	// 		break;
-	// 	}
+	default:
+		{
+			file.getline(code,2000,'=');
+			cout << "Not good" <<'\n';
+			cout << code << endl;
+			break;
+		}
 	}
 	delete []code;
 }

@@ -1,9 +1,9 @@
 #include "WriteFile.h"
-
-void recording_and_write::TTCC( char * code )
+#include <vector>
+void recording_and_write::TTCC( char * code , string strCode )
 {
 	TTCC_Database base;
-	base.code_ = code;          
+	base.code_ = strCode;          
 	base.information = true;
 	bool theEnd = false;                    // Завершение программы
 	int step = 1;                           // Шаг выполнения программы 

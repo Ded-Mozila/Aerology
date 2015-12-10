@@ -12,9 +12,9 @@ public:
 	int number;                         // Данные о територии запуска зонда и станции 
 	list<standardSurface> level;        // Стандартные уровни 70 50 40 30 20 10
 	string code_;						// Исходный шифрованный код
-	//list<surface> tropopause;           // Сведения о тропопаузе 88
-	//list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
-	//list<WIND_SHIFT> vertical;          // Сведения о вертикальном сдвиге ветра 4
+	list<surface> tropopause;           // Сведения о тропопаузе 88
+	list<surfaceWind> max_wind;         // Сведения о максимальном ветре 77 66 
+	InfoRadiationAmendment radioData;	// Сведения о радиационной поправке
 	bool operator== (const TTCC_Database & right) 
 	{
 		int m = right.number;

@@ -44,7 +44,7 @@ public:
 
 	void TTAA(char * code, string strCode);
 	void TTBB(char * code , int key );
-	void TTCC(char * code);
+	void TTCC(char * code, string strCode);
 	void TTDD(char * code);
 
 	void TimePeriod(const int newDate, const int NewTime, int& Date, int& Time );
@@ -118,7 +118,7 @@ public:
 	void OutGeopotencial(int,int,fstream&);									//Вывод в файл геопотенциалла H=
 	void OutTemp(fstream&,float);											//Вывод в файл температуры T=
 	void OutWindDirection(fstream&,const int&);								//Вывод в файл направлении ветра d=
-	void OutWindSpeed(fstream&,const int&);									//Вывод в файл скорости ветра f=
+	void OutWindSpeed(fstream&,const double&);									//Вывод в файл скорости ветра f=
 	void OutDewpoint(fstream&,const float&);								//Вывод в файл дефицита точки росы D=
 	void OutTime(fstream&,const int&,const int&);							//Вывод в файл начала зондирования t=	
 	void OutInfoZond(fstream&,const InfoRadiationAmendment&);				//Вывод в файл Сведения о радиационной обстановке s=	
