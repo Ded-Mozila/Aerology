@@ -9,7 +9,11 @@
 #include <fstream>
 #include <list>
 #include <cmath>
+#include <vector>
 #include <iomanip>
+#include <string.h>
+
+
 //файлы H
 #include "DB_structure_TTAA.h"
 #include "DB_structure_TTBB.h"

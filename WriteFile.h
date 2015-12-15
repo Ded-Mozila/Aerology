@@ -1,8 +1,6 @@
 #ifndef WRITEFILE_H
 #define WRITEFILE_H
-#include <fstream>
 #include "header.h"
-#include <string.h>
 
 #define STOP 77
 class Station 							//Данные о определенной станции
@@ -62,6 +60,7 @@ public:
 
 	NUMBER_HEIGHT NumberHeight(string);
 
+	vector<string> stringToVectorString(string );
 
 
 	void Write_file_TTBB( int period, fstream & file , int key );					// Вывод данных TTBB
@@ -102,6 +101,7 @@ public:
 	
 	void Write_file_Wind( int period, fstream & file , int key);
 	
+
 	// Функции записи данных в файл.
 
 	void WriteFile(const string);											//Cортировка данных для записи Кодов ТТAA, TTBB
@@ -113,6 +113,8 @@ public:
 	void ViewTimePeriod_00_(fstream&);										//Вывод периода 00 часов
 	void ViewTimePeriod_12_(fstream&);										//Вывод периода 12 часов
 	void WriteStandateSurfase_TTCC(const TTCC_Database,fstream&);			//Вывод стандартых уровней кода ТТСС
+	void WrinteInfoTropopause(list<surface>, fstream&);				//Вывод данных тропопаузы
+	void WrinteInfoWind(list<surfaceWind>, fstream&);				//Вывод данных максимального ветра
 	//Оптимизация вывода кодов А и С
 	void OutPressure(fstream&,int);											//Вывод в файл давления P= (Номер изобарической поверхности)
 	void OutGeopotencial(int,int,fstream&);									//Вывод в файл геопотенциалла H=
@@ -146,6 +148,8 @@ public:
 
 
 	void finishApp(fstream & file );
+	int metround(double x);
+
 };
 
 #endif // !WRITEFILE_H

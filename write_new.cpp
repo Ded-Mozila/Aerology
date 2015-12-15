@@ -2,7 +2,7 @@
 #include <string>
 #include <cmath>
 #include "settings.h"
-int metround(double x)
+int recording_and_write::metround(double x)
 {
         int d = trunc(x*10.0);
         if(d%10 > 5 )return ((d/10)-1);
@@ -232,7 +232,39 @@ void recording_and_write::ViewTimePeriod_12_(fstream & file)
 			else file << " 12:00";
 	}
 }
-
+void recording_and_write::WrinteInfoTropopause( list<surface> date, fstream& file)
+{
+	list<surface>::iterator k;
+	for (k = date.begin(); k != date.end() ; ++k)
+	{
+		surface Tr = (*k);
+		file << "P=";
+		file << setfill (' ') <<  setw (4) << Tr.pressure;
+		OutTemp(file,Tr.info_temp.temp);							//Температура		
+		OutWindDirection(file,Tr.wind.wind_direction);				//Направление ветра
+		OutWindSpeed(file,Tr.wind.wind_speed);						//Скорость ветра
+		OutDewpoint(file,Tr.info_temp.dewpoint);					//Дифицит точки росы
+		file << "\n" ;	
+	}
+}
+void recording_and_write::WrinteInfoWind( list<surfaceWind> date, fstream& file)
+{
+	list<surfaceWind>::iterator k;
+	for (k = date.begin(); k != date.end() ; ++k)
+	{
+		surfaceWind Wn = (*k);
+		file <<"N="<< Wn.point;
+		file <<" P="<< setfill (' ') <<  setw (4) << Wn.data.pressure;
+		OutWindDirection(file,Wn.data.wind.wind_direction);				//Направление ветра
+		OutWindSpeed(file,Wn.data.wind.wind_speed);						//Скорость ветра
+		if(Wn.shift.information == true)
+		{
+			file << " Vb=" << Wn.shift.up_speed\
+			 << " Va=" << Wn.shift.below_speed;
+		}
+		file << "\n" ;	
+	}
+}
 void recording_and_write::WriteStandateSurfase(const Station time_station, fstream& file/*, bool StopProcesingLevels*/)
 {
 	TTAA_Database date = time_station.TTAA;
@@ -286,45 +318,28 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 		{	
 			WriteStandateSurfase_TTCC( time_station.TTCC , file );
 		}
+		///Ввод тропопаузы
 		if (!date.tropopause.empty())
 		{
 			file<< "Тропопауза:\n";
-			list<surface>::iterator k;
-			for (k = date.tropopause.begin(); k != date.tropopause.end() ; ++k)
-			{
-				surface Tr = (*k);
-				file << "IND="<<  time_station.number <<" ";
-				file << "P=";
-				if ((Tr.pressure) < 1000) file << " ";
-				file << Tr.pressure;										//Давление
-				OutTemp(file,Tr.info_temp.temp);							//Температура		
-				OutWindDirection(file,Tr.wind.wind_direction);				//Направление ветра
-				OutWindSpeed(file,Tr.wind.wind_speed);						//Скорость ветра
-				OutDewpoint(file,Tr.info_temp.dewpoint);					//Дифицит точки росы
-				file << "\n" ;	
-
-			}
+			WrinteInfoTropopause(date.tropopause, file);
+		}
+		if (!time_station.TTCC.tropopause.empty())
+		{
+			if (date.tropopause.empty())
+				file<< "Тропопауза:\n";
+			WrinteInfoTropopause(time_station.TTCC.tropopause, file);
 		}
 		if (!date.max_wind.empty())
 		{
 			file<< "Сведения о максимальном ветре :\n";
-			list<surfaceWind>::iterator k;
-			for (k = date.max_wind.begin(); k != date.max_wind.end() ; ++k)
-			{
-				surfaceWind Wn = (*k);
-				file << "IND="<<  time_station.number <<" ";
-				file <<"N="<< Wn.point\
-				<< " P="<<Wn.data.pressure<< " ";
-				OutWindDirection(file,Wn.data.wind.wind_direction);				//Направление ветра
-				OutWindSpeed(file,Wn.data.wind.wind_speed);						//Скорость ветра
-				if(Wn.shift.information == true)
-				{
-					file << " Vb=" << Wn.shift.up_speed\
-					 << " Va=" << Wn.shift.below_speed;
-				}
-				file << "\n" ;	
-
-			}
+			WrinteInfoWind(date.max_wind,file);
+		}
+		if (!time_station.TTCC.max_wind.empty())
+		{
+			if (date.max_wind.empty())
+				file<< "Сведения о максимальном ветре :\n";
+			WrinteInfoWind(time_station.TTCC.max_wind,file);
 		}
 			file << "\n" ;
 	}
@@ -369,7 +384,7 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 			//Номер станции
 			file << "IND=" <<  time_data.number <<" ";
 			OutPressure(file,number);										//Давление
-			// OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
+			OutGeopotencial((new_surfase.height).height, number/10,file);	//Геопотенциал
 			OutTemp(file,temp);												//Температура		
 			OutWindDirection(file,wind.wind_direction);						//Направление ветра
 			OutWindSpeed(file,wind.wind_speed);								//Скорость ветра

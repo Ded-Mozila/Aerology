@@ -9,6 +9,41 @@ recording_and_write::~recording_and_write(void)
 {
 }
 
+char* recording_and_write::deleteEndl( char* code )
+{
+	//cout << code << endl;
+	int len = strlen(code)+1;
+	stringstream ss;
+	for (int i = 0; i < len; ++i)
+	{
+		if (code[i] != '\r')
+		{
+			if(code[i] == '\n' && code[i+1] == '\0')
+			{
+				ss << '\0';
+				break;
+			}
+			if(code[i] == '\n')
+				ss << ' ';
+			else ss << code[i];
+		}	
+	}
+	string str(ss.str());
+	strcpy(code,str.c_str());
+	return code;
+}
+vector<string> recording_and_write::stringToVectorString(string code)
+{
+	istringstream arrayCode(code);
+	string block;
+	vector<string> VectorCode;
+	while(arrayCode >> block)
+	{
+		VectorCode.push_back(block);
+	}
+	return VectorCode;
+}
+
 double recording_and_write::DewPoint( int TTTDD )
 {
 	double dewp = TTTDD % 100;

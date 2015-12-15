@@ -2,11 +2,11 @@
 
 void recording_and_write::TTBB( char * code,  int key )
 {
-						//Заглушки
-						surface trop;		// новая тропопауза
-						surfaceWind wind77;	// Максимальный ветер
-						WIND_SHIFT shift;	// Вертикальный сдвиг
-						//////
+			//Заглушки
+			surface trop;		// новая тропопауза
+			surfaceWind wind77;	// Максимальный ветер
+			WIND_SHIFT shift;	// Вертикальный сдвиг
+			//////
 	TTBB_Database base;
 	base.code_ = code;
 	code = deleteEndl(code);

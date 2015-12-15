@@ -71,7 +71,7 @@ public:
 	bool information;                   // Идентификатор существования данных  
 	TEMP_DEWPOINT info_temp;            // Информация о данных температуры и дефекта точки росы
 	WIND wind;                          // Данные по ветру
-	int pressure;                       // Давление на уровне 
+	double pressure;                       // Давление на уровне 
 	surface()
 	{
 		wind_node = false;

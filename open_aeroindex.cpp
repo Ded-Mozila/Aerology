@@ -69,76 +69,83 @@ void readingFile::Read( void ) // Функция поиска данных
 			}
 			case 'T':// Указатель на Данные
 			{
-				file.get(s);
-				if(s == 'T')
-				{
-					if (key_DATA == true)
+					file.get(s);
+					if(s == 'T')
 					{
-						SelectionCipher();
+						if (key_DATA == true)
+						{
+							SelectionCipher();
+						}
+						else// Ускорение поиска -> пропуск ненужных данных
+						{
+							char * TTX = new char[2000] ;
+							file.getline(TTX,2000,'=');
+							delete []TTX;
+						}
 					}
-					else// Ускорение поиска -> пропуск ненужных данных
-					{
-						char * TTX = new char[2000] ;
-						file.getline(TTX,2000,'=');
-						delete []TTX;
-					}
-				}
-				break;
+
+					break;
 			}
 		}
 	}
 }
 void readingFile::SelectionCipher( void ) //
 {
-
-	char TXX[4];
-	file.getline( TXX, 4 ,' ');
-	char * code = new char[2000] ;
-	switch (TXX[0])
+	try
 	{
-	case  'A':
+		char TXX[4];
+		file.getline( TXX, 4 ,' ');
+		char * code = new char[2000] ;
+		switch (TXX[0])
 		{
-			file.getline(code,2000,'=');
-			string cloneCode(code); 
-			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-			if(FindDefectCipher(code) == false)
-				TTXX.TTAA(code,cloneCode);
-			break;
+		case  'A':
+			{
+				file.getline(code,2000,'=');
+				string cloneCode(code); 
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTAA(code,cloneCode);
+				break;
+			}
+		case  'B':
+			{
+				file.getline(code,2000,'=');
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTBB(code, 1);
+				break;
+			}
+		case  'C':
+			{
+				file.getline(code,2000,'=');
+				string cloneCode(code); 
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTCC(code,cloneCode);
+				break;
+			}
+		// case  'D':
+		// 	{
+		// 		file.getline(code,2000,'=');
+		// 		code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+		// 		if(FindDefectCipher(code) == false)
+		// 			TTXX.TTBB(code, 2);
+		// 		break;
+		// 	}
+		default:
+			{
+				file.getline(code,2000,'=');
+				// cout << "Not good" <<'\n';
+				// cout << code << endl;
+				break;
+			}
 		}
-	// case  'B':
-	// 	{
-	// 		file.getline(code,2000,'=');
-	// 		code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-	// 		if(FindDefectCipher(code) == false)
-	// 			TTXX.TTBB(code, 1);
-	// 		break;
-	// 	}
-	case  'C':
-		{
-			file.getline(code,2000,'=');
-			string cloneCode(code); 
-			code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-			if(FindDefectCipher(code) == false)
-				TTXX.TTCC(code,cloneCode);
-			break;
-		}
-	// case  'D':
-	// 	{
-	// 		file.getline(code,2000,'=');
-	// 		code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-	// 		if(FindDefectCipher(code) == false)
-	// 			TTXX.TTBB(code, 2);
-	// 		break;
-	// 	}
-	default:
-		{
-			file.getline(code,2000,'=');
-			cout << "Not good" <<'\n';
-			cout << code << endl;
-			break;
-		}
+		delete []code;
 	}
-	delete []code;
+	catch(string x)
+	{
+		cout << "Eror!" << endl;
+	}
 }
 bool readingFile::FindDefectCipher(char * code)
 {
@@ -149,73 +156,22 @@ bool readingFile::FindDefectCipher(char * code)
 		switch(code[i])
 		{
 			case '0':
-			{
-				break;
-			}
 			case '1':
-			{
-				break;
-			}
 			case '2':
-			{
-				break;
-			}
 			case '3':
-			{
-				break;
-			}
 			case '4':
-			{
-				break;
-			}
 			case '5':
-			{
-				break;
-			}
 			case '6':
-			{
-				break;
-			}
 			case '7':
-			{
-				break;
-			}
 			case '8':
-			{
-				break;
-			}
 			case '9':
-			{
-				break;
-			}
 			case ' ':
-			{
-				break;
-			}
 			case '/':
-			{
-				break;
-			}
 			case 'N':
-			{
-				break;
-			}
 			case 'I':
-			{
-				break;
-			}
 			case 'T':
-			{
-				break;
-			}
 			case 'L':
-			{
-				break;
-			}
 			case '\0':
-			{
-				break;
-			}
 			case '\n':
 			{
 				break;
