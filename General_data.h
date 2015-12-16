@@ -1,5 +1,10 @@
 #ifndef GENERAL_DATA_H
 #define GENERAL_DATA_H 
+#include <list>
+#include <cstring>
+using namespace std;
+
+
 
 class WIND
 {
@@ -71,7 +76,7 @@ public:
 	bool information;                   // Идентификатор существования данных  
 	TEMP_DEWPOINT info_temp;            // Информация о данных температуры и дефекта точки росы
 	WIND wind;                          // Данные по ветру
-	double pressure;                       // Давление на уровне 
+	int pressure;                       // Давление на уровне 
 	surface()
 	{
 		wind_node = false;
@@ -118,7 +123,51 @@ public:
 		informationTime = false;
 		GG = 999;
 		gg = 999;
-	}	
+	}
+	void getTime(string str)
+	{
+		if(str[0] == '8')
+		{
+			informationTime = true;
+			GG = atoi(str.substr(1,2).c_str());
+			gg = atoi(str.substr(3,2).c_str());
+		}
+	};
+	void getRadio(string str)
+	{
+		informationRadia = true;
+		s = str[0];
+		rr = atoi(str.substr(1,2).c_str());
+		ss = atoi(str.substr(3,2).c_str());
+	};
+};
+class CloudInfo						//ИНформация о оболочность на станций
+{
+public:
+	int count;						//Количество облаков  Сл и См
+	int typeCl;						//Тип облаков Сл
+	int h;							//Высота нижней границы самых низких облаков
+	int typeCm;						//Тип облаков среднего яруса и слоисто-дождевые облака
+	int typeCh;						//Тип облака верхнего яруса	
+	void getCloud(string str)
+	{
+		count = str[0];
+		typeCl = str[1];
+		h = str[2];
+		typeCm = str[3];
+		typeCh = str[4];
+	};
+};
+class TTXX_Database						//Стандартный класс на основе кторого осовывають вся коды 
+{
+public:
+	bool information;					// Отсутствие информации
+	string code_;						// Исходный шифрованный код
+	DATA_TIME memory;					// Данные о времени и дате запуска и + индентификатор
+	int number;							// Данные о територии запуска зонда и станции 
+	InfoRadiationAmendment radioData;
+	TTXX_Database(){};
+	TTXX_Database(const string& str,DATA_TIME m,int n):code_(str),memory(m),number(n),information(true){};
 };
 
 #endif // !GENERAL_DATA_H

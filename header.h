@@ -12,6 +12,7 @@
 #include <vector>
 #include <iomanip>
 #include <string.h>
+#include <algorithm> 
 
 
 //файлы H

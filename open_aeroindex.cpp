@@ -1,5 +1,4 @@
 #include "readingFile.h"
-#include <algorithm> 
 
 readingFile::~readingFile()
 {
@@ -110,9 +109,10 @@ void readingFile::SelectionCipher( void ) //
 		case  'B':
 			{
 				file.getline(code,2000,'=');
+				string cloneCode(code); 
 				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
 				if(FindDefectCipher(code) == false)
-					TTXX.TTBB(code, 1);
+					TTXX.TTBB(code,cloneCode, 1);
 				break;
 			}
 		case  'C':
@@ -124,14 +124,15 @@ void readingFile::SelectionCipher( void ) //
 					TTXX.TTCC(code,cloneCode);
 				break;
 			}
-		// case  'D':
-		// 	{
-		// 		file.getline(code,2000,'=');
-		// 		code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
-		// 		if(FindDefectCipher(code) == false)
-		// 			TTXX.TTBB(code, 2);
-		// 		break;
-		// 	}
+		case  'D':
+			{
+				file.getline(code,2000,'=');
+				string cloneCode(code); 
+				code = TTXX.deleteEndl(code);				//Замена '\n' на пробел
+				if(FindDefectCipher(code) == false)
+					TTXX.TTBB(code,cloneCode, 2);
+				break;
+			}
 		default:
 			{
 				file.getline(code,2000,'=');
@@ -142,9 +143,9 @@ void readingFile::SelectionCipher( void ) //
 		}
 		delete []code;
 	}
-	catch(string x)
+	catch(...)
 	{
-		cout << "Eror!" << endl;
+		cout << "Error! in listing file" << endl;
 	}
 }
 bool readingFile::FindDefectCipher(char * code)

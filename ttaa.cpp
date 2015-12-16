@@ -1,24 +1,14 @@
 #include "WriteFile.h"
-#include <vector>
 
 
 void recording_and_write::TTAA( char * code , string strCode)
 {
 	try
 	{
-		TTAA_Database base;
-		base.code_ = code;
-		//base.information = true;
 		//cout << strCode << endl;
-		//code = deleteEndl(code);
-		bool theEnd = false;					// Завершение программы
 		bool wind_node = false;
-		base.code_ = strCode;
 		vector<string> VectorCode(stringToVectorString(code));
-		//1 Нахождение времени и даты запуска зонда
-		base.memory = DateTime(VectorCode[0],wind_node);
-		//2 Находжение большого района и станции
-		base.number = DistrictStation(VectorCode[1]);
+		TTAA_Database base(strCode,DateTime(VectorCode[0],wind_node),DistrictStation(VectorCode[1]));
 		//3 Сортировка и находние поверхностей
 		if( strstr( VectorCode.at(2).c_str(), "N" ) == NULL )
 		{ 
@@ -148,30 +138,14 @@ void recording_and_write::TTAA( char * code , string strCode)
 					case 31:
 					{
 						//cout << heightTrop.number << "\n";
-						base.radioData.informationRadia = true;
-						int srrss = atoi(VectorCode.at(i).c_str());
-						base.radioData.s = srrss/10000;
-						base.radioData.rr = (srrss/100)%100;
-						base.radioData.ss = srrss%100;
+						base.radioData.getRadio(VectorCode.at(i));
 						i +=1;
 						///Время запуска запуска
 						if(i >= VectorCode.size()) {noStLevel = true;}
 						else
 						{
-							int XGGgg = atoi(VectorCode.at(i).c_str());
-							if(XGGgg /10000 == 8)
-							{
-								base.radioData.informationTime = true;
-								base.radioData.GG = (XGGgg /100)%100;
-								base.radioData.gg = XGGgg%100;
-
-							}
-							else
-							{
-								cout << "Error " << VectorCode.at(i).c_str() << endl;
-							}
+							base.radioData.getTime(VectorCode.at(i));
 						}
-						theEnd = true;
 						noStLevel = true;
 						break;
 					}
@@ -187,7 +161,6 @@ void recording_and_write::TTAA( char * code , string strCode)
 		else
 		{
 			base.information = false;
-			theEnd = true;
 		}
 		list<Station>::iterator i;
 		list<Station>::iterator i_begin;
@@ -214,7 +187,7 @@ void recording_and_write::TTAA( char * code , string strCode)
 	}
 	catch(...)
 	{
-		cerr << "TTAA " << strCode <<  endl;
+		cerr << "Error TTAA " << strCode <<  endl;
 		// Error::no_ofErrors++;
 	}
 }

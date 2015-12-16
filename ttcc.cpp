@@ -1,25 +1,14 @@
 #include "WriteFile.h"
-#include <vector>
 void recording_and_write::TTCC( char * code , string strCode )
 {
 	try
 	{
-		TTCC_Database base;
-		base.code_ = strCode;          
-		//base.information = true;
 		//cout << strCode << endl;
-		bool theEnd = false;                    // Завершение программы
-		int step = 1;                           // Шаг выполнения программы 
 		bool wind_node = false;
 		vector<string> VectorCode(stringToVectorString(code));
-		//1 Нахождение времени и даты запуска зонда
-		base.memory = DateTime(VectorCode[0],wind_node);
-		//2 Находжение большого района и станции
-		base.number = DistrictStation(VectorCode[1]);
-		//3 Сортировка и находние поверхностей
+		TTCC_Database base(strCode,DateTime(VectorCode[0],wind_node),DistrictStation(VectorCode[1]));
 		if( strstr( VectorCode.at(2).c_str(), "N" ) == NULL )
 		{ 
-			base.information = true;
 			int i = 2;
 			bool noStLevel = false;
 			//Цикл по Сандартным уровням
@@ -58,8 +47,8 @@ void recording_and_write::TTCC( char * code , string strCode )
 						if(VectorCode.at(i).substr(0,2) == "77" || VectorCode.at(i).substr(0,2) == "66" ||VectorCode.at(i).substr(0,2) == "88" /*|| time_data.height.number/10 == 4*/)
 						{
 							//Условие выхода для тропопаузы
-							cout << "UPS2\n"\
-							<< strCode << "\n" << VectorCode.at(i) << endl;
+							//cout << "UPS2\n"\
+							//<< strCode << "\n" << VectorCode.at(i) << endl;
 							noStLevel = true;
 						}
 						else
@@ -93,10 +82,10 @@ void recording_and_write::TTCC( char * code , string strCode )
 							trop.pressure = metround(heightTrop.height/10.0);
 							trop.info_temp = TempDewpoint(VectorCode.at(i));
 							i+=1;//Преход к следующей группе
-							if(i >= VectorCode.size()) {noStLevel = true; break;}// проверка на конец списка
+							if(i >= VectorCode.size()) {noStLevel = true;}// проверка на конец списка
 							trop.wind = Wind(VectorCode.at(i),trop.wind_node);
 							i+=1;//Преход к следующей группе
-							if(i >= VectorCode.size()) {noStLevel = true; break;}// проверка на конец списка
+							if(i >= VectorCode.size()) {noStLevel = true;}// проверка на конец списка
 							base.tropopause.push_back(trop);
 						}
 						break;
@@ -137,36 +126,21 @@ void recording_and_write::TTCC( char * code , string strCode )
 					}
 					case 31:
 					{
-						cout << heightTrop.height <<" " << VectorCode.at(i-2) << "\n";
-						base.radioData.informationRadia = true;
-						int srrss = atoi(VectorCode.at(i).c_str());
-						base.radioData.s = srrss/10000;
-						base.radioData.rr = (srrss/100)%100;
-						base.radioData.ss = srrss%100;
+						//cout << heightTrop.number << "\n";
+						base.radioData.getRadio(VectorCode.at(i));
 						i +=1;
 						///Время запуска запуска
 						if(i >= VectorCode.size()) {noStLevel = true;}
 						else
 						{
-							int XGGgg = atoi(VectorCode.at(i).c_str());
-							if(XGGgg /10000 == 8)
-							{
-								base.radioData.informationTime = true;
-								base.radioData.GG = (XGGgg /100)%100;
-								base.radioData.gg = XGGgg%100;
-							}
-							else
-							{
-								cout << "Error " << VectorCode.at(i).c_str() << endl;
-							}
+							base.radioData.getTime(VectorCode.at(i));
 						}
-						theEnd = true;
 						noStLevel = true;
 						break;
 					}
 					default:
 					{
-						cout << "Error" << code << "\nBlock = " <<heightTrop.number<< " == "<< VectorCode.at(i-1) << "\n";
+						//cout << "Error" << code << "\nBlock = " <<heightTrop.number<< " == "<< VectorCode.at(i-1) << "\n";
 						noStLevel = true;
 						break;
 					}
@@ -176,7 +150,6 @@ void recording_and_write::TTCC( char * code , string strCode )
 		else
 		{
 			base.information = false;
-			theEnd = true;
 		}
 		// Заполение списка ТТCC данными
 		list<Station>::iterator i;
@@ -206,7 +179,6 @@ void recording_and_write::TTCC( char * code , string strCode )
 	catch(...)
 	{
 		cerr << "Error TTCC " << strCode <<  endl;
-		// Error::no_ofErrors++;
 	}
 
 }

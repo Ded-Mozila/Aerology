@@ -1,29 +1,19 @@
 #include "WriteFile.h"
-#include <string>
-#include <cmath>
 #include "settings.h"
 int recording_and_write::metround(double x)
 {
-        int d = trunc(x*10.0);
-        if(d%10 > 5 )return ((d/10)-1);
-        if(d%10 < 5 )return ((d/10));
-        if(d%10 == 5 )return ((d-5)%2 ==0 ? d/10 : ((d/10) -1) );
+	int d = trunc(x*10.0);
+	if(d%10 > 5 )return ((d/10)-1);
+	if(d%10 < 5 )return ((d/10));
+	if(d%10 == 5 )return ((d-5)%2 ==0 ? d/10 : ((d/10) -1) );
 }
 
 void recording_and_write::WriteFile(const string _file )
 {
 
 	OutCodTTAA(_file);  		// создание файла и запись кода TTAA
-
-	//OutCodTTCC(_file);			// запись в созданный уже файла кода TTCC
-
-	// OutCodTTBB(1);				// запись в созданный уже файла кода TTBB
-
-
-	// //OutCodTTBB(2);			// запись в созданный уже файла кода TTDD
-
-	// OutSpecialPointWind();
-
+	OutCodTTBB();				// запись в созданный уже файла кода TTBB// запись в созданный уже файла кода TTDD
+	OutSpecialPointWind();
 	finishApp(inFile_00);
 	finishApp(inFile_12);
 	inFile_00.close();
@@ -64,9 +54,9 @@ void recording_and_write::TopHeaderFileAerology(fstream & file, const int period
 			}
 		}
 	file << ")\nСтандартные уровни (гПа): ТЕМР-А(1000-100), ТЕМР-С(70-10)\n"\
- 		<<"Специальные точки по температуре: ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа) \n"\
- 		<<"Специальные точки по ветру (гПа): ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа)\nрезкое изменение направления (≥10°) или скорости (≥5 м/сек)\n"\
- 		<<"-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
+		<<"Специальные точки по температуре: ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа) \n"\
+		<<"Специальные точки по ветру (гПа): ТЕМР-B(1000-100 гПа), ТЕМР-D(выше 100 гПа)\nрезкое изменение направления (≥10°) или скорости (≥5 м/сек)\n"\
+		<<"-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
 }
 void recording_and_write::Write_file_TTAA(const int period , const string _file, fstream & file  )
 {
@@ -96,7 +86,7 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 		i_end = time_12.end();
 	}
 	//Вывод станций с которых не пришла и информация
- 	int district = 0;
+	int district = 0;
 	for ( i = i_begin; i != i_end; ++i )
 	{
 		if (((*i).info != true || (*i).TTAA.information == false) && (*i).number != 0)
@@ -232,7 +222,7 @@ void recording_and_write::ViewTimePeriod_12_(fstream & file)
 			else file << " 12:00";
 	}
 }
-void recording_and_write::WrinteInfoTropopause( list<surface> date, fstream& file)
+void recording_and_write::WriteInfoTropopause( list<surface> date, fstream& file)
 {
 	list<surface>::iterator k;
 	for (k = date.begin(); k != date.end() ; ++k)
@@ -247,7 +237,7 @@ void recording_and_write::WrinteInfoTropopause( list<surface> date, fstream& fil
 		file << "\n" ;	
 	}
 }
-void recording_and_write::WrinteInfoWind( list<surfaceWind> date, fstream& file)
+void recording_and_write::WriteInfoWind( list<surfaceWind> date, fstream& file)
 {
 	list<surfaceWind>::iterator k;
 	for (k = date.begin(); k != date.end() ; ++k)
@@ -272,8 +262,8 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 
 	if (date.information == true && time_station.info == true)
 	{
-		file << "TTAA " << date.code_ << "\n++++++++++++++++++++++++++++++++++++\n";
-		file << "TTCC " << time_station.TTCC.code_ << "\n";
+		//file << "TTAA " << date.code_ << "\n++++++++++++++++++++++++++++++++++++\n";
+		//file << "TTCC " << time_station.TTCC.code_ << "\n";
 		int  StandartLevels[11] = {0,92,85,70,50,40,30,25,20,15,10};	
 		bool emptyLevel = true;					// Пустой уровень
 		for(i = date.level.begin(); i != date.level.end(); ++i )
@@ -322,24 +312,24 @@ void recording_and_write::WriteStandateSurfase(const Station time_station, fstre
 		if (!date.tropopause.empty())
 		{
 			file<< "Тропопауза:\n";
-			WrinteInfoTropopause(date.tropopause, file);
+			WriteInfoTropopause(date.tropopause, file);
 		}
 		if (!time_station.TTCC.tropopause.empty())
 		{
 			if (date.tropopause.empty())
 				file<< "Тропопауза:\n";
-			WrinteInfoTropopause(time_station.TTCC.tropopause, file);
+			WriteInfoTropopause(time_station.TTCC.tropopause, file);
 		}
 		if (!date.max_wind.empty())
 		{
 			file<< "Сведения о максимальном ветре :\n";
-			WrinteInfoWind(date.max_wind,file);
+			WriteInfoWind(date.max_wind,file);
 		}
 		if (!time_station.TTCC.max_wind.empty())
 		{
 			if (date.max_wind.empty())
 				file<< "Сведения о максимальном ветре :\n";
-			WrinteInfoWind(time_station.TTCC.max_wind,file);
+			WriteInfoWind(time_station.TTCC.max_wind,file);
 		}
 			file << "\n" ;
 	}
