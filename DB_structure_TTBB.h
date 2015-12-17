@@ -52,8 +52,8 @@ public:
 	CloudInfo cloud;					// Информация о облочности 
 	list<Temp_Base> level;				// Уровни по температуре 
 	list<Wind_Base> level_wind;			// Уровни по ветру
-	TTBB_Database(){};
-	TTBB_Database(const string& str,DATA_TIME m,int n):TTXX_Database(str,m,n){};
+	TTBB_Database(){cloud.information = false;};
+	TTBB_Database(const string& str,DATA_TIME m,int n):TTXX_Database(str,m,n){cloud.information = false;}
 	bool operator< (const TTBB_Database & right) 
 	{
 		int m = right.number;

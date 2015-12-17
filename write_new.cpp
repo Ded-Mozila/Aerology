@@ -119,13 +119,19 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 				if (fabs(temp) < 10) file << " ";
 				file << temp;
 				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
-				//Экспериментальный вывод времений!
+			}else file << "Нет данных";
+			//Вывод облочности 
+			
+			if(((*i).TTBB).cloud.information == true){
 				file << " ";
-				if(outA.radioData.informationTime) OutTime(file,outA.radioData.GG,outA.radioData.gg);
-				file << " ";
-				if(outA.radioData.informationRadia) OutInfoZond(file,outA.radioData);
-				file << '\n' ;
-			}else file << "Нет данных\n";
+				OutCloud(file,((*i).TTBB).cloud);
+			}
+			//Экспериментальный вывод времений!
+			
+			if(outA.radioData.informationTime){file << " ";OutTime(file,outA.radioData.GG,outA.radioData.gg);}
+			
+			if(outA.radioData.informationRadia){file << " "; OutInfoZond(file,outA.radioData);}
+			file << '\n' ;
 			// if ( outA.information != true || land.pressure== -1) file << "Нет данных\n";
 		}
 	}
@@ -385,14 +391,14 @@ void recording_and_write::WriteStandateSurfase_TTCC( const TTCC_Database time_da
 }
 void recording_and_write::OutTime(fstream& file,const int& hh,const int& mm)
 {
-	file << "t=" << setfill (' ') <<  setw (3);
+	file << "t=" << setfill (' ') <<  setw (2);
 	file << hh << ":" <<  setw (2) << mm;
 }
 
 void recording_and_write::OutInfoZond(fstream& file,const InfoRadiationAmendment& info)
 {
 	file << "s=" << setfill (' ') <<  setw (3);
-	file << info.s << ": rr=" <<  setw (2) << info.rr << " ss=" <<  setw (2) << info.ss;
+	file << info.s << ": rr=" <<  setw (3) << info.rr << " ss=" <<  setw (2) << info.ss;
 }
 void recording_and_write::OutPressure(fstream& file,int pressure)
 {
@@ -437,4 +443,18 @@ void recording_and_write::OutDewpoint(fstream& file, const float& dewpoint)
 	file << dewpoint;
 	if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
 	if ( dewpoint != 999 ) file << "0";
+}
+void recording_and_write::OutCloud(fstream& file, const CloudInfo& cloud)
+{
+
+	file << " N=";
+	file << setfill (' ') <<  setw (3) << cloud.count;
+	file << " h=";
+	file << setfill (' ') <<  setw (3) << cloud.h;
+	file << " Cl=";
+	file << setfill (' ') <<  setw (3) << cloud.typeCl;
+	file << " Cm=";
+	file << setfill (' ') <<  setw (3) << cloud.typeCm;
+	file << " Ch=";
+	file << setfill (' ') <<  setw (3) << cloud.typeCh;
 }

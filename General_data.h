@@ -2,6 +2,7 @@
 #define GENERAL_DATA_H 
 #include <list>
 #include <cstring>
+#include <iostream>
 using namespace std;
 
 
@@ -144,6 +145,7 @@ public:
 class CloudInfo						//ИНформация о оболочность на станций
 {
 public:
+	bool information;
 	int count;						//Количество облаков  Сл и См
 	int typeCl;						//Тип облаков Сл
 	int h;							//Высота нижней границы самых низких облаков
@@ -151,11 +153,12 @@ public:
 	int typeCh;						//Тип облака верхнего яруса	
 	void getCloud(string str)
 	{
-		count = str[0];
-		typeCl = str[1];
-		h = str[2];
-		typeCm = str[3];
-		typeCh = str[4];
+		information = true;
+		count = atoi(str.substr(0,1).c_str());
+		typeCl = atoi(str.substr(1,1).c_str());
+		h = atoi(str.substr(2,1).c_str());
+		typeCm = atoi(str.substr(3,1).c_str());
+		typeCh = atoi(str.substr(4,1).c_str());
 	};
 };
 class TTXX_Database						//Стандартный класс на основе кторого осовывають вся коды 

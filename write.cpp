@@ -85,19 +85,19 @@ void  recording_and_write::OutFileListTTBB(  TTBB_Database j, fstream & file, in
 		if(L->information == true)
 		{
 			file <<  "IND=" << j.number;
-			int pressure = L->pressure;
-			file <<  " P=" ;
-			if( pressure <= 99 && key == 1) pressure+=1000;
-			if(key != 1) { file << setfill (' ') << setw (4) << pressure/10 << "." << pressure%10 << ' ' ; }
-			else {file << setfill (' ') << setw (4) << pressure << ".0 ";}
-			file <<  "T=" ;
-			double temp = L->info_temp.temp;
-			if (temp > 0 )file << " ";
-			if (fabs(temp) < 10)file << " ";
-			if (fabs(temp) == 0)file << " ";
-			file << temp;
-			if((temp - (int)temp) == 0 && temp != 999) file << ".0";
-			file << '\n' ;
+			if(L->pressure == 999 && L->info_temp.temp == 999 && L->info_temp.dewpoint == 999)
+				file << "===========================\n";
+			else
+			{
+				int pressure = L->pressure;
+				file <<  " P=" ;
+				if( pressure <= 99 && key == 1) pressure+=1000;
+				if(key != 1) { file << setfill (' ') << setw (4) << pressure/10 << "." << pressure%10 << ' ' ; }
+				else {file << setfill (' ') << setw (4) << pressure << ".0 ";}
+				OutTemp(file,L->info_temp.temp);
+				OutDewpoint(file,L->info_temp.dewpoint);
+				file << '\n' ;
+			}
 		}
 	}
 }
@@ -158,10 +158,9 @@ void recording_and_write::OutFileListWind(TTBB_Database time_data, fstream & fil
 			if( L->pressure <= 99 && key == 1) (*L).pressure+=1000;
 			if(key != 1) { file << setfill (' ') << setw (4) << L->pressure/10 << "." << L->pressure%10 << ' ' ; }
 			else {file << setfill (' ') << setw (4) << L->pressure << ".0 ";}
-			file << "d=" << setw (3) << (*L).wind.wind_direction << " f=" ;
-			if ( abs((*L).wind.wind_speed) < 100 )file << " ";
-			if ( abs((*L).wind.wind_speed) < 10 )file << " ";
-			file << (*L).wind.wind_speed << '\n' ;
+			OutWindDirection(file,(*L).wind.wind_direction);
+			OutWindSpeed(file,(*L).wind.wind_speed);
+			file << endl;
 		}
 	}
 }

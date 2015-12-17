@@ -121,8 +121,9 @@ public:
 	void OutDewpoint(fstream&,const float&);								//Вывод в файл дефицита точки росы D=
 	void OutTime(fstream&,const int&,const int&);							//Вывод в файл начала зондирования t=	
 	void OutInfoZond(fstream&,const InfoRadiationAmendment&);				//Вывод в файл Сведения о радиационной обстановке s=	
-	void WriteInfoTropopause( list<surface>, fstream& );	 		//Вывод картежа данных о тропапаузе
-	void WriteInfoWind(list<surfaceWind>, fstream&); 				//Вывод дынных о максимальном ветре
+	void WriteInfoTropopause( list<surface>, fstream& );	 				//Вывод картежа данных о тропапаузе
+	void WriteInfoWind(list<surfaceWind>, fstream&); 						//Вывод дынных о максимальном ветре
+	void OutCloud(fstream&,const CloudInfo&);								//Вывод данных по облочности
 	//////////////////
 	void OutCodTTBB();												//Процесс открытия файла для записи кода ТТВВ
 	
