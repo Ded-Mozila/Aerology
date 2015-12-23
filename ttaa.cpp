@@ -54,8 +54,8 @@ void recording_and_write::TTAA( char * code , string strCode)
 						if(VectorCode.at(i).substr(0,2) == "77" || VectorCode.at(i).substr(0,2) == "66" ||VectorCode.at(i).substr(0,2) == "88" /*|| time_data.height.number/10 == 4*/)
 						{
 							//Условие выхода для тропопаузы
-							cout << "UPS2\n"\
-							<< strCode << "\n" << VectorCode.at(i) << endl;
+							//cout << "UPS2\n"\
+							//<< strCode << "\n" << VectorCode.at(i) << endl;
 							noStLevel = true;
 						}
 						else

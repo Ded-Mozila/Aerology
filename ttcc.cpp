@@ -107,7 +107,7 @@ void recording_and_write::TTCC( char * code , string strCode )
 							else
 							{							
 								int vb = atoi(VectorCode.at(i).c_str());
-								cout << " vv " << VectorCode.at(i).at(0) << "\n";
+								//cout << " vv " << VectorCode.at(i).at(0) << "\n";
 								if(VectorCode.at(i).at(0) == '4' /*&& ((vb/1000)%10 >= 0*/  && vb != 31313 )
 								{
 									wind.shift.information = true;
@@ -169,7 +169,6 @@ void recording_and_write::TTCC( char * code , string strCode )
 		{
 			if(base.number == (*i).number )
 			{
-				//cout << base.number << endl;
 				(*i).info = true;
 				(*i).TTCC = base;
 				break;
