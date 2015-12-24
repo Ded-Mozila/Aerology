@@ -76,14 +76,14 @@ void recording_and_write::TopHeaderFileAerology(fstream & file, const int period
 	<< "	Cm - облака среднего яруса\n"\
 << "•	Ch - облака верхнего яруса\n"\
 << "•	h - высота нижней границы самых низких облаков \n"\
-<< " *** Таблица с данными по облакам приведена в конце файла!" 
+<< " *** Таблица с данными по облакам приведена в конце файла. ***\n" 
 		<<"-------------------------------------------------------\nНЕТ ДАННЫХ от станций\n";
 }
 void recording_and_write::Write_file_TTAA(const int period , const string _file, fstream & file  )
 {
 	local_time st;										// Получение системного времени
 	string name = StrNameFile( st, period , _file );	//Создание имени файла для вывода
-	cout << name << endl;
+	//cout << name << endl;
 	file.open( name.c_str() , ios_base::out );			//Создание файла куда записываются данные 
 	if(!file)
 	{
@@ -110,7 +110,7 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 	int district = 0;
 	for ( i = i_begin; i != i_end; ++i )
 	{
-		if (((*i).info != true || (*i).TTAA.information == false) && (*i).number != 0)
+		if (((*i).info == false) /*&& (*i).number != 0*/)
 		{
 			if(((*i).number)/1000 != district )// Сортировак по району нахождения станции
 			{
