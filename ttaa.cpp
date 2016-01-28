@@ -151,7 +151,7 @@ void recording_and_write::TTAA( char * code , string strCode)
 					}
 					default:
 					{
-						cout << "Error" << code << "\nBlock = " <<heightTrop.number<< " == "<< VectorCode.at(i-1) << "\n";
+						//cout << "Error" << code << "\nBlock = " <<heightTrop.number<< " == "<< VectorCode.at(i-1) << "\n";
 						noStLevel = true;
 						break;
 					}
@@ -187,7 +187,7 @@ void recording_and_write::TTAA( char * code , string strCode)
 	}
 	catch(...)
 	{
-		cerr << "Error TTAA " << strCode <<  endl;
+		cout  << "Error TTAA " << strCode <<  endl;
 		// Error::no_ofErrors++;
 	}
 }

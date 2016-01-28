@@ -69,8 +69,8 @@ void recording_and_write::TopHeaderFileAerology(fstream & file, const int period
 << "•	d - направление ветра \n"\
 << "•	f - скорость ветра\n"\
 << "•	D - дефицит точки росы\n"\
-<< "•	Vb -а бсолютное значение векторной разности ветра на уровне максимума  и уроне на 1 км ниже уровня максимума. \n"\
-<< "•	Va - абсолютное значение векторной разности ветра на уровне максимума  и уроне на 1 км выше уровня максимума.\n"\
+<< "•	Vb - абсолютное значение векторной разности ветра на уровне максимума и уроне на 1 км ниже уровня максимума. \n"\
+<< "•	Va - абсолютное значение векторной разности ветра на уровне максимума и уроне на 1 км выше уровня максимума.\n"\
 << "•	N - количество облаков Cl  или Cm : \n"\
 	<< "	Cl - облака вертикального развития и облака нижнего яруса \n"\
 	<< "	Cm - облака среднего яруса\n"\
@@ -134,12 +134,10 @@ void recording_and_write::Write_file_TTAA(const int period , const string _file,
 				file << "Pzem=";
 				if ((land.pressure) < 1000) file << " ";
 				file << land.pressure << " ";
-				file << "Tzem=";
-				double temp = land.info_temp.temp;	//Температура
-				if ( temp >= 0 ) file << " ";
-				if (fabs(temp) < 10) file << " ";
-				file << temp;
-				if ((temp - (int)temp) == 0 && temp != 999) file << ".0";
+				OutTemp(file,land.info_temp.temp);							//Температура		
+				OutWindDirection(file,land.wind.wind_direction);				//Направление ветра
+				OutWindSpeed(file,land.wind.wind_speed);						//Скорость ветра
+				OutDewpoint(file,land.info_temp.dewpoint);					//Дифицит точки росы
 			}else file << "Нет данных";
 			//Вывод облочности 
 			
@@ -463,7 +461,7 @@ void recording_and_write::OutDewpoint(fstream& file, const float& dewpoint)
 	if (dewpoint == 999) file << " ";
 	file << dewpoint;
 	if ( ( dewpoint  - (int)dewpoint ) == 0 && dewpoint != 999 ) file << ".0";
-	if ( dewpoint != 999 ) file << "0";
+	//if ( dewpoint != 999 ) file << "0";
 }
 void recording_and_write::OutCloud(fstream& file, const CloudInfo& cloud)
 {

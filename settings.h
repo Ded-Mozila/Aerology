@@ -3,18 +3,11 @@
 #define SETTINGS_H 
 #define DEFAULT_MODE S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH
 
-//Безполезный код
-struct Time_Period		
-{
-	int hour;
-	int minutes;
-};
-
 class Settings
 {
 public:
     string outDirectory;		//Исходный файл с кодами 
-	string inDirectory;			//Дериктория записи декодируемой информации
+	string inDirectory;			//Дириктория записи декодируемой информации
 	string dataDirectory;		//Директория записи кодов которые разкодировались
 	list<int> stations;			//Список станция которых нужно декодировать
 	fstream fileSettings;		//Поток файла с настройками

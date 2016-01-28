@@ -40,7 +40,7 @@ void readingFile::Read( void ) // Функция поиска данных
 {
 	local_time st;
 	bool key_DATA = false;		// Отсутствие информации о Дате(нужна дата)
-	cout << "dctulf true" << endl;
+	//cout << "dctulf true" << endl;
 	char s;						// Символ считывания (для обхода всего документа)
 	while (!file.get(s).eof())	// Отбор проходит по символам & T U
 	{
@@ -135,8 +135,8 @@ void readingFile::SelectionCipher( void ) //
 			}
 		default:
 			{
+				cout << "Read error" <<'\n';
 				file.getline(code,2000,'=');
-				// cout << "Not good" <<'\n';
 				// cout << code << endl;
 				break;
 			}

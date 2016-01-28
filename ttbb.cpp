@@ -123,8 +123,7 @@ void  recording_and_write::TTBB( string code, string strCode,  int key )
 	}
 	catch(...)
 	{
-		cerr <<k << " TTBB " <<key<< " " << strCode <<  endl;
-		k++; 
+		cout << "TTBB " <<key<< " " << strCode <<  endl;
 	}
 }
 

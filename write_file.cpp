@@ -39,6 +39,7 @@ vector<string> recording_and_write::stringToVectorString(string code)
 	vector<string> VectorCode;
 	while(arrayCode >> block)
 	{
+		if( block.c_str() != "")
 		VectorCode.push_back(block);
 	}
 	return VectorCode;

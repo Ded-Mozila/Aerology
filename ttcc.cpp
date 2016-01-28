@@ -177,7 +177,7 @@ void recording_and_write::TTCC( char * code , string strCode )
 	}
 	catch(...)
 	{
-		cerr << "Error TTCC " << strCode <<  endl;
+		cout << "Error TTCC " << strCode <<  endl;
 	}
 
 }
