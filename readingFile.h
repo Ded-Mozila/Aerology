@@ -12,6 +12,7 @@ public:
 	readingFile(void);							// Конструктор по умолчанию
 	~readingFile(void);
 	void OpenFile_(void);
+	void OpenDirPeriod(local_time start, local_time end);
 	void outInfoFileDecodePeriod(int period);
 	string MadeNameAeroindex( int period, const string _file );	// Создание имени для исходного файла
 	void Read( void );							// Функция поиска данных

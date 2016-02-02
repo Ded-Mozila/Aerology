@@ -104,6 +104,8 @@ public:
 	// Функции записи данных в файл.
 
 	void WriteFile(const string);											//Cортировка данных для записи Кодов ТТAA, TTBB
+
+	void WriteFileClouds(const string);
 	//вывод кода А
 	void OutCodTTAA(const string);											//Процесс открытия файла для записи кода ТТАА
 	void WriteStandateSurfase(const Station,fstream&);// (возвращает ключ на остановку) Функция записи стандартных изобарических поверхностей TTAA

@@ -1,12 +1,31 @@
 #include "readingFile.h"
-
+#include <sys/types.h>
+#include <dirent.h>
+#include <errno.h>
+#include <vector>
+#include <algorithm> 
 readingFile::~readingFile()
 {
 }
 readingFile::readingFile()
 {
 }
+int getdir (string dir, vector<string> &files)
+{
+    DIR *dp;
+    struct dirent *dirp;
+    if((dp  = opendir(dir.c_str())) == NULL) {
+        cout << "Error(" << errno << ") opening " << dir << endl;
+        return errno;
+    }
 
+    while ((dirp = readdir(dp)) != NULL) {
+    	if(string(dirp->d_name) != "." && string(dirp->d_name) != ".." )
+        	files.push_back(string(dirp->d_name));
+    }
+    closedir(dp);
+    return 0;
+}
 void readingFile::OpenFile_(  )
 {
 	TTXX.data = 0;
@@ -27,14 +46,94 @@ void readingFile::OpenFile_(  )
 	}
 	else
 	{
-		Read();
+		Read(); 
 		cout << "Read_Good \n";
 		file.close();
 		TTXX.WriteFile( app.inDirectory );
 		outDataFile();
 	}
 }
+void readingFile::OpenDirPeriod(local_time start, local_time end)
+{
+	TTXX.data = 0;
+	app.stations.sort();
+	list<int>::iterator i;
+	for (i = app.stations.begin(); i != app.stations.end(); ++i)
+	{
+		Station new_station;
+		new_station.number = (*i);
+		TTXX.time_00.push_back(new_station);
+		TTXX.time_12.push_back(new_station);
+	}
+	//Открытие дериктории и открытие под файлов
+	string namedir =  app.outDirectory;
+	string nameOut = app.outDirectory;
+	cout << namedir<< endl;
+	vector<string> files = vector<string>();
+	getdir(namedir.c_str(),files);
 
+    for (unsigned int i = 0;i < files.size();i++) {
+    	string addresFile = namedir;
+    	string nameOut_year = nameOut;
+        if (start.wYear <= atoi(files[i].c_str()) && atoi(files[i].c_str()) <= end.wYear)
+        {
+        	vector<string> files_months = vector<string>();
+        	addresFile += files[i] + "/"; 
+        	nameOut_year += files[i] + "/";
+        	getdir(addresFile.c_str(),files_months);
+        	std::sort(files_months.begin(),files_months.end());
+			for (unsigned int j = 0;j < files_months.size();j++) {
+				if (start.wMonth <= atoi(files_months[j].c_str()) )
+        		{	
+	        		string addresFile_day = addresFile + files_months[j] + "/";
+	        		string nameOut_year_month = nameOut_year + files_months[j] + "/";
+					vector<string> files_day = vector<string>();
+					getdir(addresFile_day.c_str(),files_day );
+					std::sort(files_day.begin(),files_day.end());
+					for (unsigned int k = 0;k < files_day.size();k++) {
+						string addresFile_day_name = addresFile_day +  files_day[k];
+						cout << "Start_" + addresFile_day_name  + endl;
+						file.open( addresFile_day_name.c_str(), ios_base::in);
+						if(!file)
+						{
+							perror("Error open file aeroindex.txt!");
+							exit(1);
+						}
+						else
+						{
+							Read(); 
+							file.close();
+							TTXX.WriteFileClouds(addresFile_day);
+							TTXX.WriteFile( app.inDirectory );
+							cout << "End_" + addresFile_day_name + endl;
+							//outDataFile();
+						}	
+					}
+					files_day.clear();
+				}
+			}
+			files_months.clear();
+        }
+    }
+    files.clear();
+	//perror("Error open file aeroindex.txt!");
+	exit(1);
+	//посмотреть как работать с дерикториями вновь
+	file.open( app.outDirectory.c_str(), ios_base::in);
+	if(!file)
+	{
+		perror("Error open file aeroindex.txt!");
+		exit(1);
+	}
+	else
+	{
+		Read(); 
+		cout << "Read_Good \n";
+		file.close();
+		TTXX.WriteFile( app.inDirectory );
+		outDataFile();
+	}
+}
 
 void readingFile::Read( void ) // Функция поиска данных
 {

@@ -16,7 +16,13 @@ local_time::local_time() //Конструктор по умолчанию
 }
 local_time::~local_time() //Деструктор по умолчанию
 {}
-
+local_time::local_time(long year, long month, long day, long hour)
+{
+	wYear = year;
+	wMonth = month;
+	wDay = day;
+	whour = hour;
+}
 local_time local_time::Yesterday()
 {
 	local_time yesterday;

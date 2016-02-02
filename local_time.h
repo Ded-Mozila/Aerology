@@ -16,6 +16,7 @@ public:
 	long wsec;
 	~local_time();
 	local_time();
+	local_time(long,long,long,long);//год,месяц,день,час
 	local_time Yesterday();	//нахождение вчерашних числа
 	
 };

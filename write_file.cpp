@@ -162,9 +162,9 @@ char* recording_and_write::Wind(char * code,surface& trop, surfaceWind& wind77,W
 WIND recording_and_write::Wind(string code, bool node)
 {
 	WIND new_wind;
-	int ddfff = atoi(code.c_str());
 	if(code[0] !='/') //Проверка на присутствие скороти ветра
 	{
+		int ddfff = atoi(code.c_str());
 		if (code[2] !='/') 
 		{
 			new_wind.wind_direction = (ddfff / 1000) * 10 ; // Определение направление ветра
@@ -187,6 +187,8 @@ WIND recording_and_write::Wind(string code, bool node)
 	}
 	else
 	{
+		int ddfff = atoi(code.c_str());
+		
 		if (code[2] !='/') 
 		{
 			int fff = ddfff % 1000;

@@ -1,5 +1,5 @@
-/home/allusers/obmen/aeroindex.txt;
-/home/allusers/obmen/Zyryanov/test_SpecialPoints_4.4;
+/home/allusers/obmen/Zyryanov/SpecialPoints/data/;
+/home/allusers/obmen/Zyryanov/test_SpecialPoints_4.4_Cloud;
 /home/allusers/obmen/Zyryanov/test_SpecialPoints_4.4/DataAerology;
 21432
 21824
